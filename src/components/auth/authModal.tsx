@@ -1,0 +1,38 @@
+"use client";
+
+import { useState } from "react";
+import LoginForm from "@/components/auth/loginForm";
+import SignupForm from "@/components/auth/signupForm";
+
+interface AuthModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
+  const [mode, setMode] = useState<"login" | "signup">("login");
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-6 relative">
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
+        >
+          ✕
+        </button>
+
+        {mode === "login" ? (
+          <LoginForm onSwitch={() => setMode("signup")} />
+        ) : (
+          <SignupForm onSwitch={() => setMode("login")} />
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default AuthModal;
