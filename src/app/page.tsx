@@ -64,14 +64,12 @@
 //   );
 // }
 
-import Navbar from "@/components/navbar/navbar";
-import HeroSection from "@/components/hero/heroSection";
+import HomePage from "@/components/main";
 
-export default function HomePage() {
+export default function Main() {
   return (
     <>
-      <Navbar />
-      <HeroSection />
+      <HomePage />
     </>
   );
 }
