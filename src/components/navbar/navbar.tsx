@@ -1,17 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Bell } from "lucide-react";
 import AuthModal from "@/components/auth/authModal";
+import { useAuth } from "../hooks/useAuth";
+import { useNavigation } from "../common/navigationContext";
 
-interface NavbarProps {
-  onNavigate: (section: "home" | "about" | "contact") => void;
-}
-
-const Navbar = ({ onNavigate }: NavbarProps) => {
-  const [open, setOpen] = useState(false);
+const Navbar = () => {
+  const { user, logout } = useAuth();
+  const { activeSection, setActiveSection } = useNavigation(); // ✅ Use context
   const [menuOpen, setMenuOpen] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
 
   return (
     <>
@@ -20,40 +19,60 @@ const Navbar = ({ onNavigate }: NavbarProps) => {
           {/* Brand */}
           <div
             className="text-2xl font-extrabold tracking-wide text-[#6B9AC4] cursor-pointer"
-            onClick={() => onNavigate("home")}
+            onClick={() => setActiveSection("home")}
           >
             Audit<span className="text-[#A3C4BC]">Flow</span>
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-700">
+          <div className="hidden md:flex items-center space-x-6 text-sm font-medium text-gray-700">
+            {!user && ( // Hide Home button if logged in
+              <button
+                onClick={() => setActiveSection("home")}
+                className="hover:text-[#6B9AC4]"
+              >
+                Home
+              </button>
+            )}
             <button
-              onClick={() => onNavigate("home")}
-              className="hover:text-[#6B9AC4]"
-            >
-              Home
-            </button>
-
-            <button
-              onClick={() => onNavigate("about")}
+              onClick={() => setActiveSection("about")}
               className="hover:text-[#6B9AC4]"
             >
               About
             </button>
-
             <button
+              onClick={() => setActiveSection("contact")}
               className="hover:text-[#6B9AC4]"
-              onClick={() => onNavigate("contact")}
             >
-              Contact Us
+              Contact
             </button>
 
-            <button
-              onClick={() => setOpen(true)}
-              className="px-4 py-2 rounded-lg bg-[#6B9AC4] text-white hover:bg-[#5A89B0] transition"
-            >
-              Login
-            </button>
+            {/* Login / Logout + Notification */}
+            {user ? (
+              <div className="flex items-center gap-4">
+                <button className="relative">
+                  <Bell
+                    size={22}
+                    className="text-gray-700 hover:text-[#6B9AC4]"
+                  />
+                  <span className="absolute top-0 right-0 block w-2 h-2 bg-red-500 rounded-full"></span>
+                </button>
+
+                <button
+                  onClick={logout}
+                  className="px-4 py-2 rounded-lg bg-[#6B9AC4] text-white hover:bg-[#5A89B0] transition"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setAuthModalOpen(true)}
+                className="px-4 py-2 rounded-lg bg-[#6B9AC4] text-white hover:bg-[#5A89B0] transition"
+              >
+                Login
+              </button>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -69,42 +88,70 @@ const Navbar = ({ onNavigate }: NavbarProps) => {
         {menuOpen && (
           <div className="md:hidden bg-white border-t">
             <div className="flex flex-col px-6 py-4 space-y-4 text-sm font-medium text-gray-700">
+              {!user && (
+                <button
+                  onClick={() => {
+                    setActiveSection("home");
+                    setMenuOpen(false);
+                  }}
+                >
+                  Home
+                </button>
+              )}
               <button
                 onClick={() => {
-                  onNavigate("home");
-                  setMenuOpen(false);
-                }}
-              >
-                Home
-              </button>
-
-              <button
-                onClick={() => {
-                  onNavigate("about");
+                  setActiveSection("about");
                   setMenuOpen(false);
                 }}
               >
                 About
               </button>
-
-              <button onClick={() => setMenuOpen(false)}>Contact Us</button>
-
               <button
                 onClick={() => {
+                  setActiveSection("contact");
                   setMenuOpen(false);
-                  setOpen(true);
                 }}
-                className="w-full px-4 py-2 rounded-lg bg-[#6B9AC4] text-white hover:bg-[#5A89B0] transition"
               >
-                Login
+                Contact
               </button>
+
+              {user ? (
+                <div className="flex flex-col gap-2">
+                  <button
+                    onClick={() => {
+                      logout();
+                      setMenuOpen(false);
+                    }}
+                    className="w-full px-4 py-2 rounded-lg bg-[#6B9AC4] text-white hover:bg-[#5A89B0] transition"
+                  >
+                    Logout
+                  </button>
+                  <div className="flex items-center gap-2">
+                    <Bell size={20} className="text-gray-700" />
+                    <span className="text-sm text-gray-700">Notifications</span>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  onClick={() => {
+                    setAuthModalOpen(true);
+                    setMenuOpen(false);
+                  }}
+                  className="w-full px-4 py-2 rounded-lg bg-[#6B9AC4] text-white hover:bg-[#5A89B0] transition"
+                >
+                  Login
+                </button>
+              )}
             </div>
           </div>
         )}
       </nav>
 
       {/* Auth Modal */}
-      <AuthModal isOpen={open} onClose={() => setOpen(false)} />
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+      />
     </>
   );
 };
