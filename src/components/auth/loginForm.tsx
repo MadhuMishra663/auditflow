@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useLogin } from "../hooks/useLogin";
 import SuccessModal from "@/components/common/successModal";
+import { useAuth } from "../hooks/useAuth";
 
 interface LoginFormProps {
   onSwitch: () => void;
 }
 
 const LoginForm = ({ onSwitch }: LoginFormProps) => {
+  const { login } = useAuth();
   const { loginUser, loading, error } = useLogin();
   const [showSuccess, setShowSuccess] = useState(false);
 
@@ -24,11 +26,12 @@ const LoginForm = ({ onSwitch }: LoginFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    await loginUser(formData);
-
-    // hide form + show success modal
-    setShowSuccess(true);
+    try {
+      await login(formData.email, formData.password); // stores user inside context
+      setShowSuccess(true);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const handleSuccessClose = () => {
@@ -79,6 +82,7 @@ const LoginForm = ({ onSwitch }: LoginFormProps) => {
           <div className="mt-6 text-center text-sm text-gray-600">
             or{" "}
             <button
+              type="button"
               onClick={onSwitch}
               className="text-[#6B9AC4] font-medium hover:underline"
             >
@@ -88,13 +92,15 @@ const LoginForm = ({ onSwitch }: LoginFormProps) => {
         </>
       )}
 
-      <SuccessModal
-        isOpen={showSuccess}
-        title="Login Successful"
-        message="Welcome back! Redirecting..."
-        duration={2000}
-        onClose={handleSuccessClose}
-      />
+      {showSuccess && (
+        <SuccessModal
+          isOpen={showSuccess}
+          title="Login Successful"
+          message="Welcome back! Redirecting..."
+          duration={2000}
+          onClose={handleSuccessClose}
+        />
+      )}
     </>
   );
 };

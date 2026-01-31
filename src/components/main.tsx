@@ -1,26 +1,40 @@
 "use client";
 
-import { useState } from "react";
-import Navbar from "@/components/navbar/navbar";
-import HeroSection from "@/components/hero/heroSection";
-import AboutSection from "@/components/about/about";
-import ContactSection from "./contact/contact";
-// import ContactSection from "@/components/contact/contact";
+import { Suspense, lazy } from "react";
+import { useAuth } from "./hooks/useAuth";
+import { useNavigation } from "./common/navigationContext";
+import Loader from "@/components/common/loader";
+
+const HeroSection = lazy(() => import("@/components/hero/heroSection"));
+const AboutSection = lazy(() => import("@/components/about/about"));
+const ContactSection = lazy(() => import("./contact/contact"));
+const AdminDashboard = lazy(() => import("./admin/dashboard"));
 
 export default function HomePage() {
-  const [activeSection, setActiveSection] = useState<
-    "home" | "about" | "contact"
-  >("home");
+  const { user } = useAuth();
+  const { activeSection, setActiveSection, hydrated } = useNavigation();
+
+  // Show loader until hydrated
+  if (!hydrated) return <Loader />;
+
+  // Admin dashboard
+  if (user?.role === "admin") {
+    return (
+      <Suspense fallback={<Loader />}>
+        <AdminDashboard />
+      </Suspense>
+    );
+  }
 
   return (
-    <>
-      <Navbar onNavigate={setActiveSection} />
-      {/* Render ONE section at a time */}
+    <Suspense fallback={<Loader />}>
       {activeSection === "home" && (
-        <HeroSection onLearnMore={() => setActiveSection("about")} />
-      )}{" "}
+        <HeroSection
+          onLearnMore={() => setActiveSection("about")} // ✅ Navigate to About
+        />
+      )}
       {activeSection === "about" && <AboutSection />}
       {activeSection === "contact" && <ContactSection />}
-    </>
+    </Suspense>
   );
 }
