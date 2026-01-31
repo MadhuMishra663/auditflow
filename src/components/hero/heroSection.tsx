@@ -3,9 +3,15 @@
 import Image from "next/image";
 import { useState } from "react";
 import AuthModal from "../auth/authModal";
+import AboutSection from "../about/about";
 
-const HeroSection = () => {
+interface HeroSectionProps {
+  onLearnMore: () => void; // callback when clicking Learn More
+}
+
+const HeroSection = ({ onLearnMore }: HeroSectionProps) => {
   const [open, setOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
   return (
     <section className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
       {/* Left Content */}
@@ -28,7 +34,10 @@ const HeroSection = () => {
           >
             Get Started
           </button>
-          <button className="px-6 py-3 border border-[#6B9AC4] text-[#6B9AC4] rounded-lg hover:bg-[#6B9AC4]/10 transition">
+          <button
+            className="px-6 py-3 border border-[#6B9AC4] text-[#6B9AC4] rounded-lg hover:bg-[#6B9AC4]/10 transition"
+            onClick={onLearnMore}
+          >
             Learn More
           </button>
         </div>
