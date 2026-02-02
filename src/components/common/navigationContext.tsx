@@ -8,7 +8,14 @@ import {
   ReactNode,
 } from "react";
 
-type Section = "home" | "about" | "contact";
+export type Section =
+  | "home"
+  | "about"
+  | "contact"
+  | "dashboard"
+  | "auditors"
+  | "audits"
+  | "settings";
 
 interface NavigationContextType {
   activeSection: Section;
@@ -31,10 +38,18 @@ export const NavigationProvider = ({ children }: { children: ReactNode }) => {
 
     // Defer to avoid cascading render
     setTimeout(() => {
-      if (stored === "home" || stored === "about" || stored === "contact") {
+      if (
+        stored === "home" ||
+        stored === "about" ||
+        stored === "contact" ||
+        stored === "dashboard" ||
+        stored === "auditors" ||
+        stored === "audits" ||
+        stored === "settings"
+      ) {
         setActiveSectionState(stored);
       }
-      setHydrated(true); // now we know which section to show
+      setHydrated(true);
     }, 0);
   }, []);
 

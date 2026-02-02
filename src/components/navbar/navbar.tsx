@@ -7,11 +7,11 @@ import { useAuth } from "../hooks/useAuth";
 import { useNavigation } from "../common/navigationContext";
 
 const Navbar = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, loading } = useAuth();
   const { activeSection, setActiveSection } = useNavigation(); // ✅ Use context
   const [menuOpen, setMenuOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
-
+  if (loading) return null;
   return (
     <>
       <nav className="w-full bg-white/70 backdrop-blur-md shadow-sm sticky top-0 z-40">
