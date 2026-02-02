@@ -18,6 +18,7 @@ export const useDepartments = () => {
         const res = await axios.get(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/departments`,
         );
+        console.log("API BASE URL:", process.env.NEXT_PUBLIC_API_BASE_URL);
 
         setDepartments(res.data.departments);
       } catch (err) {
