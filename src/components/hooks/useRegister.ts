@@ -31,7 +31,7 @@ export const useRegister = () => {
       setError(null);
 
       const response = await axios.post<RegisterResponse>(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}${process.env.NEXT_PUBLIC_AUTH_REGISTER}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/register`,
         payload,
       );
 

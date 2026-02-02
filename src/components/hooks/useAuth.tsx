@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (email: string, password: string) => {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}${process.env.NEXT_PUBLIC_AUTH_LOGIN}`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`,
       {
         method: "POST",
         body: JSON.stringify({ email, password }),
