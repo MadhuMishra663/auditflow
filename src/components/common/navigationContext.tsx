@@ -38,6 +38,8 @@ export const NavigationProvider = ({ children }: { children: ReactNode }) => {
         stored === "dashboard"
       ) {
         setActiveSectionState(stored);
+      } else {
+        setActiveSectionState("home"); // fallback
       }
       setHydrated(true); // now we know which section to show
     }, 0);
