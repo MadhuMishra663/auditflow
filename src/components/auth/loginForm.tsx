@@ -2,11 +2,12 @@ import { useState } from "react";
 import { useLogin } from "../hooks/useLogin";
 import SuccessModal from "@/components/common/successModal";
 import { useAuth } from "../hooks/useAuth";
+import { Section } from "../common/navigationContext";
 
 interface LoginFormProps {
   onSwitch: () => void;
   onClose: () => void;
-  setActiveSection: (section: string) => void;
+  setActiveSection: (section: Section) => void;
 }
 
 const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {

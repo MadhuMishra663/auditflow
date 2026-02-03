@@ -1,13 +1,14 @@
 "use client";
 
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import LoginForm from "./loginForm";
 import SignupForm from "./signupForm";
+import { Section } from "../common/navigationContext";
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  setActiveSection: Dispatch<SetStateAction<string>>; // ✅ pass from Navbar
+  setActiveSection: (section: Section) => void;
 }
 
 export default function AuthModal({

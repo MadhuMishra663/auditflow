@@ -8,7 +8,7 @@ import {
   ReactNode,
 } from "react";
 
-type Section = "home" | "about" | "contact" | "dashboard";
+export type Section = "home" | "about" | "contact" | "dashboard";
 
 interface NavigationContextType {
   activeSection: Section;
