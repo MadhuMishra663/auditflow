@@ -1,14 +1,9 @@
-"use client";
-
-import HeroSection from "@/components/hero/heroSection";
-import { useRouter } from "next/navigation";
+import HomePage from "@/components/main";
 
 export default function Main() {
-  const router = useRouter();
-
   return (
     <>
-      <HeroSection onLearnMore={() => router.push("/about")} />
+      <HomePage />
     </>
   );
 }

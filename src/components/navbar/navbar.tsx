@@ -21,7 +21,8 @@ const Navbar = () => {
           {/* Brand */}
           <div
             className="text-2xl font-extrabold tracking-wide text-[#6B9AC4] cursor-pointer"
-            onClick={() => setActiveSection("home")}
+            // onClick={() => setActiveSection("home")}
+            onClick={() => router.push("/")}
           >
             Audit<span className="text-[#A3C4BC]">Flow</span>
           </div>
@@ -31,14 +32,14 @@ const Navbar = () => {
             {!user && ( // Hide Home button if logged in
               <button
                 // onClick={() => setActiveSection("home")}
-                onClick={() => router.push("/home")}
+                onClick={() => router.push("/")}
                 className="hover:text-[#6B9AC4]"
               >
                 Home
               </button>
             )}
             <button
-              onClick={() => setActiveSection("about")}
+              onClick={() => router.push("/about")}
               className="hover:text-[#6B9AC4]"
             >
               About
@@ -72,7 +73,7 @@ const Navbar = () => {
                 <button
                   onClick={() => {
                     logout();
-                    router.push("/home"); // ✅ REQUIRED
+                    router.push("/"); // ✅ REQUIRED
                   }}
                   className="px-4 py-2 rounded-lg bg-[#6B9AC4] text-white hover:bg-[#5A89B0] transition"
                 >
@@ -106,7 +107,7 @@ const Navbar = () => {
                 <button
                   onClick={() => {
                     // setActiveSection("home");
-                    router.push("/home");
+                    router.push("/");
                     setMenuOpen(false);
                   }}
                 >
@@ -153,7 +154,7 @@ const Navbar = () => {
                       logout();
                       setMenuOpen(false);
                       // setActiveSection("home");
-                      router.push("/home");
+                      router.push("/");
                     }}
                     className="w-full px-4 py-2 rounded-lg bg-[#6B9AC4] text-white hover:bg-[#5A89B0] transition"
                   >

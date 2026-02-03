@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import AuthModal from "../auth/authModal";
 import AboutSection from "../about/about";
-import { Section } from "../common/navigationContext";
+import { Section, useNavigation } from "../common/navigationContext";
 
 interface HeroSectionProps {
   onLearnMore: () => void; // callback when clicking Learn More
@@ -13,6 +13,8 @@ interface HeroSectionProps {
 const HeroSection = ({ onLearnMore }: HeroSectionProps) => {
   const [open, setOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
+  const { activeSection, setActiveSection } = useNavigation();
+
   return (
     <section className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
       {/* Left Content */}
@@ -57,9 +59,7 @@ const HeroSection = ({ onLearnMore }: HeroSectionProps) => {
       <AuthModal
         isOpen={open}
         onClose={() => setOpen(false)}
-        setActiveSection={function (section: Section): void {
-          throw new Error("Function not implemented.");
-        }}
+        setActiveSection={setActiveSection}
       />
     </section>
   );
