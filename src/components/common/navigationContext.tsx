@@ -31,7 +31,12 @@ export const NavigationProvider = ({ children }: { children: ReactNode }) => {
 
     // Defer to avoid cascading render
     setTimeout(() => {
-      if (stored === "home" || stored === "about" || stored === "contact") {
+      if (
+        stored === "home" ||
+        stored === "about" ||
+        stored === "contact" ||
+        stored === "dashboard"
+      ) {
         setActiveSectionState(stored);
       }
       setHydrated(true); // now we know which section to show

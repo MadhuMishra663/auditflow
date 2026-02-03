@@ -172,6 +172,7 @@ const Navbar = () => {
       <AuthModal
         isOpen={authModalOpen}
         onClose={() => setAuthModalOpen(false)}
+        setActiveSection={setActiveSection}
       />
     </>
   );
