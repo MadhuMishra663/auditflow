@@ -41,25 +41,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => clearTimeout(timer); // cleanup just in case
   }, []);
 
-  // const login = async (email: string, password: string) => {
-  //   const res = await fetch(
-  //     `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`,
-  //     {
-  //       method: "POST",
-  //       body: JSON.stringify({ email, password }),
-  //       headers: { "Content-Type": "application/json" },
-  //     },
-  //   );
-
-  //   const data = await res.json();
-
-  //   if (res.ok) {
-  //     // set user only in state (no localStorage)
-  //     setUser(data.user);
-  //   } else {
-  //     throw new Error(data.message || "Login failed");
-  //   }
-  // };
   const login = async (email: string, password: string): Promise<User> => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`,
@@ -77,7 +58,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
 
     setUser(data.user);
-    return data.user; // ✅ THIS FIXES EVERYTHING
+    return data.user;
   };
 
   const logout = () => {
