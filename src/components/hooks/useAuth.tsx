@@ -1,7 +1,13 @@
 // src/components/hooks/useAuth.tsx
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 
 type Role = "admin" | "department" | "auditor";
 
@@ -23,6 +29,17 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  // Optional: fetch user info from API if you want server-side persistence
+  useEffect(() => {
+    // defer state update to next tick
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 0);
+
+    return () => clearTimeout(timer); // cleanup just in case
+  }, []);
 
   const login = async (email: string, password: string) => {
     const res = await fetch(
