@@ -3,6 +3,7 @@ import { useLogin } from "../hooks/useLogin";
 import SuccessModal from "@/components/common/successModal";
 import { useAuth } from "../hooks/useAuth";
 import { Section } from "../common/navigationContext";
+import { useRouter } from "next/navigation";
 
 interface LoginFormProps {
   onSwitch: () => void;
@@ -11,9 +12,10 @@ interface LoginFormProps {
 }
 
 const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const { loginUser, loading, error } = useLogin();
   const [showSuccess, setShowSuccess] = useState(false);
+  const router = useRouter();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -43,7 +45,15 @@ const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
   const handleSuccessClose = () => {
     setShowSuccess(false);
     onClose();
-    // navigate("/dashboard") ← later
+
+    // Get user from context
+    if (user?.role === "admin") {
+      setActiveSection("dashboard"); // for single-page nav
+      router.push("/dashboard"); // for actual dashboard route
+    } else {
+      setActiveSection("home");
+      router.push("/");
+    }
   };
 
   return (
