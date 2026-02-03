@@ -35,6 +35,7 @@ export default function HomePage() {
       )}
       {activeSection === "about" && <AboutSection />}
       {activeSection === "contact" && <ContactSection />}
+      {activeSection === "dashboard" && <AdminDashboard />}
     </Suspense>
   );
 }
