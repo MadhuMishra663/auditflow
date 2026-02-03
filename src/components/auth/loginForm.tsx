@@ -6,9 +6,10 @@ import { useAuth } from "../hooks/useAuth";
 interface LoginFormProps {
   onSwitch: () => void;
   onClose: () => void;
+  setActiveSection: (section: string) => void;
 }
 
-const LoginForm = ({ onSwitch, onClose }: LoginFormProps) => {
+const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
   const { login } = useAuth();
   const { loginUser, loading, error } = useLogin();
   const [showSuccess, setShowSuccess] = useState(false);
@@ -30,6 +31,8 @@ const LoginForm = ({ onSwitch, onClose }: LoginFormProps) => {
     try {
       await login(formData.email, formData.password); // stores user inside context
       setShowSuccess(true);
+      setActiveSection("dashboard");
+      onClose();
     } catch (err) {
       console.error(err);
     }

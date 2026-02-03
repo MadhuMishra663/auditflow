@@ -1,15 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import LoginForm from "./loginForm";
 import SignupForm from "./signupForm";
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
+  setActiveSection: Dispatch<SetStateAction<string>>; // ✅ pass from Navbar
 }
 
-export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
+export default function AuthModal({
+  isOpen,
+  onClose,
+  setActiveSection,
+}: AuthModalProps) {
   const [mode, setMode] = useState<"login" | "signup">("login");
 
   if (!isOpen) return null;
@@ -25,7 +30,11 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         </button>
 
         {mode === "login" ? (
-          <LoginForm onSwitch={() => setMode("signup")} onClose={onClose} />
+          <LoginForm
+            onSwitch={() => setMode("signup")}
+            onClose={onClose}
+            setActiveSection={setActiveSection}
+          />
         ) : (
           <SignupForm onSwitch={() => setMode("login")} />
         )}
