@@ -50,6 +50,12 @@ const Navbar = () => {
             {/* Login / Logout + Notification */}
             {user ? (
               <div className="flex items-center gap-4">
+                <button
+                  onClick={() => setActiveSection("dashboard")}
+                  className="hover:text-[#6B9AC4]"
+                >
+                  Dashboard
+                </button>
                 <button className="relative">
                   <Bell
                     size={22}
@@ -99,6 +105,17 @@ const Navbar = () => {
                   }}
                 >
                   Home
+                </button>
+              )}
+              {user && (
+                <button
+                  onClick={() => {
+                    setActiveSection("dashboard"); // ✅ DASHBOARD
+                    setMenuOpen(false);
+                  }}
+                  className="hover:text-[#6B9AC4]"
+                >
+                  Dashboard
                 </button>
               )}
               <button
