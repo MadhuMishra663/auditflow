@@ -8,7 +8,7 @@ import { useNavigation } from "../common/navigationContext";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
-  const { activeSection, setActiveSection } = useNavigation(); // ✅ Use context
+  const { activeSection, setActiveSection } = useNavigation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
 
@@ -59,7 +59,10 @@ const Navbar = () => {
                 </button>
 
                 <button
-                  onClick={logout}
+                  onClick={() => {
+                    logout();
+                    setActiveSection("home"); // ✅ REQUIRED
+                  }}
                   className="px-4 py-2 rounded-lg bg-[#6B9AC4] text-white hover:bg-[#5A89B0] transition"
                 >
                   Logout
@@ -121,6 +124,7 @@ const Navbar = () => {
                     onClick={() => {
                       logout();
                       setMenuOpen(false);
+                      setActiveSection("home");
                     }}
                     className="w-full px-4 py-2 rounded-lg bg-[#6B9AC4] text-white hover:bg-[#5A89B0] transition"
                   >

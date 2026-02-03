@@ -34,10 +34,6 @@ export const useRegister = () => {
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/register`,
         payload,
       );
-      console.log("ENV CHECK:", {
-        api: process.env.NEXT_PUBLIC_API_BASE_URL,
-        nodeEnv: process.env.NODE_ENV,
-      });
 
       return response.data;
     } catch (err: unknown) {

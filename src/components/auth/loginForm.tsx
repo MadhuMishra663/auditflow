@@ -5,9 +5,10 @@ import { useAuth } from "../hooks/useAuth";
 
 interface LoginFormProps {
   onSwitch: () => void;
+  onClose: () => void;
 }
 
-const LoginForm = ({ onSwitch }: LoginFormProps) => {
+const LoginForm = ({ onSwitch, onClose }: LoginFormProps) => {
   const { login } = useAuth();
   const { loginUser, loading, error } = useLogin();
   const [showSuccess, setShowSuccess] = useState(false);
@@ -36,6 +37,7 @@ const LoginForm = ({ onSwitch }: LoginFormProps) => {
 
   const handleSuccessClose = () => {
     setShowSuccess(false);
+    onClose();
     // navigate("/dashboard") ← later
   };
 

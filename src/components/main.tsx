@@ -18,7 +18,7 @@ export default function HomePage() {
   if (!hydrated) return <Loader />;
 
   // Admin dashboard
-  if (user?.role === "admin") {
+  if (user?.role === "admin" && activeSection === "home") {
     return (
       <Suspense fallback={<Loader />}>
         <AdminDashboard />

@@ -25,7 +25,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         </button>
 
         {mode === "login" ? (
-          <LoginForm onSwitch={() => setMode("signup")} />
+          <LoginForm onSwitch={() => setMode("signup")} onClose={onClose} />
         ) : (
           <SignupForm onSwitch={() => setMode("login")} />
         )}
