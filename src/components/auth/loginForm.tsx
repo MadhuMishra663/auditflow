@@ -31,8 +31,9 @@ const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
     e.preventDefault();
     try {
       await login(formData.email, formData.password); // stores user inside context
-      setShowSuccess(true);
+
       setActiveSection("dashboard");
+      setShowSuccess(true);
       onClose();
     } catch (err) {
       console.error(err);
