@@ -21,7 +21,7 @@ const NavigationContext = createContext<NavigationContextType | undefined>(
 );
 
 export const NavigationProvider = ({ children }: { children: ReactNode }) => {
-  const [activeSection, setActiveSectionState] = useState<Section | null>(null);
+  const [activeSection, setActiveSectionState] = useState<Section>("home");
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {

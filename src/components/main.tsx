@@ -4,6 +4,7 @@ import { Suspense, lazy } from "react";
 import { useAuth } from "./hooks/useAuth";
 import { useNavigation } from "./common/navigationContext";
 import Loader from "@/components/common/loader";
+import { useRouter } from "next/navigation";
 
 const HeroSection = lazy(() => import("@/components/hero/heroSection"));
 const AboutSection = lazy(() => import("@/components/about/about"));
@@ -13,6 +14,7 @@ const AdminDashboard = lazy(() => import("./admin/dashboard"));
 export default function HomePage() {
   const { user } = useAuth();
   const { activeSection, setActiveSection, hydrated } = useNavigation();
+  const router = useRouter();
 
   // Show loader until hydrated
   if (!hydrated) return <Loader />;
@@ -28,14 +30,18 @@ export default function HomePage() {
 
   return (
     <Suspense fallback={<Loader />}>
-      {activeSection === "home" && (
+      {/* {activeSection === "home" && (
         <HeroSection
           onLearnMore={() => setActiveSection("about")} // ✅ Navigate to About
         />
-      )}
+      )} */}
       {activeSection === "about" && <AboutSection />}
       {activeSection === "contact" && <ContactSection />}
-      {activeSection === "dashboard" && <AdminDashboard />}
+      {activeSection === "dashboard" && user?.role !== "admin" && (
+        <HeroSection
+          onLearnMore={() => router.push("/about")} // ✅ Navigate to About
+        />
+      )}
     </Suspense>
   );
 }

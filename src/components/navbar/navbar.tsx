@@ -5,12 +5,14 @@ import { Menu, X, Bell } from "lucide-react";
 import AuthModal from "@/components/auth/authModal";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigation } from "../common/navigationContext";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
   const { activeSection, setActiveSection } = useNavigation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
+  const router = useRouter();
 
   return (
     <>
@@ -28,7 +30,8 @@ const Navbar = () => {
           <div className="hidden md:flex items-center space-x-6 text-sm font-medium text-gray-700">
             {!user && ( // Hide Home button if logged in
               <button
-                onClick={() => setActiveSection("home")}
+                // onClick={() => setActiveSection("home")}
+                onClick={() => router.push("/home")}
                 className="hover:text-[#6B9AC4]"
               >
                 Home
@@ -41,7 +44,8 @@ const Navbar = () => {
               About
             </button>
             <button
-              onClick={() => setActiveSection("contact")}
+              // onClick={() => setActiveSection("contact")}
+              onClick={() => router.push("/contact")}
               className="hover:text-[#6B9AC4]"
             >
               Contact
@@ -51,7 +55,8 @@ const Navbar = () => {
             {user ? (
               <div className="flex items-center gap-4">
                 <button
-                  onClick={() => setActiveSection("dashboard")}
+                  // onClick={() => setActiveSection("dashboard")}
+                  onClick={() => router.push("/admin/dashboard")}
                   className="hover:text-[#6B9AC4]"
                 >
                   Dashboard
@@ -67,7 +72,7 @@ const Navbar = () => {
                 <button
                   onClick={() => {
                     logout();
-                    setActiveSection("home"); // ✅ REQUIRED
+                    router.push("/home"); // ✅ REQUIRED
                   }}
                   className="px-4 py-2 rounded-lg bg-[#6B9AC4] text-white hover:bg-[#5A89B0] transition"
                 >
@@ -100,7 +105,8 @@ const Navbar = () => {
               {!user && (
                 <button
                   onClick={() => {
-                    setActiveSection("home");
+                    // setActiveSection("home");
+                    router.push("/home");
                     setMenuOpen(false);
                   }}
                 >
@@ -110,7 +116,8 @@ const Navbar = () => {
               {user && (
                 <button
                   onClick={() => {
-                    setActiveSection("dashboard"); // ✅ DASHBOARD
+                    // setActiveSection("dashboard");
+                    router.push("/admin/dashboard"); // ✅ DASHBOARD
                     setMenuOpen(false);
                   }}
                   className="hover:text-[#6B9AC4]"
@@ -120,7 +127,9 @@ const Navbar = () => {
               )}
               <button
                 onClick={() => {
-                  setActiveSection("about");
+                  // setActiveSection("about");
+                  router.push("/about");
+
                   setMenuOpen(false);
                 }}
               >
@@ -128,7 +137,9 @@ const Navbar = () => {
               </button>
               <button
                 onClick={() => {
-                  setActiveSection("contact");
+                  // setActiveSection("contact");
+                  router.push("/contact");
+
                   setMenuOpen(false);
                 }}
               >
@@ -141,7 +152,8 @@ const Navbar = () => {
                     onClick={() => {
                       logout();
                       setMenuOpen(false);
-                      setActiveSection("home");
+                      // setActiveSection("home");
+                      router.push("/home");
                     }}
                     className="w-full px-4 py-2 rounded-lg bg-[#6B9AC4] text-white hover:bg-[#5A89B0] transition"
                   >

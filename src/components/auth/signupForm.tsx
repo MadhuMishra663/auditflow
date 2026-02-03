@@ -81,7 +81,7 @@ const SignupForm = ({ onSwitch }: SignupFormProps) => {
             placeholder="Full Name"
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 border rounded-lg"
+            className="w-full px-4 py-2 border rounded-lg text-black"
           />
 
           <input
@@ -90,7 +90,7 @@ const SignupForm = ({ onSwitch }: SignupFormProps) => {
             placeholder="Email"
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 border rounded-lg"
+            className="w-full px-4 py-2 border rounded-lg text-black"
           />
 
           <input
@@ -99,7 +99,7 @@ const SignupForm = ({ onSwitch }: SignupFormProps) => {
             placeholder="Password"
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 border rounded-lg"
+            className="w-full px-4 py-2 border rounded-lg text-black"
           />
 
           {/* Role */}
@@ -107,7 +107,7 @@ const SignupForm = ({ onSwitch }: SignupFormProps) => {
             name="role"
             value={formData.role}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg"
+            className="w-full px-4 py-2 border rounded-lg text-black"
           >
             <option value="department">Department User</option>
             <option value="auditor">Auditor</option>
@@ -122,7 +122,7 @@ const SignupForm = ({ onSwitch }: SignupFormProps) => {
               onChange={handleChange}
               required
               disabled={deptLoading}
-              className="w-full px-4 py-2 border rounded-lg"
+              className="w-full px-4 py-2 border rounded-lg text-black"
             >
               <option value="">Select Department</option>
               {departments.map((dept) => (

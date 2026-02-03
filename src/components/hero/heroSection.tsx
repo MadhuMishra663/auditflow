@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import AuthModal from "../auth/authModal";
 import AboutSection from "../about/about";
+import { Section } from "../common/navigationContext";
 
 interface HeroSectionProps {
   onLearnMore: () => void; // callback when clicking Learn More
@@ -53,7 +54,13 @@ const HeroSection = ({ onLearnMore }: HeroSectionProps) => {
           priority
         />
       </div>
-      <AuthModal isOpen={open} onClose={() => setOpen(false)} />
+      <AuthModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        setActiveSection={function (section: Section): void {
+          throw new Error("Function not implemented.");
+        }}
+      />
     </section>
   );
 };

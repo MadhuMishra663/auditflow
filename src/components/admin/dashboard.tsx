@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { useAuth } from "@/components/hooks/useAuth";
+import { useRouter } from "next/navigation";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -16,6 +17,8 @@ interface Auditor {
 
 const AdminDashboard = () => {
   const { user } = useAuth();
+  const router = useRouter();
+
   const [auditors, setAuditors] = useState<Auditor[]>([
     {
       id: 1,
@@ -37,6 +40,11 @@ const AdminDashboard = () => {
     email: "",
     department: "",
   });
+  useEffect(() => {
+    if (!user || user.role !== "admin") {
+      router.replace("/"); // redirect unauthorized users
+    }
+  }, [user, router]);
   // Only show if logged-in user is admin
   if (!user || user.role !== "admin") return null;
 

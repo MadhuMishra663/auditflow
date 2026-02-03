@@ -12,9 +12,12 @@ interface LoginFormProps {
 }
 
 const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
-  const { login, user } = useAuth();
-  const { loginUser, loading, error } = useLogin();
+  const { login } = useAuth();
+  const { loginUser } = useLogin();
   const [showSuccess, setShowSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -29,31 +32,50 @@ const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
     });
   };
 
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   try {
+  //     await login(formData.email, formData.password); // stores user inside context
+
+  //     setShowSuccess(true);
+  //     onClose();
+
+  //     // Redirect based on role
+  //     if (user?.role === "admin") {
+  //       router.push("/admin/dashboard"); // go to admin dashboard
+  //     } else {
+  //       router.push("/home"); // go to home for other roles
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      await login(formData.email, formData.password); // stores user inside context
+    setLoading(true);
+    setError(null);
 
-      setActiveSection("dashboard");
-      setShowSuccess(true);
-      onClose();
+    try {
+      const user = await login(formData.email, formData.password);
+
+      onClose(); // close modal first
+
+      if (user.role === "admin") {
+        router.replace("/admin/dashboard");
+      } else {
+        router.replace("/");
+      }
     } catch (err) {
-      console.error(err);
+      setError(err instanceof Error ? err.message : "Login failed");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSuccessClose = () => {
     setShowSuccess(false);
     onClose();
-
-    // Get user from context
-    if (user?.role === "admin") {
-      setActiveSection("dashboard"); // for single-page nav
-      router.push("/dashboard"); // for actual dashboard route
-    } else {
-      setActiveSection("home");
-      router.push("/");
-    }
   };
 
   return (
@@ -71,7 +93,7 @@ const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
               placeholder="Email"
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border rounded-lg"
+              className="w-full px-4 py-2 border rounded-lg text-black"
             />
 
             <input
@@ -80,7 +102,7 @@ const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
               placeholder="Password"
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border rounded-lg"
+              className="w-full px-4 py-2 border rounded-lg text-black"
             />
 
             <button
