@@ -1,6 +1,6 @@
-// src/components/hooks/useAuth.tsx
 "use client";
 
+import { Role } from "@/types/admin";
 import {
   createContext,
   useContext,
@@ -8,8 +8,6 @@ import {
   ReactNode,
   useEffect,
 } from "react";
-
-type Role = "admin" | "department" | "auditor";
 
 interface User {
   id: string;
@@ -20,9 +18,10 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
+  loading: boolean;
   setUser: (user: User | null) => void;
-  login: (email: string, password: string) => Promise<User>; // ✅ FIX
-  logout: () => void;
+  login: (email: string, password: string) => Promise<User>;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -31,16 +30,32 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Optional: fetch user info from API if you want server-side persistence
+  // Load user on mount using cookie
   useEffect(() => {
-    // defer state update to next tick
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 0);
+    const loadUser = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/me`,
+          {
+            credentials: "include", // ✅ send httpOnly cookie
+          },
+        );
 
-    return () => clearTimeout(timer); // cleanup just in case
+        if (!res.ok) throw new Error("Not logged in");
+
+        const data = await res.json();
+        setUser(data.user);
+      } catch {
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUser();
   }, []);
 
+  // Login
   const login = async (email: string, password: string): Promise<User> => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`,
@@ -48,6 +63,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
+        credentials: "include", // ✅ important!
       },
     );
 
@@ -57,22 +73,38 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       throw new Error(data.message || "Login failed");
     }
 
-    setUser(data.user);
-    return data.user;
+    const user: User = {
+      id: data.user.id,
+      name: data.user.name,
+      email: data.user.email,
+      role: data.user.role,
+    };
+
+    setUser(user);
+    return user;
   };
 
-  const logout = () => {
-    setUser(null);
+  // Logout
+  const logout = async () => {
+    try {
+      await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/logout`, {
+        method: "POST",
+        credentials: "include", // ✅ send cookie to clear it
+      });
+    } catch (err) {
+      console.error("Logout failed", err);
+    } finally {
+      setUser(null);
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, login, logout }}>
+    <AuthContext.Provider value={{ user, setUser, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// Hook to use auth context
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) throw new Error("useAuth must be used within AuthProvider");

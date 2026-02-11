@@ -32,25 +32,6 @@ const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
     });
   };
 
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   try {
-  //     await login(formData.email, formData.password); // stores user inside context
-
-  //     setShowSuccess(true);
-  //     onClose();
-
-  //     // Redirect based on role
-  //     if (user?.role === "admin") {
-  //       router.push("/admin/dashboard"); // go to admin dashboard
-  //     } else {
-  //       router.push("/home"); // go to home for other roles
-  //     }
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -59,10 +40,14 @@ const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
     try {
       const user = await login(formData.email, formData.password);
 
-      onClose(); // close modal first
+      onClose();
 
-      if (user.role === "admin") {
-        router.replace("/admin/dashboard");
+      if (user.role === "ADMIN") {
+        router.replace("/admin");
+      } else if (user.role === "AUDITOR") {
+        router.replace("/auditor");
+      } else if (user.role === "DEPARTMENT") {
+        router.replace("/department");
       } else {
         router.replace("/");
       }
