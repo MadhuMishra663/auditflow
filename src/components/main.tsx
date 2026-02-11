@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 const HeroSection = lazy(() => import("@/components/hero/heroSection"));
 const AboutSection = lazy(() => import("@/components/about/about"));
 const ContactSection = lazy(() => import("./contact/contact"));
-const AdminDashboard = lazy(() => import("./admin/dashboard"));
+const AdminDashboard = lazy(() => import("@/components/admin/dashboard"));
 
 export default function HomePage() {
   const { user } = useAuth();
@@ -20,7 +20,7 @@ export default function HomePage() {
   if (!hydrated) return <Loader />;
 
   // Admin dashboard
-  if (user?.role === "admin" && activeSection === "dashboard") {
+  if (user?.role === "ADMIN" && activeSection === "dashboard") {
     return (
       <Suspense fallback={<Loader />}>
         <AdminDashboard />
@@ -37,7 +37,7 @@ export default function HomePage() {
       )} */}
       {activeSection === "about" && <AboutSection />}
       {activeSection === "contact" && <ContactSection />}
-      {activeSection === "dashboard" && user?.role !== "admin" && (
+      {activeSection === "dashboard" && user?.role !== "ADMIN" && (
         <HeroSection
           onLearnMore={() => router.push("/about")} // ✅ Navigate to About
         />

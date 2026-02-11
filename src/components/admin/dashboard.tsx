@@ -41,12 +41,12 @@ const AdminDashboard = () => {
     department: "",
   });
   useEffect(() => {
-    if (!user || user.role !== "admin") {
+    if (!user || user.role !== "ADMIN") {
       router.replace("/"); // redirect unauthorized users
     }
   }, [user, router]);
   // Only show if logged-in user is admin
-  if (!user || user.role !== "admin") return null;
+  if (!user || user.role !== "ADMIN") return null;
 
   // Example data
   const totalEmployees = 50;
