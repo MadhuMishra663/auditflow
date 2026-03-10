@@ -29,15 +29,25 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-
+  const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK_API === "true";
   // Load user on mount using cookie
   useEffect(() => {
+    if (USE_MOCK) {
+      const storedUser = localStorage.getItem("mockUser");
+
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+
+      setLoading(false);
+      return;
+    }
     const loadUser = async () => {
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/me`,
           {
-            credentials: "include", // ✅ send httpOnly cookie
+            credentials: "include",
           },
         );
 
@@ -57,13 +67,32 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // Login
   const login = async (email: string, password: string): Promise<User> => {
+    if (USE_MOCK) {
+      const mockUser: User = {
+        id: "1",
+        name: "Demo Admin",
+        email,
+        role:
+          email === "admin@test.com"
+            ? "ADMIN"
+            : email === "auditor@test.com"
+              ? "AUDITOR"
+              : "DEPARTMENT",
+      };
+
+      localStorage.setItem("mockUser", JSON.stringify(mockUser));
+
+      setUser(mockUser);
+
+      return mockUser;
+    }
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
-        credentials: "include", // ✅ important!
+        credentials: "include",
       },
     );
 
@@ -74,10 +103,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const user: User = {
-      id: data.user.id,
-      name: data.user.name,
-      email: data.user.email,
-      role: data.user.role,
+      id: data.data.user.id,
+      name: data.data.user.name,
+      email: data.data.user.email,
+      role: data.data.user.role,
     };
 
     setUser(user);
@@ -86,10 +115,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // Logout
   const logout = async () => {
+    if (USE_MOCK) {
+      localStorage.removeItem("mockUser");
+      setUser(null);
+      return;
+    }
     try {
       await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/logout`, {
         method: "POST",
-        credentials: "include", // ✅ send cookie to clear it
+        credentials: "include",
       });
     } catch (err) {
       console.error("Logout failed", err);
