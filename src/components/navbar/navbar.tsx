@@ -57,7 +57,7 @@ const Navbar = () => {
               <div className="flex items-center gap-4">
                 <button
                   // onClick={() => setActiveSection("dashboard")}
-                  onClick={() => router.push("/admin")}
+                  onClick={() => router.push("/dashboard")}
                   className="hover:text-[#6B9AC4]"
                 >
                   Dashboard
