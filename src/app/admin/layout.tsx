@@ -1,26 +1,12 @@
-"use client";
-
-import { useAuth } from "@/components/hooks/useAuth";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import Sidebar from "@/components/admin/sidebar";
+
+export const dynamic = "force-dynamic";
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { user } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!user || user.role !== "ADMIN") {
-      router.replace("/");
-    }
-  }, [user, router]);
-
-  if (!user || user.role !== "ADMIN") return null;
-
   return (
     <div className="flex">
       <Sidebar />

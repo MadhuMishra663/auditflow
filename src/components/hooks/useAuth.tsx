@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/me`,
           {
-            credentials: "include", // ✅ send httpOnly cookie
+            credentials: "include",
           },
         );
 
@@ -63,7 +63,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
-        credentials: "include", // ✅ important!
+        credentials: "include",
       },
     );
 
@@ -74,10 +74,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const user: User = {
-      id: data.user.id,
-      name: data.user.name,
-      email: data.user.email,
-      role: data.user.role,
+      id: data.data.user.id,
+      name: data.data.user.name,
+      email: data.data.user.email,
+      role: data.data.user.role,
     };
 
     setUser(user);
@@ -89,7 +89,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/logout`, {
         method: "POST",
-        credentials: "include", // ✅ send cookie to clear it
+        credentials: "include",
       });
     } catch (err) {
       console.error("Logout failed", err);
