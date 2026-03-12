@@ -185,7 +185,7 @@ export function Sidebar({
               letterSpacing: "-0.2px",
             }}
           >
-            GRC Platform
+            AuditFlow
           </span>
         </div>
 
