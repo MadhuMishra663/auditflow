@@ -29,9 +29,15 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-
+  const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK_API === "true";
   // Load user on mount using cookie
   useEffect(() => {
+    if (USE_MOCK) {
+       localStorage.removeItem("mockUser"); // ← wipe any stale session
+    setUser(null);
+    setLoading(false);
+    return;
+  }
     const loadUser = async () => {
       try {
         const res = await fetch(
@@ -57,6 +63,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // Login
   const login = async (email: string, password: string): Promise<User> => {
+    if (USE_MOCK) {
+      const mockUser: User = {
+        id: "1",
+        name: "Demo Admin",
+        email,
+        role:
+          email === "admin@test.com"
+            ? "ADMIN"
+            : email === "auditor@test.com"
+              ? "AUDITOR"
+              : "DEPARTMENT",
+      };
+
+      localStorage.setItem("mockUser", JSON.stringify(mockUser));
+
+      setUser(mockUser);
+
+      return mockUser;
+    }
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`,
       {
@@ -86,6 +111,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // Logout
   const logout = async () => {
+    if (USE_MOCK) {
+      localStorage.removeItem("mockUser");
+      setUser(null);
+      return;
+    }
     try {
       await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/logout`, {
         method: "POST",
