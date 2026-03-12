@@ -33,15 +33,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Load user on mount using cookie
   useEffect(() => {
     if (USE_MOCK) {
-      const storedUser = localStorage.getItem("mockUser");
-
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
-      }
-
-      setLoading(false);
-      return;
-    }
+       localStorage.removeItem("mockUser"); // ← wipe any stale session
+    setUser(null);
+    setLoading(false);
+    return;
+  }
     const loadUser = async () => {
       try {
         const res = await fetch(
