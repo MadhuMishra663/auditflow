@@ -1,8 +1,7 @@
 "use client";
 
 import DashboardOverview from "@/components/admin/dashboardOverview";
-import UserManagement from "@/components/admin/userManagement";
-import AuditorManagement from "@/components/admin/auditorManagement";
+//import AuditorManagement from "@/components/admin/auditorManagement";
 import { useAuth } from "@/components/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -22,8 +21,7 @@ export default function AdminDashboardPage() {
   return (
     <div className="space-y-10">
       <DashboardOverview />
-      <UserManagement />
-      <AuditorManagement />
+
     </div>
   );
 }

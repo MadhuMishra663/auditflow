@@ -1,25 +1,17 @@
 // src/app/admin/layout.tsx
-import { Sidebar } from "@/components/admin/sidebar";
+import Sidebar from "@/components/admin/sidebar";
+import AdminTopbar from "@/components/admin/adminTopbar";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ display: "flex", minHeight: "100vh", backgroundColor: "#F8F9FB" }}>
-      <Sidebar
-        orgName="Acme Corporation"
-        orgTag="Technology"
-        userName="Johan Admin"
-        userRole="Organization Administrator"
-      />
-      {/* offset must match sidebar width exactly: 358px */}
-      <main style={{
-        marginLeft: "358px",
-        flex: 1,
-        minHeight: "100vh",
-        overflowY: "auto",
-        overflowX: "hidden",
-      }}>
-        {children}
-      </main>
+    <div className="flex min-h-screen bg-[#f7f8fc]">
+      <Sidebar />
+      <div className="ml-[358px] flex-1 flex flex-col min-h-screen">
+        <AdminTopbar />
+        <main className="flex-1 overflow-y-auto">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }
