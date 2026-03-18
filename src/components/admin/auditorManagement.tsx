@@ -1,4 +1,4 @@
-import Sidebar from "@/components/admin/sidebar";
+import Sidebar from "@/components/common/sidebar";
 
 export default function AuditorsPage() {
   return (
