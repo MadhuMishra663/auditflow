@@ -33,7 +33,7 @@ const Pagination: React.FC<PaginationProps> = ({
       `w-9 h-9 flex items-center justify-center rounded-full border text-sm font-medium transition-colors
       ${
         active
-          ? "bg-[#29B6D2] text-white border-[#29B6D2]"           // LINE 37: Teal active color
+          ? "bg-gray-400 text-white border-gray-400"           // LINE 37: Teal active color
           : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50" // LINE 38: Subtle inactive style
       }`;
 
