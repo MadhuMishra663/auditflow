@@ -73,7 +73,7 @@ const SIDEBAR_BG  = "#FFFFFF";
 
 const NAV_ITEMS = [
   { id: "dashboard",        label: "Dashboard",        icon: (c: string) => <GridIcon color={c} /> },
-  { id: "risk-management",  label: "Risk Management",  icon: (c: string) => <AlertTriangleIcon color={c} /> },
+  { id: "riskManagement",  label: "Risk Management",  icon: (c: string) => <AlertTriangleIcon color={c} /> },
   { id: "compliance",       label: "Compliance",       icon: (c: string) => <ClipboardIcon color={c} /> },
   { id: "policies",         label: "policies",         icon: (c: string) => <FileTextIcon color={c} /> },
   { id: "audit-management", label: "Audit Management", icon: (c: string) => <SearchIcon color={c} /> },
@@ -82,7 +82,7 @@ const NAV_ITEMS = [
 
 const ROUTES: Record<string, string> = {
   "dashboard":        "/admin/dashboard",
-  "risk-management":  "/admin/risk-management",
+  "riskManagement":  "/admin/riskManagement",
   "compliance":       "/admin/compliance",
   "policies":         "/admin/policies",
   "audit-management": "/admin/audit-management",
@@ -106,7 +106,7 @@ export function Sidebar({
   const pathname = usePathname();
 
   const getActiveItem = () => {
-    if (pathname.includes("risk-management"))  return "risk-management";
+    if (pathname.includes("riskManagement"))  return "riskManagement";
     if (pathname.includes("compliance"))       return "compliance";
     if (pathname.includes("policies"))         return "policies";
     if (pathname.includes("audit-management")) return "audit-management";

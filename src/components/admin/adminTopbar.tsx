@@ -15,7 +15,7 @@ const MOCK_NOTIFICATIONS = [
 
 const PAGE_TITLES: Record<string, string> = {
   "/admin/dashboard":        "Dashboard",
-  "/admin/risk-management":  "Risk Management",
+  "/admin/riskManagement":  "Risk Management",
   "/admin/compliance":       "Compliance",
   "/admin/policies":         "Policies",
   "/admin/audit-management": "Audit Management",
