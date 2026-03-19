@@ -287,7 +287,6 @@ export default function RiskManagment() {
           </div>
 
           {/* ── Pagination ── */}
-          {/* ── Pagination ── */}
           <Pagination
             currentPage={currentPage}
             totalItems={sorted.length}

@@ -4,9 +4,7 @@ import { useState, useEffect, useRef } from "react";
 // Add this import at the top
 import Pagination from "@/components/common/pagination";
 
-// ─────────────────────────────────────────────
 // Types
-// ─────────────────────────────────────────────
 type Status = "Compliant" | "In Progress" | "Non-Compliant";
 type Framework = "SOC 2" | "GDPR" | "ISO 27001" | "PCI DSS";
 
@@ -20,9 +18,7 @@ interface Control {
   nextReview: string;
 }
 
-// ─────────────────────────────────────────────
 // Mock Data
-// ─────────────────────────────────────────────
 const allControls: Control[] = [
   { id: 1,  framework: "SOC 2",     control: "CC6.1 – Logical Access Controls",         status: "Compliant",     owner: "Security Team", lastReview: "2026-01-15", nextReview: "2026-04-15" },
   { id: 2,  framework: "GDPR",      control: "Article 32 – Security of Processing",     status: "In Progress",   owner: "Privacy Team",  lastReview: "2026-02-01", nextReview: "2026-05-01" },
@@ -48,9 +44,7 @@ const frameworkTabs: ("All frameworks" | Framework)[] = [
 const PAGE_SIZE = 3;
 const DISPLAY_TOTAL_PAGES = 10;
 
-// ─────────────────────────────────────────────
 // Status config
-// ─────────────────────────────────────────────
 const statusConfig: Record<Status, { bg: string; text: string; border: string }> = {
   "Compliant":     { bg: "bg-emerald-50",  text: "text-emerald-600", border: "border-emerald-200" },
   "In Progress":   { bg: "bg-sky-50",      text: "text-sky-500",     border: "border-sky-200"     },
@@ -64,9 +58,7 @@ function complianceForFramework(fw: Framework) {
   return { pct: Math.round((compliant / relevant.length) * 100), compliant, total: relevant.length };
 }
 
-// ─────────────────────────────────────────────
 // Animated counter hook
-// ─────────────────────────────────────────────
 function useCountUp(target: number, duration = 1200) {
   const [value, setValue] = useState(0);
   useEffect(() => {
@@ -82,9 +74,7 @@ function useCountUp(target: number, duration = 1200) {
   return value;
 }
 
-// ─────────────────────────────────────────────
 // Animated progress bar
-// ─────────────────────────────────────────────
 function AnimatedBar({ pct, color = "bg-violet-500" }: { pct: number; color?: string }) {
   const [width, setWidth] = useState(0);
   useEffect(() => {
@@ -101,9 +91,7 @@ function AnimatedBar({ pct, color = "bg-violet-500" }: { pct: number; color?: st
   );
 }
 
-// ─────────────────────────────────────────────
 // SVG Icons
-// ─────────────────────────────────────────────
 const TrendUpIcon = () => (
   <svg className="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
@@ -150,9 +138,7 @@ const ChevronRightIcon = () => (
   </svg>
 );
 
-// ─────────────────────────────────────────────
 // StatCard with fade-in + count-up
-// ─────────────────────────────────────────────
 function StatCard({
   label, rawValue, icon, progress, cardBg, iconBg, delay = 0,
 }: {
@@ -193,10 +179,8 @@ function StatCard({
     </div>
   );
 }
-
-// ─────────────────────────────────────────────
 // StatusBadge
-// ─────────────────────────────────────────────
+
 function StatusBadge({ status }: { status: Status }) {
   const cfg = statusConfig[status];
   return (
@@ -206,9 +190,7 @@ function StatusBadge({ status }: { status: Status }) {
   );
 }
 
-// ─────────────────────────────────────────────
 // FrameworkCard with slide-up + animated bar
-// ─────────────────────────────────────────────
 function FrameworkCard({ fw, delay = 0 }: { fw: Framework; delay?: number }) {
   const { pct, compliant, total } = complianceForFramework(fw);
   const [visible, setVisible] = useState(false);
@@ -235,9 +217,7 @@ function FrameworkCard({ fw, delay = 0 }: { fw: Framework; delay?: number }) {
   );
 }
 
-// ─────────────────────────────────────────────
 // Dropdown
-// ─────────────────────────────────────────────
 function Dropdown({ value, options, open, onToggle, onSelect }: {
   value: string;
   options: string[];
@@ -272,9 +252,7 @@ function Dropdown({ value, options, open, onToggle, onSelect }: {
   );
 }
 
-// ─────────────────────────────────────────────
 // Table row with fade-in
-// ─────────────────────────────────────────────
 function TableRow({ c, index }: { c: Control; index: number }) {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -301,9 +279,7 @@ function TableRow({ c, index }: { c: Control; index: number }) {
   );
 }
 
-// ─────────────────────────────────────────────
 // Main Page
-// ─────────────────────────────────────────────
 export default function ComplianceDashboard() {
   const [activeTab, setActiveTab]     = useState<"All frameworks" | Framework>("All frameworks");
   const [currentPage, setCurrentPage] = useState(1);
@@ -446,7 +422,6 @@ export default function ComplianceDashboard() {
             </div>
           </div>
 
-          {/* ── 4. Pagination ── */}
           {/* ── 4. Pagination ── */}
           <Pagination
             currentPage={currentPage}
