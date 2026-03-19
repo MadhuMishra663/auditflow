@@ -5,6 +5,10 @@ import { useState, useEffect, useRef } from "react";
 import Pagination from "@/components/common/pagination";
 
 // Types
+
+// ─────────────────────────────────────────────
+// Types
+// ─────────────────────────────────────────────
 type Status = "Compliant" | "In Progress" | "Non-Compliant";
 type Framework = "SOC 2" | "GDPR" | "ISO 27001" | "PCI DSS";
 
@@ -17,6 +21,7 @@ interface Control {
   lastReview: string;
   nextReview: string;
 }
+
 
 // Mock Data
 const allControls: Control[] = [
@@ -57,8 +62,8 @@ function complianceForFramework(fw: Framework) {
   const compliant = relevant.filter((c) => c.status === "Compliant").length;
   return { pct: Math.round((compliant / relevant.length) * 100), compliant, total: relevant.length };
 }
-
 // Animated counter hook
+
 function useCountUp(target: number, duration = 1200) {
   const [value, setValue] = useState(0);
   useEffect(() => {
@@ -73,8 +78,8 @@ function useCountUp(target: number, duration = 1200) {
   }, [target, duration]);
   return value;
 }
-
 // Animated progress bar
+// ─────────────────────────────────────────────
 function AnimatedBar({ pct, color = "bg-violet-500" }: { pct: number; color?: string }) {
   const [width, setWidth] = useState(0);
   useEffect(() => {
@@ -92,6 +97,7 @@ function AnimatedBar({ pct, color = "bg-violet-500" }: { pct: number; color?: st
 }
 
 // SVG Icons
+// ─────────────────────────────────────────────
 const TrendUpIcon = () => (
   <svg className="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
@@ -137,8 +143,8 @@ const ChevronRightIcon = () => (
     <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
   </svg>
 );
-
 // StatCard with fade-in + count-up
+// ─────────────────────────────────────────────
 function StatCard({
   label, rawValue, icon, progress, cardBg, iconBg, delay = 0,
 }: {
@@ -179,8 +185,9 @@ function StatCard({
     </div>
   );
 }
-// StatusBadge
 
+// StatusBadge
+// ─────────────────────────────────────────────
 function StatusBadge({ status }: { status: Status }) {
   const cfg = statusConfig[status];
   return (
@@ -191,6 +198,7 @@ function StatusBadge({ status }: { status: Status }) {
 }
 
 // FrameworkCard with slide-up + animated bar
+// ─────────────────────────────────────────────
 function FrameworkCard({ fw, delay = 0 }: { fw: Framework; delay?: number }) {
   const { pct, compliant, total } = complianceForFramework(fw);
   const [visible, setVisible] = useState(false);
@@ -218,6 +226,7 @@ function FrameworkCard({ fw, delay = 0 }: { fw: Framework; delay?: number }) {
 }
 
 // Dropdown
+// ─────────────────────────────────────────────
 function Dropdown({ value, options, open, onToggle, onSelect }: {
   value: string;
   options: string[];
@@ -253,6 +262,7 @@ function Dropdown({ value, options, open, onToggle, onSelect }: {
 }
 
 // Table row with fade-in
+// ─────────────────────────────────────────────
 function TableRow({ c, index }: { c: Control; index: number }) {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -280,6 +290,8 @@ function TableRow({ c, index }: { c: Control; index: number }) {
 }
 
 // Main Page
+// ─────────────────────────────────────────────
+
 export default function ComplianceDashboard() {
   const [activeTab, setActiveTab]     = useState<"All frameworks" | Framework>("All frameworks");
   const [currentPage, setCurrentPage] = useState(1);
@@ -429,6 +441,51 @@ export default function ComplianceDashboard() {
             itemsPerPage={PAGE_SIZE}
             onPageChange={handlePageChange}
           />
+=======
+          <div className="flex items-center gap-1 flex-wrap">
+            <button
+              onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+              disabled={currentPage === 1}
+              className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-40 transition-all active:scale-95"
+            >
+              <ChevronLeftIcon /> Previous
+            </button>
+
+            {[1, 2, 3, 4, 5, 6, 7].map((p) => (
+              <button
+                key={p}
+                onClick={() => handlePageChange(p)}
+                className={`w-7 h-7 rounded-lg text-xs font-medium transition-all active:scale-90 ${
+                  currentPage === p
+                    ? "bg-violet-600 text-white shadow-sm scale-105"
+                    : "text-slate-600 border border-slate-200 bg-white hover:bg-slate-50 hover:border-violet-300"
+                }`}
+              >
+                {p}
+              </button>
+            ))}
+
+            <span className="px-1 text-slate-300 text-xs select-none tracking-widest">·········</span>
+
+            <button
+              onClick={() => handlePageChange(DISPLAY_TOTAL_PAGES)}
+              className={`w-7 h-7 rounded-lg text-xs font-medium transition-all active:scale-90 ${
+                currentPage === DISPLAY_TOTAL_PAGES
+                  ? "bg-violet-600 text-white shadow-sm scale-105"
+                  : "text-slate-600 border border-slate-200 bg-white hover:bg-slate-50 hover:border-violet-300"
+              }`}
+            >
+              {DISPLAY_TOTAL_PAGES}
+            </button>
+
+            <button
+              onClick={() => handlePageChange(Math.min(DISPLAY_TOTAL_PAGES, currentPage + 1))}
+              disabled={currentPage === DISPLAY_TOTAL_PAGES}
+              className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-40 transition-all active:scale-95"
+            >
+              Next <ChevronRightIcon />
+            </button>
+          </div>
 
         </main>
       </div>

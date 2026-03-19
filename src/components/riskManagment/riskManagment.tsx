@@ -293,7 +293,43 @@ export default function RiskManagment() {
             itemsPerPage={PAGE_SIZE}
             onPageChange={(page) => setCurrentPage(page)}
             />
-
+          <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-100">
+            <button onClick={() => setCurrentPage(p => Math.max(1,p-1))} disabled={currentPage===1}
+              className="flex items-center gap-1.5 px-3 py-2 text-sm rounded-lg hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed"
+              style={{ color: "#222222" }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6"/></svg>
+              Previous
+            </button>
+            <div className="flex items-center gap-1">
+              {pageNumbers().map((page) => (
+                <button key={page} onClick={() => setCurrentPage(page)}
+                  className="w-9 h-9 text-sm rounded-full font-medium transition-colors"
+                  style={currentPage===page
+                    ? { backgroundColor: "#EDE8F9", color: "#8B6FD4" }
+                    : { color: "#222222" }}>
+                  {page}
+                </button>
+              ))}
+              {totalPages > 7 && (
+                <>
+                  <span className="px-1 text-xs" style={{ color: "#222222" }}>.........</span>
+                  <button onClick={() => setCurrentPage(totalPages)}
+                    className="w-9 h-9 text-sm rounded-full font-medium transition-colors"
+                    style={currentPage===totalPages
+                      ? { backgroundColor: "#EDE8F9", color: "#8B6FD4" }
+                      : { color: "#222222" }}>
+                    {totalPages}
+                  </button>
+                </>
+              )}
+            </div>
+            <button onClick={() => setCurrentPage(p => Math.min(totalPages,p+1))} disabled={currentPage===totalPages}
+              className="flex items-center gap-1.5 px-3 py-2 text-sm rounded-lg hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed"
+              style={{ color: "#222222" }}>
+              Next
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>
