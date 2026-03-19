@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 const HeroSection = lazy(() => import("@/components/hero/heroSection"));
 const AboutSection = lazy(() => import("@/components/about/about"));
 const ContactSection = lazy(() => import("./contact/contact"));
-const AdminDashboard = lazy(() => import("@/components/admin/dashboard"));
+const AdminDashboard = lazy(() => import("@/components/admin/Dashboard/dashboard"));
 
 export default function HomePage() {
   const { user } = useAuth();

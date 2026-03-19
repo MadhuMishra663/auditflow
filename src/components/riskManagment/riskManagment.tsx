@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Pagination from "@/components/common/pagination";
 
 const allRisks = [
   { id: 1, title: "Data Breach Vulnerability", description: "Potential security gaps in customer database", severity: "Critical", status: "Open", category: "Security", owner: "John Smith", created: "2026-02-20", avatar: "https://i.pravatar.cc/32?img=1" },
@@ -286,6 +287,12 @@ export default function RiskManagment() {
           </div>
 
           {/* ── Pagination ── */}
+          <Pagination
+            currentPage={currentPage}
+            totalItems={sorted.length}
+            itemsPerPage={PAGE_SIZE}
+            onPageChange={(page) => setCurrentPage(page)}
+            />
           <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-100">
             <button onClick={() => setCurrentPage(p => Math.max(1,p-1))} disabled={currentPage===1}
               className="flex items-center gap-1.5 px-3 py-2 text-sm rounded-lg hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed"
@@ -323,7 +330,6 @@ export default function RiskManagment() {
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
             </button>
           </div>
-
         </div>
       </div>
     </div>
