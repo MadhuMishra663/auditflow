@@ -1,6 +1,6 @@
 "use client";
 
-import DashboardOverview from "@/components/admin/dashboardOverview";
+import DashboardOverview from "@/components/admin/Dashboard/dashboardOverview";
 //import AuditorManagement from "@/components/admin/auditorManagement";
 import { useAuth } from "@/components/hooks/useAuth";
 import { useRouter } from "next/navigation";

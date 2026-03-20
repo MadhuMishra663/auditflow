@@ -1,6 +1,10 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+// Add this import at the top
+import Pagination from "@/components/common/pagination";
+
+// Types
 
 // ─────────────────────────────────────────────
 // Types
@@ -18,9 +22,8 @@ interface Control {
   nextReview: string;
 }
 
-// ─────────────────────────────────────────────
+
 // Mock Data
-// ─────────────────────────────────────────────
 const allControls: Control[] = [
   { id: 1,  framework: "SOC 2",     control: "CC6.1 – Logical Access Controls",         status: "Compliant",     owner: "Security Team", lastReview: "2026-01-15", nextReview: "2026-04-15" },
   { id: 2,  framework: "GDPR",      control: "Article 32 – Security of Processing",     status: "In Progress",   owner: "Privacy Team",  lastReview: "2026-02-01", nextReview: "2026-05-01" },
@@ -46,9 +49,7 @@ const frameworkTabs: ("All frameworks" | Framework)[] = [
 const PAGE_SIZE = 3;
 const DISPLAY_TOTAL_PAGES = 10;
 
-// ─────────────────────────────────────────────
 // Status config
-// ─────────────────────────────────────────────
 const statusConfig: Record<Status, { bg: string; text: string; border: string }> = {
   "Compliant":     { bg: "bg-emerald-50",  text: "text-emerald-600", border: "border-emerald-200" },
   "In Progress":   { bg: "bg-sky-50",      text: "text-sky-500",     border: "border-sky-200"     },
@@ -61,10 +62,8 @@ function complianceForFramework(fw: Framework) {
   const compliant = relevant.filter((c) => c.status === "Compliant").length;
   return { pct: Math.round((compliant / relevant.length) * 100), compliant, total: relevant.length };
 }
-
-// ─────────────────────────────────────────────
 // Animated counter hook
-// ─────────────────────────────────────────────
+
 function useCountUp(target: number, duration = 1200) {
   const [value, setValue] = useState(0);
   useEffect(() => {
@@ -79,8 +78,6 @@ function useCountUp(target: number, duration = 1200) {
   }, [target, duration]);
   return value;
 }
-
-// ─────────────────────────────────────────────
 // Animated progress bar
 // ─────────────────────────────────────────────
 function AnimatedBar({ pct, color = "bg-violet-500" }: { pct: number; color?: string }) {
@@ -99,7 +96,6 @@ function AnimatedBar({ pct, color = "bg-violet-500" }: { pct: number; color?: st
   );
 }
 
-// ─────────────────────────────────────────────
 // SVG Icons
 // ─────────────────────────────────────────────
 const TrendUpIcon = () => (
@@ -147,8 +143,6 @@ const ChevronRightIcon = () => (
     <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
   </svg>
 );
-
-// ─────────────────────────────────────────────
 // StatCard with fade-in + count-up
 // ─────────────────────────────────────────────
 function StatCard({
@@ -192,7 +186,6 @@ function StatCard({
   );
 }
 
-// ─────────────────────────────────────────────
 // StatusBadge
 // ─────────────────────────────────────────────
 function StatusBadge({ status }: { status: Status }) {
@@ -204,7 +197,6 @@ function StatusBadge({ status }: { status: Status }) {
   );
 }
 
-// ─────────────────────────────────────────────
 // FrameworkCard with slide-up + animated bar
 // ─────────────────────────────────────────────
 function FrameworkCard({ fw, delay = 0 }: { fw: Framework; delay?: number }) {
@@ -233,7 +225,6 @@ function FrameworkCard({ fw, delay = 0 }: { fw: Framework; delay?: number }) {
   );
 }
 
-// ─────────────────────────────────────────────
 // Dropdown
 // ─────────────────────────────────────────────
 function Dropdown({ value, options, open, onToggle, onSelect }: {
@@ -270,7 +261,6 @@ function Dropdown({ value, options, open, onToggle, onSelect }: {
   );
 }
 
-// ─────────────────────────────────────────────
 // Table row with fade-in
 // ─────────────────────────────────────────────
 function TableRow({ c, index }: { c: Control; index: number }) {
@@ -299,9 +289,9 @@ function TableRow({ c, index }: { c: Control; index: number }) {
   );
 }
 
-// ─────────────────────────────────────────────
 // Main Page
 // ─────────────────────────────────────────────
+
 export default function ComplianceDashboard() {
   const [activeTab, setActiveTab]     = useState<"All frameworks" | Framework>("All frameworks");
   const [currentPage, setCurrentPage] = useState(1);
@@ -445,6 +435,13 @@ export default function ComplianceDashboard() {
           </div>
 
           {/* ── 4. Pagination ── */}
+          <Pagination
+            currentPage={currentPage}
+            totalItems={filtered.length}
+            itemsPerPage={PAGE_SIZE}
+            onPageChange={handlePageChange}
+          />
+=======
           <div className="flex items-center gap-1 flex-wrap">
             <button
               onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
