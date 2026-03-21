@@ -1,4 +1,3 @@
-// src/components/admin/adminTopbar.tsx
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
@@ -15,7 +14,7 @@ const MOCK_NOTIFICATIONS = [
 
 const PAGE_TITLES: Record<string, string> = {
   "/admin/dashboard":        "Dashboard",
-  "/admin/risk-management":  "Risk Management",
+  "/admin/risk-management":   "Risk Management",
   "/admin/compliance":       "Compliance",
   "/admin/policies":         "Policies",
   "/admin/audit-management": "Audit Management",
