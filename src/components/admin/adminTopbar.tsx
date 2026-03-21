@@ -15,7 +15,7 @@ const MOCK_NOTIFICATIONS = [
 
 const PAGE_TITLES: Record<string, string> = {
   "/admin/dashboard":        "Dashboard",
-  "/admin/riskManagement":  "Risk Management",
+  "/admin/risk-management":  "Risk Management",
   "/admin/compliance":       "Compliance",
   "/admin/policies":         "Policies",
   "/admin/audit-management": "Audit Management",
@@ -31,7 +31,24 @@ function getPageTitle(pathname: string): string {
   return match ? PAGE_TITLES[match] : "Dashboard";
 }
 
-export default function AdminTopbar() {
+// Hamburger icon
+const HamburgerIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" width="22" height="22" stroke="currentColor" strokeWidth={2}>
+    <line x1="3" y1="6" x2="21" y2="6" />
+    <line x1="3" y1="12" x2="21" y2="12" />
+    <line x1="3" y1="18" x2="21" y2="18" />
+  </svg>
+);
+
+// ── Props ────────────────────────────────────────────────────────────────────
+
+type AdminTopbarProps = {
+  onMenuOpen?: () => void; // called when hamburger is tapped on mobile
+};
+
+// ── Component ────────────────────────────────────────────────────────────────
+
+export default function AdminTopbar({ onMenuOpen }: AdminTopbarProps) {
   const pathname = usePathname();
   const router   = useRouter();
   const { user, logout } = useAuth();
@@ -61,9 +78,22 @@ export default function AdminTopbar() {
   return (
     <header className="sticky top-0 z-30 bg-white border-b border-gray-100 h-[60px] flex items-center justify-between px-7">
 
-      {/* Page title */}
-      <h1 className="text-lg font-bold text-gray-900 tracking-tight">{pageTitle}</h1>
+      {/* ── Left: hamburger (mobile only) + page title ── */}
+      <div className="flex items-center gap-3">
+        {/* Hamburger — only visible on mobile (md:hidden) */}
+        <button
+          onClick={onMenuOpen}
+          className="md:hidden p-1.5 -ml-1 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+          aria-label="Open menu"
+        >
+          <HamburgerIcon />
+        </button>
 
+        {/* Page title */}
+        <h1 className="text-lg font-bold text-gray-900 tracking-tight">{pageTitle}</h1>
+      </div>
+
+      {/* ── Right: bell + profile ── */}
       <div className="flex items-center gap-1">
 
         {/* ── Bell ── */}
@@ -80,10 +110,8 @@ export default function AdminTopbar() {
             )}
           </button>
 
-          {/* Notification dropdown */}
           {notifOpen && (
             <div className="absolute right-0 top-[calc(100%+10px)] w-[340px] bg-white rounded-xl border border-gray-200 shadow-xl z-50 overflow-hidden">
-              {/* Header */}
               <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
                 <span className="text-sm font-bold text-gray-900 flex items-center gap-2">
                   Notifications
@@ -100,7 +128,6 @@ export default function AdminTopbar() {
                 )}
               </div>
 
-              {/* List */}
               <div className="max-h-[300px] overflow-y-auto">
                 {notifications.map((n) => (
                   <div
@@ -118,7 +145,6 @@ export default function AdminTopbar() {
                 ))}
               </div>
 
-              {/* Footer */}
               <div className="px-4 py-2.5 border-t border-gray-100 text-center">
                 <button onClick={() => setNotifOpen(false)} className="text-xs text-[#6B9AC4] font-medium hover:underline">
                   View all notifications
@@ -140,7 +166,7 @@ export default function AdminTopbar() {
                 <circle cx="12" cy="7" r="4"/>
               </svg>
             </div>
-            <div className="text-left">
+            <div className="text-left hidden sm:block">
               <p className="text-[13px] font-semibold text-gray-900 leading-tight whitespace-nowrap">
                 {user?.name ?? "Johan Admin"}
               </p>
@@ -148,14 +174,13 @@ export default function AdminTopbar() {
             </div>
             <svg
               viewBox="0 0 24 24" fill="none" width="13" height="13" stroke="#9ca3af" strokeWidth={2.2}
-              className="flex-shrink-0 transition-transform duration-200"
+              className="flex-shrink-0 transition-transform duration-200 hidden sm:block"
               style={{ transform: profileOpen ? "rotate(180deg)" : "rotate(0deg)" }}
             >
               <polyline points="6 9 12 15 18 9"/>
             </svg>
           </button>
 
-          {/* Profile dropdown */}
           {profileOpen && (
             <div className="absolute right-0 top-[calc(100%+10px)] w-44 bg-white rounded-xl border border-gray-200 shadow-xl overflow-hidden z-50">
               <button
