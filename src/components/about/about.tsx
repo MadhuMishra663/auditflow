@@ -1,5 +1,6 @@
 "use client";
 
+import { theme } from "@/styles/theme";
 import Image from "next/image";
 
 const AboutSection = () => {
@@ -9,7 +10,16 @@ const AboutSection = () => {
         {/* Left Text */}
         <div>
           <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-6">
-            About <span className="text-[#6B9AC4]">AuditFlow</span>
+            About{" "}
+            <span
+              style={{
+                background: theme.colors.buttonColor,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              AuditFlow
+            </span>
           </h2>
 
           <p className="text-gray-700 text-lg mb-4">
