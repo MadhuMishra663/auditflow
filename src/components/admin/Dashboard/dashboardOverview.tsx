@@ -95,28 +95,27 @@ const statusStyle: Record<string, { bg: string; text: string }> = {
   "Non-Compliant": { bg: "#fee2e2", text: "#ef4444" },
 };
 
-// ── Component ──────────────────────────────────────────────────────────────────
 const DashboardOverview = () => {
   const { data, loading, error } = useAdminDashboard();
 
   if (loading)
     return (
-      <div className="p-8">
+      <div className="p-6">
         <p className="text-sm text-gray-400">Loading dashboard...</p>
       </div>
     );
 
   if (error || !data)
     return (
-      <div className="p-8">
+      <div className="p-6">
         <p className="text-sm text-red-500">{error || "No data available"}</p>
       </div>
     );
 
   return (
-    <div className="bg-[#f7f8fc] min-h-screen p-6">
+    <div className="bg-[#f7f8fc] min-h-screen p-4 sm:p-6">
       {/* ── Stat Cards ── */}
-      <div className="grid grid-cols-4 gap-4 mb-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
         <StatCard
           title="Total Risk"
           value={data.totalAudits}
@@ -144,214 +143,124 @@ const DashboardOverview = () => {
       </div>
 
       {/* ── Pie + Bar ── */}
-      <div className="grid grid-cols-5 gap-4 mb-5">
-        <div className="col-span-2 bg-white rounded-xl border border-gray-100 p-5">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-5">
+        {/* Pie */}
+        <div className="lg:col-span-2 bg-white rounded-xl border border-gray-100 p-4 sm:p-5">
           <h3 className="text-[13px] font-semibold text-gray-700 mb-3">
             Risk Distribution by Severity
           </h3>
-          <ResponsiveContainer width="100%" height={260}>
-            <PieChart>
-              <Pie
-                data={riskDistribution}
-                cx="50%"
-                cy="50%"
-                outerRadius={95}
-                paddingAngle={1}
-                dataKey="value"
-                labelLine={{ stroke: "#d1d5db", strokeWidth: 1 }}
-                label={(props: PieLabelRenderProps) => {
-                  const { cx, cy, midAngle, outerRadius, name, value, index } =
-                    props;
 
-                  if (
-                    cx === undefined ||
-                    cy === undefined ||
-                    midAngle === undefined ||
-                    outerRadius === undefined ||
-                    index === undefined
-                  ) {
-                    return null;
-                  }
-
-                  const RADIAN = Math.PI / 180;
-                  const radius = outerRadius + 30;
-                  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-                  const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-                  const labelColors = ["#f472b6", "#f59e0b", "#93c5fd"];
-
-                  return (
-                    <text
-                      x={x}
-                      y={y}
-                      fill={labelColors[index]}
-                      textAnchor={x > cx ? "start" : "end"}
-                      dominantBaseline="central"
-                      fontSize={12}
-                      fontWeight={500}
-                    >
-                      {`${name} ${value}%`}
-                    </text>
-                  );
-                }}
-              >
-                {riskDistribution.map((entry, i) => (
-                  <Cell
-                    key={i}
-                    fill={entry.color}
-                    stroke="#fff"
-                    strokeWidth={2}
-                  />
-                ))}
-              </Pie>
-              <Tooltip
-                contentStyle={{
-                  background: "#fff",
-                  border: "1px solid #e8eaf0",
-                  borderRadius: 8,
-                  fontSize: 12,
-                }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
+          <div className="w-full h-[220px] sm:h-[260px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={riskDistribution}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  paddingAngle={1}
+                  dataKey="value"
+                >
+                  {riskDistribution.map((entry, i) => (
+                    <Cell
+                      key={i}
+                      fill={entry.color}
+                      stroke="#fff"
+                      strokeWidth={2}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
         </div>
 
-        <div className="col-span-3 bg-white rounded-xl border border-gray-100 p-5">
+        {/* Bar */}
+        <div className="lg:col-span-3 bg-white rounded-xl border border-gray-100 p-4 sm:p-5">
           <h3 className="text-[13px] font-semibold text-gray-700 mb-3">
             Compliance Status Overview
           </h3>
-          <ResponsiveContainer width="100%" height={260}>
-            <BarChart data={complianceStatus} barSize={125}>
+
+          <div className="w-full h-[220px] sm:h-[260px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={complianceStatus}>
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="#f0f1f5"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="name"
+                  tick={{ fill: "#9ca3af", fontSize: 11 }}
+                />
+                <YAxis tick={{ fill: "#9ca3af", fontSize: 11 }} />
+                <Tooltip />
+                <Bar dataKey="value" fill="#93c5fd" radius={[5, 5, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Trend ── */}
+      <div className="bg-white rounded-xl border border-gray-100 p-4 sm:p-5 mb-5">
+        <h3 className="text-[13px] font-semibold text-gray-700 mb-3">
+          Risk &amp; Compliance Trends
+        </h3>
+
+        <div className="w-full h-[220px] sm:h-[260px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={trends}>
               <CartesianGrid
                 strokeDasharray="3 3"
                 stroke="#f0f1f5"
                 vertical={false}
               />
-              <XAxis
-                dataKey="name"
-                tick={{ fill: "#9ca3af", fontSize: 11 }}
-                axisLine={false}
-                tickLine={false}
+              <XAxis dataKey="month" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="risk"
+                stroke="#6366f1"
+                strokeWidth={2}
+                dot={false}
               />
-              <YAxis
-                tick={{ fill: "#9ca3af", fontSize: 11 }}
-                axisLine={false}
-                tickLine={false}
+              <Line
+                type="monotone"
+                dataKey="compliance"
+                stroke="#93c5fd"
+                strokeWidth={2}
+                dot={false}
               />
-              <Tooltip
-                contentStyle={{
-                  background: "#fff",
-                  border: "1px solid #e8eaf0",
-                  borderRadius: 8,
-                  fontSize: 12,
-                }}
-                cursor={{ fill: "rgba(0,0,0,0.03)" }}
-              />
-              <Bar dataKey="value" fill="#93c5fd" radius={[5, 5, 0, 0]} />
-            </BarChart>
+            </LineChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      {/* ── Trend ── */}
-      <div className="bg-white rounded-xl border border-gray-100 p-5 mb-5">
-        <h3 className="text-[13px] font-semibold text-gray-700 mb-3">
-          Risk &amp; Compliance Trends
-        </h3>
-        <ResponsiveContainer width="100%" height={220}>
-          <LineChart data={trends}>
-            <CartesianGrid
-              strokeDasharray="3 3"
-              stroke="#f0f1f5"
-              vertical={false}
-            />
-            <XAxis
-              dataKey="month"
-              tick={{ fill: "#9ca3af", fontSize: 11 }}
-              axisLine={false}
-              tickLine={false}
-            />
-            <YAxis
-              yAxisId="left"
-              tick={{ fill: "#9ca3af", fontSize: 11 }}
-              axisLine={false}
-              tickLine={false}
-            />
-            <YAxis
-              yAxisId="right"
-              orientation="right"
-              tick={{ fill: "#9ca3af", fontSize: 11 }}
-              axisLine={false}
-              tickLine={false}
-            />
-            <Tooltip
-              contentStyle={{
-                background: "#fff",
-                border: "1px solid #e8eaf0",
-                borderRadius: 8,
-                fontSize: 12,
-              }}
-            />
-            <Legend
-              wrapperStyle={{ fontSize: 12, color: "#9ca3af", paddingTop: 12 }}
-            />
-            <Line
-              yAxisId="left"
-              type="monotone"
-              dataKey="risk"
-              stroke="#6366f1"
-              strokeWidth={2}
-              dot={false}
-              name="Risk Level"
-            />
-            <Line
-              yAxisId="right"
-              type="monotone"
-              dataKey="compliance"
-              stroke="#93c5fd"
-              strokeWidth={2}
-              dot={false}
-              name="Compliance %"
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
-
       {/* ── Bottom Row ── */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* High Priority Risks */}
-        <div className="bg-white rounded-xl border border-gray-100 p-5">
+        <div className="bg-white rounded-xl border border-gray-100 p-4 sm:p-5">
           <h3 className="text-[13px] font-semibold text-gray-700 mb-4">
             High Priority Risks
           </h3>
+
           <div className="space-y-3">
             {highPriorityRisks.map((r, i) => (
               <div
                 key={i}
                 className="flex items-center gap-3 bg-[#ebebf5] rounded-xl px-4 py-3"
               >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke={severityStyle[r.severity].icon}
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="flex-shrink-0"
-                >
-                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-                  <line x1="12" y1="9" x2="12" y2="13" />
-                  <line x1="12" y1="17" x2="12.01" y2="17" />
-                </svg>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-[13px] font-bold text-gray-800">
+                    <span className="text-[13px] font-bold text-gray-800 truncate">
                       {r.title}
                     </span>
                     <span
-                      className="text-[11px] font-bold px-2.5 py-0.5 rounded-full flex-shrink-0"
+                      className="text-[11px] font-bold px-2.5 py-0.5 rounded-full"
                       style={{
                         background: severityStyle[r.severity].bg,
                         color: severityStyle[r.severity].text,
@@ -368,47 +277,29 @@ const DashboardOverview = () => {
         </div>
 
         {/* Upcoming Reviews */}
-        <div className="bg-white rounded-xl border border-gray-100 p-5">
+        <div className="bg-white rounded-xl border border-gray-100 p-4 sm:p-5">
           <h3 className="text-[13px] font-semibold text-gray-700 mb-4">
             Upcoming Reviews
           </h3>
+
           <div className="space-y-3">
             {upcomingReviews.map((rev, i) => (
               <div
                 key={i}
-                className="flex items-center justify-between gap-3 bg-[#ebebf5] rounded-xl px-4 py-3"
+                className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-[#ebebf5] rounded-xl px-4 py-3"
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-7 h-7 rounded-lg bg-white flex items-center justify-center flex-shrink-0">
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="#a78bfa"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                      <polyline points="14 2 14 8 20 8" />
-                      <polyline points="9 15 11 17 15 13" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-[14px] font-bold text-gray-800 mb-0.5">
-                      {rev.title}
-                    </p>
-                    <p className="text-[11.5px] text-gray-500 mb-0.5">
-                      {rev.subtitle}
-                    </p>
-                    <p className="text-[11px] text-gray-400">
-                      Next review : {rev.date}
-                    </p>
-                  </div>
+                <div>
+                  <p className="text-[14px] font-bold text-gray-800">
+                    {rev.title}
+                  </p>
+                  <p className="text-[11.5px] text-gray-500">{rev.subtitle}</p>
+                  <p className="text-[11px] text-gray-400">
+                    Next review : {rev.date}
+                  </p>
                 </div>
+
                 <span
-                  className="text-[11px] font-bold px-3 py-1.5 rounded-full whitespace-nowrap flex-shrink-0"
+                  className="text-[11px] font-bold px-3 py-1.5 rounded-full"
                   style={{
                     background: statusStyle[rev.status]?.bg,
                     color: statusStyle[rev.status]?.text,

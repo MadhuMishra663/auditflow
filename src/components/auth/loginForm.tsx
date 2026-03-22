@@ -4,6 +4,7 @@ import SuccessModal from "@/components/common/successModal";
 import { useAuth } from "../hooks/useAuth";
 import { Section } from "../common/navigationContext";
 import { useRouter } from "next/navigation";
+import Button from "../common/button";
 
 interface LoginFormProps {
   onSwitch: () => void;
@@ -90,13 +91,13 @@ const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
               className="w-full px-4 py-2 border rounded-lg text-black"
             />
 
-            <button
+            <Button
+              text={loading ? "Logging in..." : "Login"}
               type="submit"
               disabled={loading}
-              className="w-full py-2 bg-[#6B9AC4] text-white rounded-lg"
-            >
-              {loading ? "Logging in..." : "Login"}
-            </button>
+              fullWidth
+              className="py-2"
+            />
 
             {error && (
               <p className="text-red-500 text-sm text-center">{error}</p>
@@ -108,9 +109,10 @@ const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
             <button
               type="button"
               onClick={onSwitch}
+              disabled
               className="text-[#6B9AC4] font-medium hover:underline"
             >
-              Sign up
+              Start Demo Video
             </button>
           </div>
         </>

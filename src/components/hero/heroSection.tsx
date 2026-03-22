@@ -5,6 +5,8 @@ import { useState } from "react";
 import AuthModal from "../auth/authModal";
 import AboutSection from "../about/about";
 import { Section, useNavigation } from "../common/navigationContext";
+import { theme } from "@/styles/theme";
+import Button from "../common/button";
 
 interface HeroSectionProps {
   onLearnMore: () => void; // callback when clicking Learn More
@@ -22,7 +24,15 @@ const HeroSection = ({ onLearnMore }: HeroSectionProps) => {
         <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">
           Smart Audits.
           <br />
-          <span className="text-[#6B9AC4]">Clear Insights.</span>
+          <span
+            style={{
+              background: theme.colors.buttonColor,
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
+            Clear Insights.
+          </span>{" "}
         </h1>
 
         <p className="mt-6 text-gray-600 text-lg">
@@ -31,12 +41,11 @@ const HeroSection = ({ onLearnMore }: HeroSectionProps) => {
         </p>
 
         <div className="mt-8 flex gap-4">
-          <button
-            className="px-6 py-3 bg-[#6B9AC4] text-white rounded-lg hover:bg-[#5A89B0] transition"
+          <Button
+            text="Get Started"
             onClick={() => setOpen(true)}
-          >
-            Get Started
-          </button>
+            className="px-6 py-3 rounded-lg"
+          />
           <button
             className="px-6 py-3 border border-[#6B9AC4] text-[#6B9AC4] rounded-lg hover:bg-[#6B9AC4]/10 transition"
             onClick={onLearnMore}
