@@ -442,10 +442,10 @@ export default function RiskManagment() {
     >
       <div className="max-w-6xl mx-auto space-y-5">
         {/* ── Stat Cards ── */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4" style={{ backgroundColor: "#F9F3F6" }}>
           <div
             className="rounded-2xl p-5 flex items-center justify-between"
-            style={{ backgroundColor: "#F9F3F6" }}
+            style={{ backgroundColor: "#F9F3F6", border: "1.5px solid rgb(243, 218, 223)"}}
           >
             <div>
               <p className="text-xs mb-2" style={{ color: "#AAAAAA" }}>
@@ -472,7 +472,7 @@ export default function RiskManagment() {
           </div>
           <div
             className="rounded-2xl p-5 flex items-center justify-between"
-            style={{ backgroundColor: "rgb(250,245,240)" }}
+            style={{ backgroundColor: "rgb(250,245,240)",border: "1.5px solid #e8e2d3" }}
           >
             <div>
               <p className="text-xs mb-2" style={{ color: "#AAAAAA" }}>
@@ -498,7 +498,7 @@ export default function RiskManagment() {
           </div>
           <div
             className="rounded-2xl p-5 flex items-center justify-between"
-            style={{ backgroundColor: "#EAF2F8" }}
+            style={{ backgroundColor: "#EAF2F8",border: "1.5px solid #c8e5f6" }}
           >
             <div>
               <p className="text-xs mb-2" style={{ color: "#AAAAAA" }}>
@@ -525,7 +525,7 @@ export default function RiskManagment() {
           </div>
           <div
             className="rounded-2xl p-5 flex items-center justify-between"
-            style={{ backgroundColor: "#F1F7F6" }}
+            style={{ backgroundColor: "#F1F7F6",border: "1.5px solid #dae4dd" }}
           >
             <div>
               <p className="text-xs mb-2" style={{ color: "#AAAAAA" }}>
@@ -553,10 +553,10 @@ export default function RiskManagment() {
         </div>
 
         {/* ── Risk Register Panel ── */}
-        <div className="bg-white rounded-2xl shadow-sm p-5 sm:p-6">
+        <div className="bg-white rounded-2xl p-5 sm:p-8" style={{ border: "1.5px solid #E0DBF8" }}>
           {/* Header */}
           <div className="flex items-center justify-between mb-5">
-            <h1 className="text-lg font-bold" style={{ color: "#222222" }}>
+            <h1 className="text-lg font-medium" style={{ color: "#222222" }}>
               Risk Register
             </h1>
           </div>
@@ -570,10 +570,9 @@ export default function RiskManagment() {
                 height="15"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#BBBBBB"
+                stroke="#000000"
                 strokeWidth="2"
-                strokeLinecap="round"
-              >
+                strokeLinecap="round">
                 <circle cx="11" cy="11" r="8" />
                 <line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
@@ -617,7 +616,7 @@ export default function RiskManagment() {
                 >
                   <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
                 </svg>
-                short
+                sort
                 <svg
                   width="11"
                   height="11"
@@ -767,9 +766,10 @@ export default function RiskManagment() {
           </div>
 
           {/* ── Table Header ── */}
+          <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid #DCD7F8" }}>
           <div
-            className="hidden sm:grid gap-4 pb-3 border-b border-gray-100 px-4"
-            style={{ gridTemplateColumns: "2.5fr 1fr 1.2fr 1fr 1.3fr 1fr" }}
+            className="hidden sm:grid gap-4 px-4 py-3"
+            style={{ gridTemplateColumns: "2.5fr 1fr 1.2fr 1fr 1.3fr 1fr", backgroundColor: "#F7F6FA", borderBottom: "1px solid #DCD7F8" }}
           >
             {[
               "Risk Title",
@@ -781,8 +781,8 @@ export default function RiskManagment() {
             ].map((h) => (
               <div
                 key={h}
-                className="text-sm font-bold font"
-                style={{ color: "#222222" }}
+                className="text-sm font-medium font"
+                style={{ color: "#000000" }}
               >
                 {h}
               </div>
@@ -790,7 +790,7 @@ export default function RiskManagment() {
           </div>
 
           {/* ── Table Rows Desktop — each row in its own bordered box ── */}
-          <div className="hidden sm:block space-y-2 mt-3">
+          <div className="hidden sm:block">
             {paginated.length === 0 && (
               <div className="py-12 text-center" style={{ color: "#AAAAAA" }}>
                 No risks found.
@@ -799,7 +799,7 @@ export default function RiskManagment() {
             {paginated.map((r) => (
               <div
                 key={r.id}
-                className="grid gap-4 px-4 py-4 items-center rounded-2xl"
+                className="grid gap-4 px-4 py-4 items-center"
                 style={{
                   gridTemplateColumns: "2.5fr 1fr 1.2fr 1fr 1.3fr 1fr",
                   border: "1px solid #F0F0F0",
@@ -812,7 +812,7 @@ export default function RiskManagment() {
                   >
                     {r.title}
                   </p>
-                  <p className="text-xs mt-0.5" style={{ color: "#BBBBBB" }}>
+                  <p className="text-xs mt-0.5" style={{ color: "#6d6d6d" }}>
                     {r.description}
                   </p>
                 </div>
@@ -822,7 +822,7 @@ export default function RiskManagment() {
                 <div>
                   <StatusBadge status={r.status} />
                 </div>
-                <div className="text-sm" style={{ color: "#666666" }}>
+                <div className="text-sm" style={{ color: "#000000" }}>
                   {r.category}
                 </div>
                 <div className="flex items-center gap-2">
@@ -831,7 +831,7 @@ export default function RiskManagment() {
                     alt={r.owner}
                     className="w-8 h-8 rounded-full object-cover flex-shrink-0"
                   />
-                  <span className="text-sm" style={{ color: "#666666" }}>
+                  <span className="text-sm" style={{ color: "#000000" }}>
                     {r.owner}
                   </span>
                 </div>
@@ -893,6 +893,7 @@ export default function RiskManagment() {
           />
         </div>
       </div>
+    </div>
     </div>
   );
 }
