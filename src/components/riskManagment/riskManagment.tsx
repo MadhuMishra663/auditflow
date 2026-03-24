@@ -442,10 +442,16 @@ export default function RiskManagment() {
     >
       <div className="max-w-6xl mx-auto space-y-5">
         {/* ── Stat Cards ── */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div
+          className="grid grid-cols-2 sm:grid-cols-4 gap-4"
+          style={{ backgroundColor: "#F9F3F6" }}
+        >
           <div
             className="rounded-2xl p-5 flex items-center justify-between"
-            style={{ backgroundColor: "#F9F3F6" }}
+            style={{
+              backgroundColor: "#F9F3F6",
+              border: "1.5px solid rgb(243, 218, 223)",
+            }}
           >
             <div>
               <p className="text-xs mb-2" style={{ color: "#AAAAAA" }}>
@@ -472,7 +478,10 @@ export default function RiskManagment() {
           </div>
           <div
             className="rounded-2xl p-5 flex items-center justify-between"
-            style={{ backgroundColor: "rgb(250,245,240)" }}
+            style={{
+              backgroundColor: "rgb(250,245,240)",
+              border: "1.5px solid #e8e2d3",
+            }}
           >
             <div>
               <p className="text-xs mb-2" style={{ color: "#AAAAAA" }}>
@@ -498,7 +507,10 @@ export default function RiskManagment() {
           </div>
           <div
             className="rounded-2xl p-5 flex items-center justify-between"
-            style={{ backgroundColor: "#EAF2F8" }}
+            style={{
+              backgroundColor: "#EAF2F8",
+              border: "1.5px solid #c8e5f6",
+            }}
           >
             <div>
               <p className="text-xs mb-2" style={{ color: "#AAAAAA" }}>
@@ -525,7 +537,10 @@ export default function RiskManagment() {
           </div>
           <div
             className="rounded-2xl p-5 flex items-center justify-between"
-            style={{ backgroundColor: "#F1F7F6" }}
+            style={{
+              backgroundColor: "#F1F7F6",
+              border: "1.5px solid #dae4dd",
+            }}
           >
             <div>
               <p className="text-xs mb-2" style={{ color: "#AAAAAA" }}>
@@ -553,10 +568,13 @@ export default function RiskManagment() {
         </div>
 
         {/* ── Risk Register Panel ── */}
-        <div className="bg-white rounded-2xl shadow-sm p-5 sm:p-6">
+        <div
+          className="bg-white rounded-2xl p-5 sm:p-8"
+          style={{ border: "1.5px solid #E0DBF8" }}
+        >
           {/* Header */}
           <div className="flex items-center justify-between mb-5">
-            <h1 className="text-lg font-bold" style={{ color: "#222222" }}>
+            <h1 className="text-lg font-medium" style={{ color: "#222222" }}>
               Risk Register
             </h1>
           </div>
@@ -571,7 +589,7 @@ export default function RiskManagment() {
                 height="15"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#BBBBBB"
+                stroke="#000000"
                 strokeWidth="2"
                 strokeLinecap="round"
               >
@@ -594,6 +612,75 @@ export default function RiskManagment() {
                   border: "1px solid #EEEEEE",
                 }}
               />
+            </div>
+            {/* Sort */}
+            <div className="relative">
+              <button
+                onClick={() => {
+                  setShowSortMenu(!showSortMenu);
+                  setShowOptionMenu(false);
+                }}
+                className="flex items-center gap-2 px-4 py-3 text-sm rounded-2xl whitespace-nowrap"
+                style={{
+                  backgroundColor: "#F7F7F9",
+                  color: "#666666",
+                  border: "1px solid #EEEEEE",
+                }}
+              >
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#BBBBBB"
+                  strokeWidth="2"
+                >
+                  <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+                </svg>
+                sort
+                <svg
+                  width="11"
+                  height="11"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#BBBBBB"
+                  strokeWidth="2"
+                >
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </button>
+              {showSortMenu && (
+                <div className="absolute right-0 mt-1 bg-white border border-gray-100 rounded-xl shadow-lg z-20 w-44 py-1">
+                  {[
+                    ["created", "Date Created"],
+                    ["title", "Risk Title"],
+                    ["severity", "Severity"],
+                  ].map(([val, label]) => (
+                    <button
+                      key={val}
+                      onClick={() => {
+                        setSortBy(val);
+                        setShowSortMenu(false);
+                      }}
+                      className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center justify-between ${sortBy === val ? "text-violet-500 font-medium" : "text-gray-600"}`}
+                    >
+                      {label}
+                      {sortBy === val && (
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.5"
+                        >
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Controls */}
@@ -674,89 +761,51 @@ export default function RiskManagment() {
 
           {/* ── Table Header ── */}
           <div
-            className="hidden sm:grid gap-4 pb-3 border-b border-gray-100 px-4"
-            style={{ gridTemplateColumns: "2.5fr 1fr 1.2fr 1fr 1.3fr 1fr" }}
+            className="rounded-2xl overflow-hidden"
+            style={{ border: "1px solid #DCD7F8" }}
           >
-            {[
-              "Risk Title",
-              "Severity",
-              "Status",
-              "Category",
-              "Owner",
-              "Created",
-            ].map((h) => (
-              <div
-                key={h}
-                className="text-sm font-bold font"
-                style={{ color: "#222222" }}
-              >
-                {h}
-              </div>
-            ))}
-          </div>
+            <div
+              className="hidden sm:grid gap-4 px-4 py-3"
+              style={{
+                gridTemplateColumns: "2.5fr 1fr 1.2fr 1fr 1.3fr 1fr",
+                backgroundColor: "#F7F6FA",
+                borderBottom: "1px solid #DCD7F8",
+              }}
+            >
+              {[
+                "Risk Title",
+                "Severity",
+                "Status",
+                "Category",
+                "Owner",
+                "Created",
+              ].map((h) => (
+                <div
+                  key={h}
+                  className="text-sm font-medium font"
+                  style={{ color: "#000000" }}
+                >
+                  {h}
+                </div>
+              ))}
+            </div>
 
-          {/* ── Table Rows Desktop — each row in its own bordered box ── */}
-          <div className="hidden sm:block space-y-2 mt-3">
-            {paginated.length === 0 && (
-              <div className="py-12 text-center" style={{ color: "#AAAAAA" }}>
-                No risks found.
-              </div>
-            )}
-            {paginated.map((r) => (
-              <div
-                key={r.id}
-                className="grid gap-4 px-4 py-4 items-center rounded-2xl"
-                style={{
-                  gridTemplateColumns: "2.5fr 1fr 1.2fr 1fr 1.3fr 1fr",
-                  border: "1px solid #F0F0F0",
-                }}
-              >
-                <div>
-                  <p
-                    className="font-semibold text-sm"
-                    style={{ color: "#222222" }}
-                  >
-                    {r.title}
-                  </p>
-                  <p className="text-xs mt-0.5" style={{ color: "#BBBBBB" }}>
-                    {r.description}
-                  </p>
+            {/* ── Table Rows Desktop — each row in its own bordered box ── */}
+            <div className="hidden sm:block">
+              {paginated.length === 0 && (
+                <div className="py-12 text-center" style={{ color: "#AAAAAA" }}>
+                  No risks found.
                 </div>
-                <div>
-                  <SeverityBadge severity={r.severity} />
-                </div>
-                <div>
-                  <StatusBadge status={r.status} />
-                </div>
-                <div className="text-sm" style={{ color: "#666666" }}>
-                  {r.category}
-                </div>
-                <div className="flex items-center gap-2">
-                  <img
-                    src={r.avatar}
-                    alt={r.owner}
-                    className="w-8 h-8 rounded-full object-cover flex-shrink-0"
-                  />
-                  <span className="text-sm" style={{ color: "#666666" }}>
-                    {r.owner}
-                  </span>
-                </div>
-                <div className="text-sm" style={{ color: "#BBBBBB" }}>
-                  {r.created}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* ── Cards Mobile ── */}
-          <div className="sm:hidden space-y-3 mt-3">
-            {paginated.map((r) => (
-              <div
-                key={r.id}
-                className="rounded-2xl p-4 space-y-2"
-                style={{ border: "1px solid #F0F0F0" }}
-              >
-                <div className="flex items-start justify-between gap-2">
+              )}
+              {paginated.map((r) => (
+                <div
+                  key={r.id}
+                  className="grid gap-4 px-4 py-4 items-center"
+                  style={{
+                    gridTemplateColumns: "2.5fr 1fr 1.2fr 1fr 1.3fr 1fr",
+                    border: "1px solid #F0F0F0",
+                  }}
+                >
                   <div>
                     <p
                       className="font-semibold text-sm"
@@ -764,39 +813,89 @@ export default function RiskManagment() {
                     >
                       {r.title}
                     </p>
-                    <p className="text-xs mt-0.5" style={{ color: "#BBBBBB" }}>
+                    <p className="text-xs mt-0.5" style={{ color: "#6d6d6d" }}>
                       {r.description}
                     </p>
                   </div>
-                  <SeverityBadge severity={r.severity} />
-                </div>
-                <div className="flex flex-wrap gap-2 items-center text-xs">
-                  <StatusBadge status={r.status} />
-                  <span style={{ color: "#DDDDDD" }}>•</span>
-                  <span style={{ color: "#888888" }}>{r.category}</span>
-                  <span style={{ color: "#DDDDDD" }}>•</span>
-                  <div className="flex items-center gap-1">
+                  <div>
+                    <SeverityBadge severity={r.severity} />
+                  </div>
+                  <div>
+                    <StatusBadge status={r.status} />
+                  </div>
+                  <div className="text-sm" style={{ color: "#000000" }}>
+                    {r.category}
+                  </div>
+                  <div className="flex items-center gap-2">
                     <img
                       src={r.avatar}
                       alt={r.owner}
-                      className="w-5 h-5 rounded-full object-cover"
+                      className="w-8 h-8 rounded-full object-cover flex-shrink-0"
                     />
-                    <span style={{ color: "#888888" }}>{r.owner}</span>
+                    <span className="text-sm" style={{ color: "#000000" }}>
+                      {r.owner}
+                    </span>
                   </div>
-                  <span style={{ color: "#DDDDDD" }}>•</span>
-                  <span style={{ color: "#AAAAAA" }}>{r.created}</span>
+                  <div className="text-sm" style={{ color: "#BBBBBB" }}>
+                    {r.created}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
 
-          {/* ── Pagination ── */}
-          <Pagination
-            currentPage={currentPage}
-            totalItems={sorted.length}
-            itemsPerPage={PAGE_SIZE}
-            onPageChange={(page) => setCurrentPage(page)}
-          />
+            {/* ── Cards Mobile ── */}
+            <div className="sm:hidden space-y-3 mt-3">
+              {paginated.map((r) => (
+                <div
+                  key={r.id}
+                  className="rounded-2xl p-4 space-y-2"
+                  style={{ border: "1px solid #F0F0F0" }}
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <p
+                        className="font-semibold text-sm"
+                        style={{ color: "#222222" }}
+                      >
+                        {r.title}
+                      </p>
+                      <p
+                        className="text-xs mt-0.5"
+                        style={{ color: "#BBBBBB" }}
+                      >
+                        {r.description}
+                      </p>
+                    </div>
+                    <SeverityBadge severity={r.severity} />
+                  </div>
+                  <div className="flex flex-wrap gap-2 items-center text-xs">
+                    <StatusBadge status={r.status} />
+                    <span style={{ color: "#DDDDDD" }}>•</span>
+                    <span style={{ color: "#888888" }}>{r.category}</span>
+                    <span style={{ color: "#DDDDDD" }}>•</span>
+                    <div className="flex items-center gap-1">
+                      <img
+                        src={r.avatar}
+                        alt={r.owner}
+                        className="w-5 h-5 rounded-full object-cover"
+                      />
+                      <span style={{ color: "#888888" }}>{r.owner}</span>
+                    </div>
+                    <span style={{ color: "#DDDDDD" }}>•</span>
+                    <span style={{ color: "#AAAAAA" }}>{r.created}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* ── Pagination ── */}
+            <Pagination
+              currentPage={currentPage}
+              totalItems={sorted.length}
+              itemsPerPage={PAGE_SIZE}
+              onPageChange={(page) => setCurrentPage(page)}
+            />
+          </div>
         </div>
       </div>
     </div>
