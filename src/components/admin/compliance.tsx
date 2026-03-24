@@ -1,10 +1,8 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-// Add this import at the top
 import Pagination from "@/components/common/pagination";
 
-// Types
+import { useState, useEffect, useRef } from "react";
 
 // ─────────────────────────────────────────────
 // Types
@@ -21,7 +19,6 @@ interface Control {
   lastReview: string;
   nextReview: string;
 }
-
 
 // Mock Data
 const allControls: Control[] = [
@@ -62,8 +59,8 @@ function complianceForFramework(fw: Framework) {
   const compliant = relevant.filter((c) => c.status === "Compliant").length;
   return { pct: Math.round((compliant / relevant.length) * 100), compliant, total: relevant.length };
 }
-// Animated counter hook
 
+// Animated counter hook
 function useCountUp(target: number, duration = 1200) {
   const [value, setValue] = useState(0);
   useEffect(() => {
@@ -78,8 +75,8 @@ function useCountUp(target: number, duration = 1200) {
   }, [target, duration]);
   return value;
 }
+
 // Animated progress bar
-// ─────────────────────────────────────────────
 function AnimatedBar({ pct, color = "bg-violet-500" }: { pct: number; color?: string }) {
   const [width, setWidth] = useState(0);
   useEffect(() => {
@@ -97,7 +94,6 @@ function AnimatedBar({ pct, color = "bg-violet-500" }: { pct: number; color?: st
 }
 
 // SVG Icons
-// ─────────────────────────────────────────────
 const TrendUpIcon = () => (
   <svg className="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
@@ -143,8 +139,24 @@ const ChevronRightIcon = () => (
     <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
   </svg>
 );
+
+// PDF Icon (red)
+const PdfIcon = () => (
+  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+    <rect width="24" height="24" rx="4" fill="#FF3B30" />
+    <text x="3" y="16" fontSize="9" fontWeight="bold" fill="white" fontFamily="sans-serif">PDF</text>
+  </svg>
+);
+
+// Excel Icon (green)
+const ExcelIcon = () => (
+  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+    <rect width="24" height="24" rx="4" fill="#217346" />
+    <text x="4" y="16" fontSize="8" fontWeight="bold" fill="white" fontFamily="sans-serif">XLS</text>
+  </svg>
+);
+
 // StatCard with fade-in + count-up
-// ─────────────────────────────────────────────
 function StatCard({
   label, rawValue, icon, progress, cardBg, iconBg, delay = 0,
 }: {
@@ -187,7 +199,6 @@ function StatCard({
 }
 
 // StatusBadge
-// ─────────────────────────────────────────────
 function StatusBadge({ status }: { status: Status }) {
   const cfg = statusConfig[status];
   return (
@@ -198,7 +209,6 @@ function StatusBadge({ status }: { status: Status }) {
 }
 
 // FrameworkCard with slide-up + animated bar
-// ─────────────────────────────────────────────
 function FrameworkCard({ fw, delay = 0 }: { fw: Framework; delay?: number }) {
   const { pct, compliant, total } = complianceForFramework(fw);
   const [visible, setVisible] = useState(false);
@@ -225,8 +235,7 @@ function FrameworkCard({ fw, delay = 0 }: { fw: Framework; delay?: number }) {
   );
 }
 
-// Dropdown
-// ─────────────────────────────────────────────
+// Dropdown (filter)
 function Dropdown({ value, options, open, onToggle, onSelect }: {
   value: string;
   options: string[];
@@ -261,8 +270,64 @@ function Dropdown({ value, options, open, onToggle, onSelect }: {
   );
 }
 
+// ── CHANGE 1 & 2: Upload Button with PDF/EXCEL dropdown (w-28, light purple hover) ──
+function UploadButton() {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleOutside(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleOutside);
+    return () => document.removeEventListener("mousedown", handleOutside);
+  }, []);
+
+  const handleOption = (type: "PDF" | "EXCEL") => {
+    setOpen(false);
+    console.log(`Upload as ${type}`);
+  };
+
+  return (
+    <div className="relative" ref={ref}>
+      <button
+        onClick={(e) => { e.stopPropagation(); setOpen((o) => !o); }}
+        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-700 active:scale-95 text-white text-xs font-semibold transition-all duration-150 shadow-sm hover:shadow-md"
+      >
+        <UploadIcon />
+        Upload
+      </button>
+
+      {/* CHANGE 2: w-28 (compact width) */}
+      {open && (
+        <div className="absolute right-0 top-full mt-1.5 w-28 bg-white border border-slate-200 rounded-xl shadow-xl z-30 py-1.5 animate-fadeIn">
+          {/* CHANGE 1: hover:bg-violet-50 hover:text-violet-700 on both options */}
+          <button
+            onClick={() => handleOption("PDF")}
+            className="w-full flex items-center gap-2.5 px-3.5 py-2 text-xs font-medium text-slate-700 hover:bg-violet-50 hover:text-violet-700 transition-colors"
+          >
+            <PdfIcon />
+            PDF
+          </button>
+
+          <div className="mx-3 border-t border-slate-100" />
+
+          <button
+            onClick={() => handleOption("EXCEL")}
+            className="w-full flex items-center gap-2.5 px-3.5 py-2 text-xs font-medium text-slate-700 hover:bg-violet-50 hover:text-violet-700 transition-colors"
+          >
+            <ExcelIcon />
+            EXCEL
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // Table row with fade-in
-// ─────────────────────────────────────────────
 function TableRow({ c, index }: { c: Control; index: number }) {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -289,9 +354,9 @@ function TableRow({ c, index }: { c: Control; index: number }) {
   );
 }
 
+// ─────────────────────────────────────────────
 // Main Page
 // ─────────────────────────────────────────────
-
 export default function ComplianceDashboard() {
   const [activeTab, setActiveTab]     = useState<"All frameworks" | Framework>("All frameworks");
   const [currentPage, setCurrentPage] = useState(1);
@@ -299,7 +364,7 @@ export default function ComplianceDashboard() {
   const [optionOpen, setOptionOpen]   = useState(false);
   const [sortValue, setSortValue]     = useState("short");
   const [optionValue, setOptionValue] = useState("Option");
-  const [pageKey, setPageKey]         = useState(0); // force re-animate on page change
+  const [pageKey, setPageKey]         = useState(0);
 
   const compliantCount    = allControls.filter((c) => c.status === "Compliant").length;
   const inProgressCount   = allControls.filter((c) => c.status === "In Progress").length;
@@ -329,14 +394,14 @@ export default function ComplianceDashboard() {
 
   return (
     <>
-      {/* Inject keyframes */}
       <style>{`
         @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fadeIn { animation: fadeIn 0.15s ease-out forwards; }
       `}</style>
 
+      {/* CHANGE 3: sm:px-0 removes the gap between sidebar and content */}
       <div className="min-h-screen bg-slate-50 font-sans" onClick={closeAll}>
-        <main className="max-w-5xl mx-auto px-4 sm:px-6 py-5 space-y-4">
+        <main className="w-full px-6 py-5 space-y-4">
 
           {/* ── 1. Stat Cards ── */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -350,7 +415,7 @@ export default function ComplianceDashboard() {
               cardBg="bg-rose-50/50" iconBg="bg-rose-100" icon={<XCircleIcon />} delay={240} />
           </div>
 
-          {/* ── 2. Framework Cards (SOC cards above table) ── */}
+          {/* ── 2. Framework Cards ── */}
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
             {frameworkCards.slice(0, 3).map((fw, i) => (
               <FrameworkCard key={fw} fw={fw} delay={i * 100} />
@@ -366,10 +431,7 @@ export default function ComplianceDashboard() {
             {/* Top bar */}
             <div className="px-5 py-3.5 flex items-center justify-between border-b border-slate-100">
               <h2 className="text-sm font-semibold text-slate-700">Compliance Controls</h2>
-              <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-700 active:scale-95 text-white text-xs font-semibold transition-all duration-150 shadow-sm hover:shadow-md">
-                <UploadIcon />
-                Upload
-              </button>
+              <UploadButton />
             </div>
 
             {/* Tabs + filters */}
@@ -434,61 +496,15 @@ export default function ComplianceDashboard() {
             </div>
           </div>
 
-          {/* ── 4. Pagination ── */}
-          <Pagination
+         <Pagination
             currentPage={currentPage}
             totalItems={filtered.length}
             itemsPerPage={PAGE_SIZE}
             onPageChange={handlePageChange}
           />
-=======
-          <div className="flex items-center gap-1 flex-wrap">
-            <button
-              onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-              disabled={currentPage === 1}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-40 transition-all active:scale-95"
-            >
-              <ChevronLeftIcon /> Previous
-            </button>
-
-            {[1, 2, 3, 4, 5, 6, 7].map((p) => (
-              <button
-                key={p}
-                onClick={() => handlePageChange(p)}
-                className={`w-7 h-7 rounded-lg text-xs font-medium transition-all active:scale-90 ${
-                  currentPage === p
-                    ? "bg-violet-600 text-white shadow-sm scale-105"
-                    : "text-slate-600 border border-slate-200 bg-white hover:bg-slate-50 hover:border-violet-300"
-                }`}
-              >
-                {p}
-              </button>
-            ))}
-
-            <span className="px-1 text-slate-300 text-xs select-none tracking-widest">·········</span>
-
-            <button
-              onClick={() => handlePageChange(DISPLAY_TOTAL_PAGES)}
-              className={`w-7 h-7 rounded-lg text-xs font-medium transition-all active:scale-90 ${
-                currentPage === DISPLAY_TOTAL_PAGES
-                  ? "bg-violet-600 text-white shadow-sm scale-105"
-                  : "text-slate-600 border border-slate-200 bg-white hover:bg-slate-50 hover:border-violet-300"
-              }`}
-            >
-              {DISPLAY_TOTAL_PAGES}
-            </button>
-
-            <button
-              onClick={() => handlePageChange(Math.min(DISPLAY_TOTAL_PAGES, currentPage + 1))}
-              disabled={currentPage === DISPLAY_TOTAL_PAGES}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-40 transition-all active:scale-95"
-            >
-              Next <ChevronRightIcon />
-            </button>
-          </div>
 
         </main>
       </div>
     </>
   );
-}
+}  
