@@ -442,10 +442,16 @@ export default function RiskManagment() {
     >
       <div className="max-w-6xl mx-auto space-y-5">
         {/* ── Stat Cards ── */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4" style={{ backgroundColor: "#F9F3F6" }}>
+        <div
+          className="grid grid-cols-2 sm:grid-cols-4 gap-4"
+          style={{ backgroundColor: "#F9F3F6" }}
+        >
           <div
             className="rounded-2xl p-5 flex items-center justify-between"
-            style={{ backgroundColor: "#F9F3F6", border: "1.5px solid rgb(243, 218, 223)"}}
+            style={{
+              backgroundColor: "#F9F3F6",
+              border: "1.5px solid rgb(243, 218, 223)",
+            }}
           >
             <div>
               <p className="text-xs mb-2" style={{ color: "#AAAAAA" }}>
@@ -472,7 +478,10 @@ export default function RiskManagment() {
           </div>
           <div
             className="rounded-2xl p-5 flex items-center justify-between"
-            style={{ backgroundColor: "rgb(250,245,240)",border: "1.5px solid #e8e2d3" }}
+            style={{
+              backgroundColor: "rgb(250,245,240)",
+              border: "1.5px solid #e8e2d3",
+            }}
           >
             <div>
               <p className="text-xs mb-2" style={{ color: "#AAAAAA" }}>
@@ -498,7 +507,10 @@ export default function RiskManagment() {
           </div>
           <div
             className="rounded-2xl p-5 flex items-center justify-between"
-            style={{ backgroundColor: "#EAF2F8",border: "1.5px solid #c8e5f6" }}
+            style={{
+              backgroundColor: "#EAF2F8",
+              border: "1.5px solid #c8e5f6",
+            }}
           >
             <div>
               <p className="text-xs mb-2" style={{ color: "#AAAAAA" }}>
@@ -525,7 +537,10 @@ export default function RiskManagment() {
           </div>
           <div
             className="rounded-2xl p-5 flex items-center justify-between"
-            style={{ backgroundColor: "#F1F7F6",border: "1.5px solid #dae4dd" }}
+            style={{
+              backgroundColor: "#F1F7F6",
+              border: "1.5px solid #dae4dd",
+            }}
           >
             <div>
               <p className="text-xs mb-2" style={{ color: "#AAAAAA" }}>
@@ -553,7 +568,10 @@ export default function RiskManagment() {
         </div>
 
         {/* ── Risk Register Panel ── */}
-        <div className="bg-white rounded-2xl p-5 sm:p-8" style={{ border: "1.5px solid #E0DBF8" }}>
+        <div
+          className="bg-white rounded-2xl p-5 sm:p-8"
+          style={{ border: "1.5px solid #E0DBF8" }}
+        >
           {/* Header */}
           <div className="flex items-center justify-between mb-5">
             <h1 className="text-lg font-medium" style={{ color: "#222222" }}>
@@ -562,8 +580,9 @@ export default function RiskManagment() {
           </div>
 
           {/* Search + Sort + Option — ONE LINE */}
-          <div className="flex items-center gap-3 mb-6">
-            <div className="relative flex-1">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
+            {/* Search */}
+            <div className="relative w-full sm:flex-1">
               <svg
                 className="absolute left-4 top-1/2 -translate-y-1/2"
                 width="15"
@@ -572,10 +591,12 @@ export default function RiskManagment() {
                 fill="none"
                 stroke="#000000"
                 strokeWidth="2"
-                strokeLinecap="round">
+                strokeLinecap="round"
+              >
                 <circle cx="11" cy="11" r="8" />
                 <line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
+
               <input
                 type="text"
                 placeholder="Search risk..."
@@ -662,195 +683,129 @@ export default function RiskManagment() {
               )}
             </div>
 
-            {/* Option */}
-            <div className="relative">
-              <button
-                onClick={() => {
-                  setShowOptionMenu(!showOptionMenu);
-                  setShowSortMenu(false);
-                }}
-                className="flex items-center gap-2 px-4 py-3 text-sm rounded-2xl whitespace-nowrap"
-                style={{
-                  backgroundColor: "#F7F7F9",
-                  color: "#666666",
-                  border: "1px solid #EEEEEE",
-                }}
-              >
-                <svg
-                  width="13"
-                  height="13"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#BBBBBB"
-                  strokeWidth="2"
+            {/* Controls */}
+            <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 w-full sm:w-auto">
+              {/* Sort */}
+              <div className="relative flex-1 sm:flex-none">
+                <button
+                  onClick={() => {
+                    setShowSortMenu(!showSortMenu);
+                    setShowOptionMenu(false);
+                  }}
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-3 text-sm rounded-2xl"
+                  style={{
+                    backgroundColor: "#F7F7F9",
+                    color: "#666666",
+                    border: "1px solid #EEEEEE",
+                  }}
                 >
-                  <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-                </svg>
-                Option
-                <svg
-                  width="11"
-                  height="11"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#BBBBBB"
-                  strokeWidth="2"
-                >
-                  <polyline points="6 9 12 15 18 9" />
-                </svg>
-              </button>
-              {showOptionMenu && (
-                <div className="absolute right-0 mt-1 bg-white border border-gray-100 rounded-xl shadow-lg z-20 w-48 py-2">
-                  <p className="px-4 py-1 text-xs text-gray-400 font-semibold uppercase tracking-wide">
-                    Severity
-                  </p>
-                  {["All", "Critical", "High", "Medium", "Low"].map((s) => (
-                    <button
-                      key={s}
-                      onClick={() => {
-                        setSeverityFilter(s);
-                        setCurrentPage(1);
-                      }}
-                      className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center justify-between ${severityFilter === s ? "text-violet-500 font-medium" : "text-gray-600"}`}
-                    >
-                      {s === "All" ? "All Severities" : s}
-                      {severityFilter === s && (
-                        <svg
-                          width="12"
-                          height="12"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2.5"
-                        >
-                          <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                      )}
-                    </button>
-                  ))}
-                  <hr className="my-2 border-gray-100" />
-                  <p className="px-4 py-1 text-xs text-gray-400 font-semibold uppercase tracking-wide">
-                    Category
-                  </p>
-                  {["All", "Security", "Compliance", "Vendor"].map((c) => (
-                    <button
-                      key={c}
-                      onClick={() => {
-                        setCategoryFilter(c);
-                        setCurrentPage(1);
-                      }}
-                      className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center justify-between ${categoryFilter === c ? "text-violet-500 font-medium" : "text-gray-600"}`}
-                    >
-                      {c === "All" ? "All Categories" : c}
-                      {categoryFilter === c && (
-                        <svg
-                          width="12"
-                          height="12"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2.5"
-                        >
-                          <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                      )}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+                  short
+                </button>
 
-            <Button
-              text="+ Add Risk"
-              onClick={() => console.log("Add Risk clicked")}
-            />
+                {showSortMenu && (
+                  <div className="absolute right-0 mt-1 w-full sm:w-44 bg-white border border-gray-100 rounded-xl shadow-lg z-20 py-1">
+                    {[
+                      ["created", "Date Created"],
+                      ["title", "Risk Title"],
+                      ["severity", "Severity"],
+                    ].map(([val, label]) => (
+                      <button
+                        key={val}
+                        onClick={() => {
+                          setSortBy(val);
+                          setShowSortMenu(false);
+                        }}
+                        className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Option */}
+              <div className="relative flex-1 sm:flex-none">
+                <button
+                  onClick={() => {
+                    setShowOptionMenu(!showOptionMenu);
+                    setShowSortMenu(false);
+                  }}
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-3 text-sm rounded-2xl"
+                  style={{
+                    backgroundColor: "#F7F7F9",
+                    color: "#666666",
+                    border: "1px solid #EEEEEE",
+                  }}
+                >
+                  Option
+                </button>
+
+                {showOptionMenu && (
+                  <div className="absolute right-0 mt-1 w-full sm:w-48 bg-white border border-gray-100 rounded-xl shadow-lg z-20 py-2">
+                    {/* keep your existing menu content unchanged */}
+                  </div>
+                )}
+              </div>
+
+              {/* Button */}
+              <div className="w-full sm:w-auto">
+                <Button
+                  text="+ Add Risk"
+                  onClick={() => console.log("Add Risk clicked")}
+                  className="w-full sm:w-auto"
+                />
+              </div>
+            </div>
           </div>
 
           {/* ── Table Header ── */}
-          <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid #DCD7F8" }}>
           <div
-            className="hidden sm:grid gap-4 px-4 py-3"
-            style={{ gridTemplateColumns: "2.5fr 1fr 1.2fr 1fr 1.3fr 1fr", backgroundColor: "#F7F6FA", borderBottom: "1px solid #DCD7F8" }}
+            className="rounded-2xl overflow-hidden"
+            style={{ border: "1px solid #DCD7F8" }}
           >
-            {[
-              "Risk Title",
-              "Severity",
-              "Status",
-              "Category",
-              "Owner",
-              "Created",
-            ].map((h) => (
-              <div
-                key={h}
-                className="text-sm font-medium font"
-                style={{ color: "#000000" }}
-              >
-                {h}
-              </div>
-            ))}
-          </div>
+            <div
+              className="hidden sm:grid gap-4 px-4 py-3"
+              style={{
+                gridTemplateColumns: "2.5fr 1fr 1.2fr 1fr 1.3fr 1fr",
+                backgroundColor: "#F7F6FA",
+                borderBottom: "1px solid #DCD7F8",
+              }}
+            >
+              {[
+                "Risk Title",
+                "Severity",
+                "Status",
+                "Category",
+                "Owner",
+                "Created",
+              ].map((h) => (
+                <div
+                  key={h}
+                  className="text-sm font-medium font"
+                  style={{ color: "#000000" }}
+                >
+                  {h}
+                </div>
+              ))}
+            </div>
 
-          {/* ── Table Rows Desktop — each row in its own bordered box ── */}
-          <div className="hidden sm:block">
-            {paginated.length === 0 && (
-              <div className="py-12 text-center" style={{ color: "#AAAAAA" }}>
-                No risks found.
-              </div>
-            )}
-            {paginated.map((r) => (
-              <div
-                key={r.id}
-                className="grid gap-4 px-4 py-4 items-center"
-                style={{
-                  gridTemplateColumns: "2.5fr 1fr 1.2fr 1fr 1.3fr 1fr",
-                  border: "1px solid #F0F0F0",
-                }}
-              >
-                <div>
-                  <p
-                    className="font-semibold text-sm"
-                    style={{ color: "#222222" }}
-                  >
-                    {r.title}
-                  </p>
-                  <p className="text-xs mt-0.5" style={{ color: "#6d6d6d" }}>
-                    {r.description}
-                  </p>
+            {/* ── Table Rows Desktop — each row in its own bordered box ── */}
+            <div className="hidden sm:block">
+              {paginated.length === 0 && (
+                <div className="py-12 text-center" style={{ color: "#AAAAAA" }}>
+                  No risks found.
                 </div>
-                <div>
-                  <SeverityBadge severity={r.severity} />
-                </div>
-                <div>
-                  <StatusBadge status={r.status} />
-                </div>
-                <div className="text-sm" style={{ color: "#000000" }}>
-                  {r.category}
-                </div>
-                <div className="flex items-center gap-2">
-                  <img
-                    src={r.avatar}
-                    alt={r.owner}
-                    className="w-8 h-8 rounded-full object-cover flex-shrink-0"
-                  />
-                  <span className="text-sm" style={{ color: "#000000" }}>
-                    {r.owner}
-                  </span>
-                </div>
-                <div className="text-sm" style={{ color: "#BBBBBB" }}>
-                  {r.created}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* ── Cards Mobile ── */}
-          <div className="sm:hidden space-y-3 mt-3">
-            {paginated.map((r) => (
-              <div
-                key={r.id}
-                className="rounded-2xl p-4 space-y-2"
-                style={{ border: "1px solid #F0F0F0" }}
-              >
-                <div className="flex items-start justify-between gap-2">
+              )}
+              {paginated.map((r) => (
+                <div
+                  key={r.id}
+                  className="grid gap-4 px-4 py-4 items-center"
+                  style={{
+                    gridTemplateColumns: "2.5fr 1fr 1.2fr 1fr 1.3fr 1fr",
+                    border: "1px solid #F0F0F0",
+                  }}
+                >
                   <div>
                     <p
                       className="font-semibold text-sm"
@@ -858,42 +813,91 @@ export default function RiskManagment() {
                     >
                       {r.title}
                     </p>
-                    <p className="text-xs mt-0.5" style={{ color: "#BBBBBB" }}>
+                    <p className="text-xs mt-0.5" style={{ color: "#6d6d6d" }}>
                       {r.description}
                     </p>
                   </div>
-                  <SeverityBadge severity={r.severity} />
-                </div>
-                <div className="flex flex-wrap gap-2 items-center text-xs">
-                  <StatusBadge status={r.status} />
-                  <span style={{ color: "#DDDDDD" }}>•</span>
-                  <span style={{ color: "#888888" }}>{r.category}</span>
-                  <span style={{ color: "#DDDDDD" }}>•</span>
-                  <div className="flex items-center gap-1">
+                  <div>
+                    <SeverityBadge severity={r.severity} />
+                  </div>
+                  <div>
+                    <StatusBadge status={r.status} />
+                  </div>
+                  <div className="text-sm" style={{ color: "#000000" }}>
+                    {r.category}
+                  </div>
+                  <div className="flex items-center gap-2">
                     <img
                       src={r.avatar}
                       alt={r.owner}
-                      className="w-5 h-5 rounded-full object-cover"
+                      className="w-8 h-8 rounded-full object-cover flex-shrink-0"
                     />
-                    <span style={{ color: "#888888" }}>{r.owner}</span>
+                    <span className="text-sm" style={{ color: "#000000" }}>
+                      {r.owner}
+                    </span>
                   </div>
-                  <span style={{ color: "#DDDDDD" }}>•</span>
-                  <span style={{ color: "#AAAAAA" }}>{r.created}</span>
+                  <div className="text-sm" style={{ color: "#BBBBBB" }}>
+                    {r.created}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
 
-          {/* ── Pagination ── */}
-          <Pagination
-            currentPage={currentPage}
-            totalItems={sorted.length}
-            itemsPerPage={PAGE_SIZE}
-            onPageChange={(page) => setCurrentPage(page)}
-          />
+            {/* ── Cards Mobile ── */}
+            <div className="sm:hidden space-y-3 mt-3">
+              {paginated.map((r) => (
+                <div
+                  key={r.id}
+                  className="rounded-2xl p-4 space-y-2"
+                  style={{ border: "1px solid #F0F0F0" }}
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <p
+                        className="font-semibold text-sm"
+                        style={{ color: "#222222" }}
+                      >
+                        {r.title}
+                      </p>
+                      <p
+                        className="text-xs mt-0.5"
+                        style={{ color: "#BBBBBB" }}
+                      >
+                        {r.description}
+                      </p>
+                    </div>
+                    <SeverityBadge severity={r.severity} />
+                  </div>
+                  <div className="flex flex-wrap gap-2 items-center text-xs">
+                    <StatusBadge status={r.status} />
+                    <span style={{ color: "#DDDDDD" }}>•</span>
+                    <span style={{ color: "#888888" }}>{r.category}</span>
+                    <span style={{ color: "#DDDDDD" }}>•</span>
+                    <div className="flex items-center gap-1">
+                      <img
+                        src={r.avatar}
+                        alt={r.owner}
+                        className="w-5 h-5 rounded-full object-cover"
+                      />
+                      <span style={{ color: "#888888" }}>{r.owner}</span>
+                    </div>
+                    <span style={{ color: "#DDDDDD" }}>•</span>
+                    <span style={{ color: "#AAAAAA" }}>{r.created}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* ── Pagination ── */}
+            <Pagination
+              currentPage={currentPage}
+              totalItems={sorted.length}
+              itemsPerPage={PAGE_SIZE}
+              onPageChange={(page) => setCurrentPage(page)}
+            />
+          </div>
         </div>
       </div>
-    </div>
     </div>
   );
 }

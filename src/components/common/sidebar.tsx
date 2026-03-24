@@ -71,6 +71,13 @@ const BuildingIcon = () => (
   </svg>
 );
 
+const CloseIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" width="22" height="22" stroke="currentColor" strokeWidth={2}>
+    <line x1="18" y1="6" x2="6" y2="18" />
+    <line x1="6" y1="6" x2="18" y2="18" />
+  </svg>
+);
+
 // ── Types ────────────────────────────────────────────────────────────────────
 
 type NavItemId =
@@ -92,6 +99,8 @@ type SidebarProps = {
   orgTag?: string;
   userName?: string;
   userRole?: string;
+  mobileOpen?: boolean;
+  onMobileClose?: () => void;
 };
 
 // ── Constants ────────────────────────────────────────────────────────────────
@@ -114,13 +123,101 @@ const ROUTES: Record<NavItemId, string> = {
   "settings":         "/admin/settings",
 };
 
+// ── Sidebar Inner Content ────────────────────────────────────────────────────
+
+function SidebarContent({
+  orgName,
+  orgTag,
+  userName,
+  userRole,
+  activeItem,
+  onNavigate,
+}: {
+  orgName: string;
+  orgTag: string;
+  userName: string;
+  userRole: string;
+  activeItem: NavItemId;
+  onNavigate: (route: string) => void;
+}) {
+  return (
+    <>
+      {/* ── Logo ── */}
+      <div className="flex items-center gap-3 w-full h-[62px] px-2 mb-2 box-border">
+        <div className="w-10 h-10 rounded-[10px] bg-gradient-to-br from-[#6B9AC4] to-[#5B21B6] flex items-center justify-center flex-shrink-0 shadow-[0_2px_8px_rgba(91,33,182,0.30)]">
+          <ShieldIcon className="w-5 h-5 text-white" />
+        </div>
+        <span
+          className="text-[20px] text-gray-900 leading-tight tracking-tight"
+          style={{ fontFamily: "'Inknut Antiqua', serif", fontWeight: 400 }}
+        >
+          AuditFlow
+        </span>
+      </div>
+
+      {/* ── Current Organisation card ── */}
+      <div className="bg-[#F7F6FA] rounded-lg border border-transparent px-3 py-[10px] mb-2">
+        <div className="flex items-center gap-1.5 mb-1.5">
+          <BuildingIcon />
+          <span className="text-[10px] font-medium text-gray-500 uppercase tracking-[0.07em]">
+            Current Organization
+          </span>
+        </div>
+        <p className="text-[15px] font-bold text-gray-800 mb-1.5 leading-snug">{orgName}</p>
+        <span className="inline-block text-[11px] font-semibold text-violet-700 bg-[#E8F1F8] px-2.5 py-0.5 rounded-full">
+          {orgTag}
+        </span>
+      </div>
+
+      {/* ── Your Role card ── */}
+      <div className="bg-[#F7F6FA] rounded-lg border border-transparent px-3 py-[10px] mb-4">
+        <div className="flex items-center gap-1.5 mb-1.5">
+          <ShieldIcon className="w-3 h-3 text-gray-400" />
+          <span className="text-[10px] font-medium text-gray-500 uppercase tracking-[0.07em]">
+            Your Role
+          </span>
+        </div>
+        <p className="text-[15px] font-bold text-gray-800 mb-0.5 leading-snug">{userRole}</p>
+        <p className="text-xs text-gray-500">{userName}</p>
+      </div>
+
+      {/* ── Nav items ── */}
+      <nav className="flex flex-col gap-2 flex-1">
+        {NAV_ITEMS.map((item) => {
+          const isActive = activeItem === item.id;
+          return (
+            <button
+              key={item.id}
+              onClick={() => onNavigate(ROUTES[item.id])}
+              className={`
+                w-full h-[59px] rounded-lg bg-[#F7F6FA] border border-transparent
+                flex items-center gap-3 pl-5 pr-4 cursor-pointer text-sm text-left
+                transition-colors duration-150 box-border
+                ${isActive
+                  ? "font-semibold text-[#6B4EFF]"
+                  : "font-medium text-gray-600 hover:text-gray-800"
+                }
+              `}
+            >
+              {item.icon(isActive)}
+              {item.label}
+            </button>
+          );
+        })}
+      </nav>
+    </>
+  );
+}
+
 // ── Sidebar Component ────────────────────────────────────────────────────────
 
 export function Sidebar({
-  orgName  = "Acme Corporation",
-  orgTag   = "Technology",
-  userName = "Johan Admin",
-  userRole = "Organization Administrator",
+  orgName       = "Acme Corporation",
+  orgTag        = "Technology",
+  userName      = "Johan Admin",
+  userRole      = "Organization Administrator",
+  mobileOpen    = false,
+  onMobileClose = () => {},
 }: SidebarProps) {
   const router   = useRouter();
   const pathname = usePathname();
@@ -136,90 +233,65 @@ export function Sidebar({
 
   const activeItem = getActiveItem();
 
+  const handleNavigate = (route: string) => {
+    router.push(route);
+    onMobileClose();
+  };
+
   return (
     <>
-      {/* Load Inknut Antiqua font */}
       <link
         href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400&display=swap"
         rel="stylesheet"
       />
 
-      <aside className="fixed left-0 top-0 w-[358px] h-screen overflow-hidden bg-white border-r border-[#E8F1F8] flex flex-col px-2 py-4 z-40">
+      {/* ── DESKTOP Sidebar ── */}
+      <aside className="hidden md:flex fixed left-0 top-0 w-[358px] h-screen overflow-hidden bg-white border-r border-[#E8F1F8] flex-col px-2 py-4 z-40">
+        <SidebarContent
+          orgName={orgName}
+          orgTag={orgTag}
+          userName={userName}
+          userRole={userRole}
+          activeItem={activeItem}
+          onNavigate={handleNavigate}
+        />
+      </aside>
 
-        {/* ── Logo ── */}
-        <div className="flex items-center gap-3 w-full h-[62px] px-2 mb-2 box-border">
-          {/* Shield icon */}
-          <div className="w-10 h-10 rounded-[10px] bg-gradient-to-br from-[#6B9AC4] to-[#5B21B6] flex items-center justify-center flex-shrink-0 shadow-[0_2px_8px_rgba(91,33,182,0.30)]">
-            <ShieldIcon className="w-5 h-5 text-white" />
-          </div>
+      {/* ── MOBILE: Backdrop ── */}
+      {mobileOpen && (
+        <div
+          className="md:hidden fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
+          onClick={onMobileClose}
+        />
+      )}
 
-          {/* Brand name */}
-          <span
-            className="text-[20px] text-gray-900 leading-tight tracking-tight"
-            style={{ fontFamily: "'Inknut Antiqua', serif", fontWeight: 400 }}
+      {/* ── MOBILE: Slide-in drawer ── */}
+      <aside
+        className={`
+          md:hidden fixed top-0 left-0 h-screen w-[300px] bg-white border-r border-[#E8F1F8]
+          flex flex-col px-2 py-4 z-[60] overflow-y-auto
+          transform transition-transform duration-300 ease-in-out
+          ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
+        `}
+      >
+        <div className="flex justify-end mb-2 pr-1">
+          <button
+            onClick={onMobileClose}
+            className="p-2 rounded-md text-gray-500 hover:text-gray-800 hover:bg-gray-100 transition-colors"
+            aria-label="Close menu"
           >
-            AuditFlow
-          </span>
+            <CloseIcon />
+          </button>
         </div>
 
-        {/* ── Current Organisation card ── */}
-        <div className="bg-[#F7F6FA] rounded-lg border border-transparent px-3 py-[10px] mb-2">
-          <div className="flex items-center gap-1.5 mb-1.5">
-            <BuildingIcon />
-            <span className="text-[10px] font-medium text-gray-500 uppercase tracking-[0.07em]">
-              Current Organization
-            </span>
-          </div>
-          <p className="text-[15px] font-bold text-gray-800 mb-1.5 leading-snug">
-            {orgName}
-          </p>
-          <span className="inline-block text-[11px] font-semibold text-violet-700 bg-[#E8F1F8] px-2.5 py-0.5 rounded-full">
-            {orgTag}
-          </span>
-        </div>
-
-        {/* ── Your Role card ── */}
-        <div className="bg-[#F7F6FA] rounded-lg border border-transparent px-3 py-[10px] mb-4">
-          <div className="flex items-center gap-1.5 mb-1.5">
-            <ShieldIcon className="w-3 h-3 text-gray-400" />
-            <span className="text-[10px] font-medium text-gray-500 uppercase tracking-[0.07em]">
-              Your Role
-            </span>
-          </div>
-          <p className="text-[15px] font-bold text-gray-800 mb-0.5 leading-snug">
-            {userRole}
-          </p>
-          <p className="text-xs text-gray-500">
-            {userName}
-          </p>
-        </div>
-
-        {/* ── Nav items ── */}
-        <nav className="flex flex-col gap-2 flex-1">
-          {NAV_ITEMS.map((item) => {
-            const isActive = activeItem === item.id;
-
-            return (
-              <button
-                key={item.id}
-                onClick={() => router.push(ROUTES[item.id])}
-                className={`
-                  w-full h-[59px] rounded-lg bg-[#F7F6FA] border border-transparent
-                  flex items-center gap-3 pl-5 pr-4 cursor-pointer text-sm text-left
-                  transition-colors duration-150 box-border
-                  ${isActive
-                    ? "font-semibold text-[#6B4EFF]"
-                    : "font-medium text-gray-600 hover:text-gray-800"
-                  }
-                `}
-              >
-                {item.icon(isActive)}
-                {item.label}
-              </button>
-            );
-          })}
-        </nav>
-
+        <SidebarContent
+          orgName={orgName}
+          orgTag={orgTag}
+          userName={userName}
+          userRole={userRole}
+          activeItem={activeItem}
+          onNavigate={handleNavigate}
+        />
       </aside>
     </>
   );

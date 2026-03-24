@@ -30,14 +30,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK_API === "true";
-  // Load user on mount using cookie
+
+  // Load user on mount
   useEffect(() => {
     if (USE_MOCK) {
-       localStorage.removeItem("mockUser"); // ← wipe any stale session
-    setUser(null);
-    setLoading(false);
-    return;
-  }
+      // Restore session from localStorage on reload instead of wiping it
+      const stored = localStorage.getItem("mockUser");
+      if (stored) {
+        try {
+          setUser(JSON.parse(stored));
+        } catch {
+          setUser(null);
+          localStorage.removeItem("mockUser");
+        }
+      } else {
+        setUser(null);
+      }
+      setLoading(false);
+      return;
+    }
+
     const loadUser = async () => {
       try {
         const res = await fetch(
@@ -76,12 +88,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
               : "DEPARTMENT",
       };
 
+      // Persist session in both localStorage and a cookie
       localStorage.setItem("mockUser", JSON.stringify(mockUser));
+      document.cookie = "mockSession=1; path=/";
 
       setUser(mockUser);
-
       return mockUser;
     }
+
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`,
       {
@@ -112,10 +126,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Logout
   const logout = async () => {
     if (USE_MOCK) {
+      // Clear both localStorage and the cookie
       localStorage.removeItem("mockUser");
+      document.cookie = "mockSession=; path=/; max-age=0";
       setUser(null);
       return;
     }
+
     try {
       await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/logout`, {
         method: "POST",

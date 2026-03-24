@@ -1,6 +1,8 @@
 "use client";
 
+import { theme } from "@/styles/theme";
 import Image from "next/image";
+import Button from "../common/button";
 
 const ContactSection = () => {
   return (
@@ -9,7 +11,16 @@ const ContactSection = () => {
         {/* Left Text + Form */}
         <div>
           <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-6">
-            Contact <span className="text-[#6B9AC4]">Us</span>
+            Contact{" "}
+            <span
+              style={{
+                background: theme.colors.buttonColor,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              Us
+            </span>
           </h2>
 
           <p className="text-gray-700 text-lg mb-6">
@@ -33,12 +44,7 @@ const ContactSection = () => {
               className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B9AC4] resize-none"
               rows={4}
             />
-            <button
-              type="submit"
-              className="px-6 py-3 bg-[#6B9AC4] text-white rounded-lg hover:bg-[#5A89B0] transition"
-            >
-              Send Message
-            </button>
+            <Button text=" Send Message" className="px-4 py-2" />
           </form>
         </div>
 

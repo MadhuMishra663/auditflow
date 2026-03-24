@@ -1,10 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-// Add this import at the top
-import Pagination from "@/components/common/pagination";
-
-// Types
 
 // ─────────────────────────────────────────────
 // Types
@@ -21,7 +17,6 @@ interface Control {
   lastReview: string;
   nextReview: string;
 }
-
 
 // Mock Data
 const allControls: Control[] = [
@@ -46,10 +41,8 @@ const frameworkTabs: ("All frameworks" | Framework)[] = [
   "All frameworks", "SOC 2", "GDPR", "ISO 27001", "PCI DSS",
 ];
 
-const PAGE_SIZE = 3;
-const DISPLAY_TOTAL_PAGES = 10;
+const PAGE_SIZE = 5;
 
-// Status config
 const statusConfig: Record<Status, { bg: string; text: string; border: string }> = {
   "Compliant":     { bg: "bg-emerald-50",  text: "text-emerald-600", border: "border-emerald-200" },
   "In Progress":   { bg: "bg-sky-50",      text: "text-sky-500",     border: "border-sky-200"     },
@@ -62,7 +55,6 @@ function complianceForFramework(fw: Framework) {
   const compliant = relevant.filter((c) => c.status === "Compliant").length;
   return { pct: Math.round((compliant / relevant.length) * 100), compliant, total: relevant.length };
 }
-// Animated counter hook
 
 function useCountUp(target: number, duration = 1200) {
   const [value, setValue] = useState(0);
@@ -78,8 +70,7 @@ function useCountUp(target: number, duration = 1200) {
   }, [target, duration]);
   return value;
 }
-// Animated progress bar
-// ─────────────────────────────────────────────
+
 function AnimatedBar({ pct, color = "bg-violet-500" }: { pct: number; color?: string }) {
   const [width, setWidth] = useState(0);
   useEffect(() => {
@@ -97,7 +88,6 @@ function AnimatedBar({ pct, color = "bg-violet-500" }: { pct: number; color?: st
 }
 
 // SVG Icons
-// ─────────────────────────────────────────────
 const TrendUpIcon = () => (
   <svg className="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
@@ -143,8 +133,20 @@ const ChevronRightIcon = () => (
     <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
   </svg>
 );
-// StatCard with fade-in + count-up
-// ─────────────────────────────────────────────
+const PdfIcon = () => (
+  <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none">
+    <rect width="24" height="24" rx="4" fill="#FF3B30" />
+    <text x="3" y="16" fontSize="9" fontWeight="bold" fill="white" fontFamily="sans-serif">PDF</text>
+  </svg>
+);
+const ExcelIcon = () => (
+  <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none">
+    <rect width="24" height="24" rx="4" fill="#217346" />
+    <text x="4" y="16" fontSize="8" fontWeight="bold" fill="white" fontFamily="sans-serif">XLS</text>
+  </svg>
+);
+
+// ─── StatCard ───
 function StatCard({
   label, rawValue, icon, progress, cardBg, iconBg, delay = 0,
 }: {
@@ -158,51 +160,46 @@ function StatCard({
 }) {
   const [visible, setVisible] = useState(false);
   const counted = useCountUp(visible ? rawValue : 0, 900);
-
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), delay);
     return () => clearTimeout(t);
   }, [delay]);
-
   const display = label === "Compliance Rate" ? `${counted}%` : counted;
 
   return (
     <div
-      className={`rounded-xl border border-slate-100 ${cardBg} px-4 py-3.5 flex items-start justify-between gap-2
+      className={`rounded-xl border border-slate-100 ${cardBg} px-3 py-3 sm:px-4 sm:py-3.5 flex items-start justify-between gap-2
         transition-all duration-500 ease-out
         ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
     >
-      <div className="flex flex-col gap-0.5">
-        <p className="text-xs text-slate-500">{label}</p>
-        <p className="text-2xl font-bold text-slate-800 leading-tight tabular-nums">{display}</p>
+      <div className="flex flex-col gap-0.5 min-w-0">
+        <p className="text-xs text-slate-500 truncate">{label}</p>
+        <p className="text-xl sm:text-2xl font-bold text-slate-800 leading-tight tabular-nums">{display}</p>
         {progress !== undefined && (
-          <div className="mt-1.5 h-1.5 w-24 rounded-full bg-white/70 overflow-hidden">
+          <div className="mt-1.5 h-1.5 w-20 sm:w-24 rounded-full bg-white/70 overflow-hidden">
             <AnimatedBar pct={visible ? progress : 0} color="bg-violet-500" />
           </div>
         )}
       </div>
-      <div className={`rounded-full p-1.5 ${iconBg} mt-0.5`}>{icon}</div>
+      <div className={`rounded-full p-1.5 ${iconBg} mt-0.5 flex-shrink-0`}>{icon}</div>
     </div>
   );
 }
 
-// StatusBadge
-// ─────────────────────────────────────────────
+// ─── StatusBadge ───
 function StatusBadge({ status }: { status: Status }) {
   const cfg = statusConfig[status];
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${cfg.bg} ${cfg.text} ${cfg.border}`}>
+    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border whitespace-nowrap ${cfg.bg} ${cfg.text} ${cfg.border}`}>
       {status}
     </span>
   );
 }
 
-// FrameworkCard with slide-up + animated bar
-// ─────────────────────────────────────────────
+// ─── FrameworkCard ───
 function FrameworkCard({ fw, delay = 0 }: { fw: Framework; delay?: number }) {
   const { pct, compliant, total } = complianceForFramework(fw);
   const [visible, setVisible] = useState(false);
-
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), delay);
     return () => clearTimeout(t);
@@ -210,13 +207,13 @@ function FrameworkCard({ fw, delay = 0 }: { fw: Framework; delay?: number }) {
 
   return (
     <div
-      className={`rounded-xl border border-slate-200 bg-white p-5 flex flex-col gap-3
+      className={`rounded-xl border border-slate-200 bg-white p-4 sm:p-5 flex flex-col gap-3
         transition-all duration-500 ease-out hover:shadow-md hover:-translate-y-0.5
         ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`}
     >
       <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{fw}</p>
       <div className="flex items-baseline gap-1.5">
-        <span className="text-3xl font-extrabold text-slate-800 tabular-nums">{pct}%</span>
+        <span className="text-2xl sm:text-3xl font-extrabold text-slate-800 tabular-nums">{pct}%</span>
         <span className="text-xs text-slate-400">compliant</span>
       </div>
       <AnimatedBar pct={visible ? pct : 0} />
@@ -225,8 +222,7 @@ function FrameworkCard({ fw, delay = 0 }: { fw: Framework; delay?: number }) {
   );
 }
 
-// Dropdown
-// ─────────────────────────────────────────────
+// ─── Dropdown ───
 function Dropdown({ value, options, open, onToggle, onSelect }: {
   value: string;
   options: string[];
@@ -241,7 +237,7 @@ function Dropdown({ value, options, open, onToggle, onSelect }: {
         className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors"
       >
         <FilterIcon />
-        <span>{value}</span>
+        <span className="hidden xs:inline">{value}</span>
         <ChevronDownIcon />
       </button>
       {open && (
@@ -261,8 +257,79 @@ function Dropdown({ value, options, open, onToggle, onSelect }: {
   );
 }
 
-// Table row with fade-in
-// ─────────────────────────────────────────────
+// ─── UploadButton ───
+function UploadButton() {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleOutside(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", handleOutside);
+    return () => document.removeEventListener("mousedown", handleOutside);
+  }, []);
+
+  return (
+    <div className="relative" ref={ref}>
+      <button
+        onClick={(e) => { e.stopPropagation(); setOpen((o) => !o); }}
+        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-700 active:scale-95 text-white text-xs font-semibold transition-all duration-150 shadow-sm hover:shadow-md"
+      >
+        <UploadIcon />
+        <span>Upload</span>
+      </button>
+      {open && (
+        <div className="absolute right-0 top-full mt-1.5 w-28 bg-white border border-slate-200 rounded-xl shadow-xl z-30 py-1.5 animate-fadeIn">
+          <button
+            onClick={() => setOpen(false)}
+            className="w-full flex items-center gap-2.5 px-3.5 py-2 text-xs font-medium text-slate-700 hover:bg-violet-50 hover:text-violet-700 transition-colors"
+          >
+            <PdfIcon />PDF
+          </button>
+          <div className="mx-3 border-t border-slate-100" />
+          <button
+            onClick={() => setOpen(false)}
+            className="w-full flex items-center gap-2.5 px-3.5 py-2 text-xs font-medium text-slate-700 hover:bg-violet-50 hover:text-violet-700 transition-colors"
+          >
+            <ExcelIcon />EXCEL
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Mobile Card Row (replaces table row on small screens) ───
+function MobileControlCard({ c, index }: { c: Control; index: number }) {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setVisible(true), index * 80);
+    return () => clearTimeout(t);
+  }, [index]);
+
+  return (
+    <div
+      className={`px-4 py-3.5 border-b border-slate-50 last:border-0 transition-all duration-300
+        ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}`}
+    >
+      <div className="flex items-start justify-between gap-2 mb-2">
+        <span className="inline-flex px-2 py-0.5 rounded border border-slate-200 text-xs font-medium text-slate-600 bg-white flex-shrink-0">
+          {c.framework}
+        </span>
+        <StatusBadge status={c.status} />
+      </div>
+      <p className="text-xs font-medium text-slate-700 mb-2">{c.control}</p>
+      <div className="flex flex-wrap gap-x-4 gap-y-1">
+        <span className="text-xs text-slate-400"><span className="text-slate-500 font-medium">Owner:</span> {c.owner}</span>
+        <span className="text-xs text-slate-400 tabular-nums"><span className="text-slate-500 font-medium">Last:</span> {c.lastReview}</span>
+        <span className="text-xs text-slate-400 tabular-nums"><span className="text-slate-500 font-medium">Next:</span> {c.nextReview}</span>
+      </div>
+    </div>
+  );
+}
+
+// ─── Desktop Table Row ───
 function TableRow({ c, index }: { c: Control; index: number }) {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -275,23 +342,86 @@ function TableRow({ c, index }: { c: Control; index: number }) {
       className={`border-b border-slate-50 hover:bg-violet-50/30 transition-all duration-300
         ${visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2"}`}
     >
-      <td className="px-5 py-3">
-        <span className="inline-flex px-2 py-0.5 rounded border border-slate-200 text-xs font-medium text-slate-600 bg-white">
+      <td className="px-4 py-3 xl:px-5">
+        <span className="inline-flex px-2 py-0.5 rounded border border-slate-200 text-xs font-medium text-slate-600 bg-white whitespace-nowrap">
           {c.framework}
         </span>
       </td>
-      <td className="px-5 py-3 text-xs text-slate-700 whitespace-nowrap">{c.control}</td>
-      <td className="px-5 py-3"><StatusBadge status={c.status} /></td>
-      <td className="px-5 py-3 text-xs text-slate-500 whitespace-nowrap">{c.owner}</td>
-      <td className="px-5 py-3 text-xs text-slate-400 whitespace-nowrap tabular-nums">{c.lastReview}</td>
-      <td className="px-5 py-3 text-xs text-slate-400 whitespace-nowrap tabular-nums">{c.nextReview}</td>
+      <td className="px-4 py-3 xl:px-5 text-xs text-slate-700">{c.control}</td>
+      <td className="px-4 py-3 xl:px-5"><StatusBadge status={c.status} /></td>
+      <td className="px-4 py-3 xl:px-5 text-xs text-slate-500 whitespace-nowrap">{c.owner}</td>
+      <td className="px-4 py-3 xl:px-5 text-xs text-slate-400 whitespace-nowrap tabular-nums">{c.lastReview}</td>
+      <td className="px-4 py-3 xl:px-5 text-xs text-slate-400 whitespace-nowrap tabular-nums">{c.nextReview}</td>
     </tr>
   );
 }
 
+// ─── Pagination ───
+function Pagination({ currentPage, totalItems, itemsPerPage, onPageChange }: {
+  currentPage: number;
+  totalItems: number;
+  itemsPerPage: number;
+  onPageChange: (p: number) => void;
+}) {
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  if (totalPages <= 1) return null;
+
+  const pages: (number | "…")[] = [];
+  if (totalPages <= 5) {
+    for (let i = 1; i <= totalPages; i++) pages.push(i);
+  } else {
+    pages.push(1);
+    if (currentPage > 3) pages.push("…");
+    for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) pages.push(i);
+    if (currentPage < totalPages - 2) pages.push("…");
+    pages.push(totalPages);
+  }
+
+  return (
+    <div className="flex items-center justify-between px-4 sm:px-5 py-3 border-t border-slate-100">
+      <p className="text-xs text-slate-400 hidden sm:block">
+        {(currentPage - 1) * itemsPerPage + 1}–{Math.min(currentPage * itemsPerPage, totalItems)} of {totalItems}
+      </p>
+      <div className="flex items-center gap-1 mx-auto sm:mx-0">
+        <button
+          onClick={() => onPageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="p-1.5 rounded-md text-slate-400 hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+        >
+          <ChevronLeftIcon />
+        </button>
+        {pages.map((p, i) =>
+          p === "…" ? (
+            <span key={`ellipsis-${i}`} className="w-7 text-center text-xs text-slate-400">…</span>
+          ) : (
+            <button
+              key={p}
+              onClick={() => onPageChange(p as number)}
+              className={`w-7 h-7 rounded-md text-xs font-medium transition-colors ${
+                currentPage === p
+                  ? "bg-violet-600 text-white"
+                  : "text-slate-500 hover:bg-slate-100"
+              }`}
+            >
+              {p}
+            </button>
+          )
+        )}
+        <button
+          onClick={() => onPageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="p-1.5 rounded-md text-slate-400 hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+        >
+          <ChevronRightIcon />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────
 // Main Page
 // ─────────────────────────────────────────────
-
 export default function ComplianceDashboard() {
   const [activeTab, setActiveTab]     = useState<"All frameworks" | Framework>("All frameworks");
   const [currentPage, setCurrentPage] = useState(1);
@@ -299,7 +429,7 @@ export default function ComplianceDashboard() {
   const [optionOpen, setOptionOpen]   = useState(false);
   const [sortValue, setSortValue]     = useState("short");
   const [optionValue, setOptionValue] = useState("Option");
-  const [pageKey, setPageKey]         = useState(0); // force re-animate on page change
+  const [pageKey, setPageKey]         = useState(0);
 
   const compliantCount    = allControls.filter((c) => c.status === "Compliant").length;
   const inProgressCount   = allControls.filter((c) => c.status === "In Progress").length;
@@ -329,57 +459,51 @@ export default function ComplianceDashboard() {
 
   return (
     <>
-      {/* Inject keyframes */}
       <style>{`
         @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fadeIn { animation: fadeIn 0.15s ease-out forwards; }
       `}</style>
 
       <div className="min-h-screen bg-slate-50 font-sans" onClick={closeAll}>
-        <main className="max-w-5xl mx-auto px-4 sm:px-6 py-5 space-y-4">
+        <main className="w-full px-3 sm:px-5 lg:px-6 py-4 sm:py-5 space-y-3 sm:space-y-4 max-w-screen-2xl mx-auto">
 
-          {/* ── 1. Stat Cards ── */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          {/* ── 1. Stat Cards — 2 cols on mobile, 4 on md+ ── */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3">
             <StatCard label="Compliance Rate" rawValue={overallPct} progress={overallPct}
               cardBg="bg-emerald-50/80" iconBg="bg-emerald-100" icon={<TrendUpIcon />} delay={0} />
             <StatCard label="Compliant" rawValue={compliantCount}
               cardBg="bg-emerald-50/40" iconBg="bg-emerald-100" icon={<CheckCircleIcon />} delay={80} />
             <StatCard label="In Progress" rawValue={inProgressCount}
               cardBg="bg-sky-50/50" iconBg="bg-sky-100" icon={<ClockIcon />} delay={160} />
-            <StatCard label="Non-compliant" rawValue={nonCompliantCount}
+            <StatCard label="Non-Compliant" rawValue={nonCompliantCount}
               cardBg="bg-rose-50/50" iconBg="bg-rose-100" icon={<XCircleIcon />} delay={240} />
           </div>
 
-          {/* ── 2. Framework Cards (SOC cards above table) ── */}
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-            {frameworkCards.slice(0, 3).map((fw, i) => (
+          {/* ── 2. Framework Cards — 2 cols on mobile, 4 on lg+ ── */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
+            {frameworkCards.map((fw, i) => (
               <FrameworkCard key={fw} fw={fw} delay={i * 100} />
             ))}
-          </div>
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-            <FrameworkCard fw="PCI DSS" delay={300} />
           </div>
 
           {/* ── 3. Compliance Controls Table ── */}
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
 
             {/* Top bar */}
-            <div className="px-5 py-3.5 flex items-center justify-between border-b border-slate-100">
+            <div className="px-4 sm:px-5 py-3 sm:py-3.5 flex items-center justify-between gap-2 border-b border-slate-100">
               <h2 className="text-sm font-semibold text-slate-700">Compliance Controls</h2>
-              <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-700 active:scale-95 text-white text-xs font-semibold transition-all duration-150 shadow-sm hover:shadow-md">
-                <UploadIcon />
-                Upload
-              </button>
+              <UploadButton />
             </div>
 
             {/* Tabs + filters */}
-            <div className="px-5 py-2.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-100">
-              <div className="flex flex-wrap gap-1.5">
+            <div className="px-3 sm:px-5 py-2.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-100">
+              {/* Scrollable tabs row on mobile */}
+              <div className="flex gap-1 overflow-x-auto pb-0.5 sm:pb-0 sm:flex-wrap scrollbar-none">
                 {frameworkTabs.map((tab) => (
                   <button
                     key={tab}
                     onClick={() => handleTabChange(tab)}
-                    className={`px-3 py-1 rounded-md text-xs font-medium transition-all duration-200 ${
+                    className={`px-2.5 sm:px-3 py-1 rounded-md text-xs font-medium whitespace-nowrap flex-shrink-0 transition-all duration-200 ${
                       activeTab === tab
                         ? "bg-violet-100 text-violet-700 scale-105"
                         : "text-slate-500 hover:bg-slate-100 hover:text-slate-700"
@@ -389,7 +513,7 @@ export default function ComplianceDashboard() {
                   </button>
                 ))}
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-shrink-0">
                 <Dropdown
                   value={sortValue}
                   options={["short", "A → Z", "Z → A", "Newest"]}
@@ -407,13 +531,22 @@ export default function ComplianceDashboard() {
               </div>
             </div>
 
-            {/* Table */}
-            <div className="overflow-x-auto">
+            {/* Mobile: card list */}
+            <div className="md:hidden" key={`mobile-${activeTab}-${pageKey}`}>
+              {paginated.length === 0 ? (
+                <div className="px-4 py-10 text-center text-slate-400 text-sm">No controls found.</div>
+              ) : (
+                paginated.map((c, i) => <MobileControlCard key={c.id} c={c} index={i} />)
+              )}
+            </div>
+
+            {/* Desktop: table */}
+            <div className="hidden md:block overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-slate-100">
                     {["Framework", "Control", "Status", "Owner", "Last Review", "Next Review"].map((h) => (
-                      <th key={h} className="px-5 py-2.5 text-left text-xs font-medium text-slate-400 whitespace-nowrap bg-white">
+                      <th key={h} className="px-4 xl:px-5 py-2.5 text-left text-xs font-medium text-slate-400 whitespace-nowrap bg-white">
                         {h}
                       </th>
                     ))}
@@ -422,9 +555,7 @@ export default function ComplianceDashboard() {
                 <tbody key={`${activeTab}-${pageKey}`}>
                   {paginated.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="px-5 py-10 text-center text-slate-400 text-sm">
-                        No controls found.
-                      </td>
+                      <td colSpan={6} className="px-5 py-10 text-center text-slate-400 text-sm">No controls found.</td>
                     </tr>
                   ) : (
                     paginated.map((c, i) => <TableRow key={c.id} c={c} index={i} />)
@@ -432,59 +563,14 @@ export default function ComplianceDashboard() {
                 </tbody>
               </table>
             </div>
-          </div>
 
-          {/* ── 4. Pagination ── */}
-          <Pagination
-            currentPage={currentPage}
-            totalItems={filtered.length}
-            itemsPerPage={PAGE_SIZE}
-            onPageChange={handlePageChange}
-          />
-=======
-          <div className="flex items-center gap-1 flex-wrap">
-            <button
-              onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-              disabled={currentPage === 1}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-40 transition-all active:scale-95"
-            >
-              <ChevronLeftIcon /> Previous
-            </button>
-
-            {[1, 2, 3, 4, 5, 6, 7].map((p) => (
-              <button
-                key={p}
-                onClick={() => handlePageChange(p)}
-                className={`w-7 h-7 rounded-lg text-xs font-medium transition-all active:scale-90 ${
-                  currentPage === p
-                    ? "bg-violet-600 text-white shadow-sm scale-105"
-                    : "text-slate-600 border border-slate-200 bg-white hover:bg-slate-50 hover:border-violet-300"
-                }`}
-              >
-                {p}
-              </button>
-            ))}
-
-            <span className="px-1 text-slate-300 text-xs select-none tracking-widest">·········</span>
-
-            <button
-              onClick={() => handlePageChange(DISPLAY_TOTAL_PAGES)}
-              className={`w-7 h-7 rounded-lg text-xs font-medium transition-all active:scale-90 ${
-                currentPage === DISPLAY_TOTAL_PAGES
-                  ? "bg-violet-600 text-white shadow-sm scale-105"
-                  : "text-slate-600 border border-slate-200 bg-white hover:bg-slate-50 hover:border-violet-300"
-              }`}
-            >
-              {DISPLAY_TOTAL_PAGES}
-            </button>
-
-            <button
-              onClick={() => handlePageChange(Math.min(DISPLAY_TOTAL_PAGES, currentPage + 1))}
-              disabled={currentPage === DISPLAY_TOTAL_PAGES}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-40 transition-all active:scale-95"
-            >
-              Next <ChevronRightIcon />
-            </button>
+            {/* Pagination inside the card */}
+            <Pagination
+              currentPage={currentPage}
+              totalItems={filtered.length}
+              itemsPerPage={PAGE_SIZE}
+              onPageChange={handlePageChange}
+            />
           </div>
 
         </main>
