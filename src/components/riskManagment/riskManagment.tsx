@@ -765,93 +765,54 @@ export default function RiskManagment() {
             style={{ border: "1px solid #DCD7F8" }}
           >
             <div
-              className="hidden sm:grid gap-4 px-4 py-3"
-              style={{
-                gridTemplateColumns: "2.5fr 1fr 1.2fr 1fr 1.3fr 1fr",
-                backgroundColor: "#F7F6FA",
-                borderBottom: "1px solid #DCD7F8",
-              }}
+              className="rounded-2xl overflow-hidden"
+              style={{ border: "1px solid #DCD7F8" }}
             >
-              {[
-                "Risk Title",
-                "Severity",
-                "Status",
-                "Category",
-                "Owner",
-                "Created",
-              ].map((h) => (
-                <div
-                  key={h}
-                  className="text-sm font-medium font"
-                  style={{ color: "#000000" }}
-                >
-                  {h}
-                </div>
-              ))}
-            </div>
+              <div
+                className="hidden sm:grid gap-4 px-4 py-3"
+                style={{
+                  gridTemplateColumns: "2.5fr 1fr 1.2fr 1fr 1.3fr 1fr",
+                  backgroundColor: "#F7F6FA",
+                  borderBottom: "1px solid #DCD7F8",
+                }}
+              >
+                {[
+                  "Risk Title",
+                  "Severity",
+                  "Status",
+                  "Category",
+                  "Owner",
+                  "Created",
+                ].map((h) => (
+                  <div
+                    key={h}
+                    className="text-sm font-medium font"
+                    style={{ color: "#000000" }}
+                  >
+                    {h}
+                  </div>
+                ))}
+              </div>
 
-            {/* ── Table Rows Desktop — each row in its own bordered box ── */}
-            <div className="hidden sm:block">
-              {paginated.length === 0 && (
-                <div className="py-12 text-center" style={{ color: "#AAAAAA" }}>
-                  No risks found.
-                </div>
-              )}
-              {paginated.map((r) => (
-                <div
-                  key={r.id}
-                  className="grid gap-4 px-4 py-4 items-center"
-                  style={{
-                    gridTemplateColumns: "2.5fr 1fr 1.2fr 1fr 1.3fr 1fr",
-                    border: "1px solid #F0F0F0",
-                  }}
-                >
-                  <div>
-                    <p
-                      className="font-semibold text-sm"
-                      style={{ color: "#222222" }}
-                    >
-                      {r.title}
-                    </p>
-                    <p className="text-xs mt-0.5" style={{ color: "#6d6d6d" }}>
-                      {r.description}
-                    </p>
+              {/* ── Table Rows Desktop — each row in its own bordered box ── */}
+              <div className="hidden sm:block">
+                {paginated.length === 0 && (
+                  <div
+                    className="py-12 text-center"
+                    style={{ color: "#AAAAAA" }}
+                  >
+                    No risks found.
                   </div>
-                  <div>
-                    <SeverityBadge severity={r.severity} />
-                  </div>
-                  <div>
-                    <StatusBadge status={r.status} />
-                  </div>
-                  <div className="text-sm" style={{ color: "#000000" }}>
-                    {r.category}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <img
-                      src={r.avatar}
-                      alt={r.owner}
-                      className="w-8 h-8 rounded-full object-cover flex-shrink-0"
-                    />
-                    <span className="text-sm" style={{ color: "#000000" }}>
-                      {r.owner}
-                    </span>
-                  </div>
-                  <div className="text-sm" style={{ color: "#BBBBBB" }}>
-                    {r.created}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* ── Cards Mobile ── */}
-            <div className="sm:hidden space-y-3 mt-3">
-              {paginated.map((r) => (
-                <div
-                  key={r.id}
-                  className="rounded-2xl p-4 space-y-2"
-                  style={{ border: "1px solid #F0F0F0" }}
-                >
-                  <div className="flex items-start justify-between gap-2">
+                )}
+                {paginated.map((r) => (
+                  <div
+                    key={r.id}
+                    className="grid gap-4 px-4 py-4 items-center"
+                    style={{
+                      gridTemplateColumns: "2.5fr 1fr 1.2fr 1fr 1.3fr 1fr",
+                      border: "1px solid #F0F0F0",
+                    }}
+                  >
                     <div>
                       <p
                         className="font-semibold text-sm"
@@ -861,40 +822,90 @@ export default function RiskManagment() {
                       </p>
                       <p
                         className="text-xs mt-0.5"
-                        style={{ color: "#BBBBBB" }}
+                        style={{ color: "#6d6d6d" }}
                       >
                         {r.description}
                       </p>
                     </div>
-                    <SeverityBadge severity={r.severity} />
-                  </div>
-                  <div className="flex flex-wrap gap-2 items-center text-xs">
-                    <StatusBadge status={r.status} />
-                    <span style={{ color: "#DDDDDD" }}>•</span>
-                    <span style={{ color: "#888888" }}>{r.category}</span>
-                    <span style={{ color: "#DDDDDD" }}>•</span>
-                    <div className="flex items-center gap-1">
+                    <div>
+                      <SeverityBadge severity={r.severity} />
+                    </div>
+                    <div>
+                      <StatusBadge status={r.status} />
+                    </div>
+                    <div className="text-sm" style={{ color: "#000000" }}>
+                      {r.category}
+                    </div>
+                    <div className="flex items-center gap-2">
                       <img
                         src={r.avatar}
                         alt={r.owner}
-                        className="w-5 h-5 rounded-full object-cover"
+                        className="w-8 h-8 rounded-full object-cover flex-shrink-0"
                       />
-                      <span style={{ color: "#888888" }}>{r.owner}</span>
+                      <span className="text-sm" style={{ color: "#000000" }}>
+                        {r.owner}
+                      </span>
                     </div>
-                    <span style={{ color: "#DDDDDD" }}>•</span>
-                    <span style={{ color: "#AAAAAA" }}>{r.created}</span>
+                    <div className="text-sm" style={{ color: "#BBBBBB" }}>
+                      {r.created}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
 
-            {/* ── Pagination ── */}
-            <Pagination
-              currentPage={currentPage}
-              totalItems={sorted.length}
-              itemsPerPage={PAGE_SIZE}
-              onPageChange={(page) => setCurrentPage(page)}
-            />
+              {/* ── Cards Mobile ── */}
+              <div className="sm:hidden space-y-3 mt-3">
+                {paginated.map((r) => (
+                  <div
+                    key={r.id}
+                    className="rounded-2xl p-4 space-y-2"
+                    style={{ border: "1px solid #F0F0F0" }}
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p
+                          className="font-semibold text-sm"
+                          style={{ color: "#222222" }}
+                        >
+                          {r.title}
+                        </p>
+                        <p
+                          className="text-xs mt-0.5"
+                          style={{ color: "#BBBBBB" }}
+                        >
+                          {r.description}
+                        </p>
+                      </div>
+                      <SeverityBadge severity={r.severity} />
+                    </div>
+                    <div className="flex flex-wrap gap-2 items-center text-xs">
+                      <StatusBadge status={r.status} />
+                      <span style={{ color: "#DDDDDD" }}>•</span>
+                      <span style={{ color: "#888888" }}>{r.category}</span>
+                      <span style={{ color: "#DDDDDD" }}>•</span>
+                      <div className="flex items-center gap-1">
+                        <img
+                          src={r.avatar}
+                          alt={r.owner}
+                          className="w-5 h-5 rounded-full object-cover"
+                        />
+                        <span style={{ color: "#888888" }}>{r.owner}</span>
+                      </div>
+                      <span style={{ color: "#DDDDDD" }}>•</span>
+                      <span style={{ color: "#AAAAAA" }}>{r.created}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* ── Pagination ── */}
+              <Pagination
+                currentPage={currentPage}
+                totalItems={sorted.length}
+                itemsPerPage={PAGE_SIZE}
+                onPageChange={(page) => setCurrentPage(page)}
+              />
+            </div>
           </div>
         </div>
       </div>
