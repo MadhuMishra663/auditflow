@@ -33,7 +33,7 @@ const Pagination: React.FC<PaginationProps> = ({
       `w-9 h-9 flex items-center justify-center rounded-full border text-sm font-medium transition-colors
       ${
         active
-          ? "bg-gray-400 text-white border-gray-400"           // LINE 37: Teal active color
+          ? "text-white border-transparent"           // LINE 37: Teal active color
           : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50" // LINE 38: Subtle inactive style
       }`;
 
@@ -45,7 +45,12 @@ const Pagination: React.FC<PaginationProps> = ({
     );
 
     const pageBtn = (i: number) => (
-      <button key={i} onClick={() => onPageChange(i)} className={btnClass(currentPage === i)}>
+      <button
+        key={i}
+        onClick={() => onPageChange(i)}
+        className={btnClass(currentPage === i)}
+        style={currentPage === i ? { backgroundColor: "#EDE8F9", borderColor: "#EDE8F9", color: "#8B6FD4" } : {}}
+      >
         {i}
       </button>
     );
