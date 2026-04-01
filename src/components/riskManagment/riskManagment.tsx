@@ -685,44 +685,7 @@ export default function RiskManagment() {
 
             {/* Controls */}
             <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 w-full sm:w-auto">
-              {/* Sort */}
-              <div className="relative flex-1 sm:flex-none">
-                <button
-                  onClick={() => {
-                    setShowSortMenu(!showSortMenu);
-                    setShowOptionMenu(false);
-                  }}
-                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-3 text-sm rounded-2xl"
-                  style={{
-                    backgroundColor: "#F7F7F9",
-                    color: "#666666",
-                    border: "1px solid #EEEEEE",
-                  }}
-                >
-                  short
-                </button>
-
-                {showSortMenu && (
-                  <div className="absolute right-0 mt-1 w-full sm:w-44 bg-white border border-gray-100 rounded-xl shadow-lg z-20 py-1">
-                    {[
-                      ["created", "Date Created"],
-                      ["title", "Risk Title"],
-                      ["severity", "Severity"],
-                    ].map(([val, label]) => (
-                      <button
-                        key={val}
-                        onClick={() => {
-                          setSortBy(val);
-                          setShowSortMenu(false);
-                        }}
-                        className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
-                      >
-                        {label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
+              
 
               {/* Option */}
               <div className="relative flex-1 sm:flex-none">

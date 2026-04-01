@@ -86,7 +86,7 @@ type NavItemId =
   | "compliance"
   | "policies"
   | "audit-management"
-  | "settings";
+  | "setting-management";
 
 interface NavItem {
   id: NavItemId;
@@ -111,7 +111,7 @@ const NAV_ITEMS: NavItem[] = [
   { id: "compliance",       label: "Compliance",       icon: (a) => <ClipboardIcon active={a} /> },
   { id: "policies",         label: "Policies",         icon: (a) => <FileTextIcon active={a} /> },
   { id: "audit-management", label: "Audit Management", icon: (a) => <SearchIcon active={a} /> },
-  { id: "settings",         label: "Settings",         icon: (a) => <SettingsIcon active={a} /> },
+  { id: "setting-management",         label: "Settings",         icon: (a) => <SettingsIcon active={a} /> },
 ];
 
 const ROUTES: Record<NavItemId, string> = {
@@ -120,7 +120,7 @@ const ROUTES: Record<NavItemId, string> = {
   "compliance":       "/admin/compliance",
   "policies":         "/admin/policies",
   "audit-management": "/admin/audit-management",
-  "settings":         "/admin/settings",
+  "setting-management":"/admin/setting-management",
 };
 
 // ── Sidebar Inner Content ────────────────────────────────────────────────────
@@ -227,7 +227,7 @@ export function Sidebar({
     if (pathname.includes("compliance"))       return "compliance";
     if (pathname.includes("policies"))         return "policies";
     if (pathname.includes("audit-management")) return "audit-management";
-    if (pathname.includes("settings"))         return "settings";
+    if (pathname.includes("settings"))         return "setting-management";
     return "dashboard";
   };
 
