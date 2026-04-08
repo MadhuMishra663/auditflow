@@ -4,339 +4,341 @@ import Pagination from "@/components/common/pagination";
 
 import { theme } from "@/styles/theme";
 import Button from "../common/button";
+import CreateRiskModal from "./createRiskModal";
+import useRisk from "../hooks/useRiskManagement";
 
-const allRisks = [
-  {
-    id: 1,
-    title: "Data Breach Vulnerability",
-    description: "Potential security gaps in customer database",
-    severity: "Critical",
-    status: "Open",
-    category: "Security",
-    owner: "John Smith",
-    created: "2026-02-20",
-    avatar: "https://i.pravatar.cc/32?img=1",
-  },
-  {
-    id: 2,
-    title: "Compliance Gap in GDPR",
-    description: "Missing data processing agreements",
-    severity: "High",
-    status: "In Progress",
-    category: "Compliance",
-    owner: "Sarah Johnson",
-    created: "2026-02-18",
-    avatar: "https://i.pravatar.cc/32?img=5",
-  },
-  {
-    id: 3,
-    title: "Third-party Vendor Risk",
-    description: "New vendor lacks adequate security controls",
-    severity: "Medium",
-    status: "Open",
-    category: "Vendor",
-    owner: "Mike Davis",
-    created: "2026-02-15",
-    avatar: "https://i.pravatar.cc/32?img=9",
-  },
-  {
-    id: 4,
-    title: "Data Breach Vulnerability",
-    description: "Potential security gaps in customer database",
-    severity: "Critical",
-    status: "Open",
-    category: "Security",
-    owner: "John Smith",
-    created: "2026-02-20",
-    avatar: "https://i.pravatar.cc/32?img=1",
-  },
-  {
-    id: 5,
-    title: "Compliance Gap in GDPR",
-    description: "Missing data processing agreements",
-    severity: "High",
-    status: "In Progress",
-    category: "Compliance",
-    owner: "Sarah Johnson",
-    created: "2026-02-18",
-    avatar: "https://i.pravatar.cc/32?img=5",
-  },
-  {
-    id: 6,
-    title: "Third-party Vendor Risk",
-    description: "New vendor lacks adequate security controls",
-    severity: "Medium",
-    status: "Open",
-    category: "Vendor",
-    owner: "Mike Davis",
-    created: "2026-02-15",
-    avatar: "https://i.pravatar.cc/32?img=9",
-  },
-  {
-    id: 7,
-    title: "Data Breach Vulnerability",
-    description: "Potential security gaps in customer database",
-    severity: "Critical",
-    status: "Open",
-    category: "Security",
-    owner: "John Smith",
-    created: "2026-02-20",
-    avatar: "https://i.pravatar.cc/32?img=1",
-  },
-  {
-    id: 8,
-    title: "Compliance Gap in GDPR",
-    description: "Missing data processing agreements",
-    severity: "High",
-    status: "In Progress",
-    category: "Compliance",
-    owner: "Sarah Johnson",
-    created: "2026-02-18",
-    avatar: "https://i.pravatar.cc/32?img=5",
-  },
-  {
-    id: 9,
-    title: "Third-party Vendor Risk",
-    description: "New vendor lacks adequate security controls",
-    severity: "Medium",
-    status: "Open",
-    category: "Vendor",
-    owner: "Mike Davis",
-    created: "2026-02-15",
-    avatar: "https://i.pravatar.cc/32?img=9",
-  },
-  {
-    id: 10,
-    title: "Data Breach Vulnerability",
-    description: "Potential security gaps in customer database",
-    severity: "Critical",
-    status: "Open",
-    category: "Security",
-    owner: "John Smith",
-    created: "2026-02-20",
-    avatar: "https://i.pravatar.cc/32?img=1",
-  },
-  {
-    id: 11,
-    title: "Compliance Gap in GDPR",
-    description: "Missing data processing agreements",
-    severity: "High",
-    status: "In Progress",
-    category: "Compliance",
-    owner: "Sarah Johnson",
-    created: "2026-02-18",
-    avatar: "https://i.pravatar.cc/32?img=5",
-  },
-  {
-    id: 12,
-    title: "Third-party Vendor Risk",
-    description: "New vendor lacks adequate security controls",
-    severity: "Medium",
-    status: "Open",
-    category: "Vendor",
-    owner: "Mike Davis",
-    created: "2026-02-15",
-    avatar: "https://i.pravatar.cc/32?img=9",
-  },
-  {
-    id: 13,
-    title: "Data Breach Vulnerability",
-    description: "Potential security gaps in customer database",
-    severity: "Critical",
-    status: "Open",
-    category: "Security",
-    owner: "John Smith",
-    created: "2026-02-20",
-    avatar: "https://i.pravatar.cc/32?img=1",
-  },
-  {
-    id: 14,
-    title: "Compliance Gap in GDPR",
-    description: "Missing data processing agreements",
-    severity: "High",
-    status: "In Progress",
-    category: "Compliance",
-    owner: "Sarah Johnson",
-    created: "2026-02-18",
-    avatar: "https://i.pravatar.cc/32?img=5",
-  },
-  {
-    id: 15,
-    title: "Third-party Vendor Risk",
-    description: "New vendor lacks adequate security controls",
-    severity: "Medium",
-    status: "Open",
-    category: "Vendor",
-    owner: "Mike Davis",
-    created: "2026-02-15",
-    avatar: "https://i.pravatar.cc/32?img=9",
-  },
-  {
-    id: 16,
-    title: "Data Breach Vulnerability",
-    description: "Potential security gaps in customer database",
-    severity: "Critical",
-    status: "Open",
-    category: "Security",
-    owner: "John Smith",
-    created: "2026-02-20",
-    avatar: "https://i.pravatar.cc/32?img=1",
-  },
-  {
-    id: 17,
-    title: "Compliance Gap in GDPR",
-    description: "Missing data processing agreements",
-    severity: "High",
-    status: "In Progress",
-    category: "Compliance",
-    owner: "Sarah Johnson",
-    created: "2026-02-18",
-    avatar: "https://i.pravatar.cc/32?img=5",
-  },
-  {
-    id: 18,
-    title: "Third-party Vendor Risk",
-    description: "New vendor lacks adequate security controls",
-    severity: "Medium",
-    status: "Open",
-    category: "Vendor",
-    owner: "Mike Davis",
-    created: "2026-02-15",
-    avatar: "https://i.pravatar.cc/32?img=9",
-  },
-  {
-    id: 19,
-    title: "Data Breach Vulnerability",
-    description: "Potential security gaps in customer database",
-    severity: "Critical",
-    status: "Open",
-    category: "Security",
-    owner: "John Smith",
-    created: "2026-02-20",
-    avatar: "https://i.pravatar.cc/32?img=1",
-  },
-  {
-    id: 20,
-    title: "Compliance Gap in GDPR",
-    description: "Missing data processing agreements",
-    severity: "High",
-    status: "In Progress",
-    category: "Compliance",
-    owner: "Sarah Johnson",
-    created: "2026-02-18",
-    avatar: "https://i.pravatar.cc/32?img=5",
-  },
-  {
-    id: 21,
-    title: "Third-party Vendor Risk",
-    description: "New vendor lacks adequate security controls",
-    severity: "Medium",
-    status: "Open",
-    category: "Vendor",
-    owner: "Mike Davis",
-    created: "2026-02-15",
-    avatar: "https://i.pravatar.cc/32?img=9",
-  },
-  {
-    id: 22,
-    title: "Data Breach Vulnerability",
-    description: "Potential security gaps in customer database",
-    severity: "Critical",
-    status: "Open",
-    category: "Security",
-    owner: "John Smith",
-    created: "2026-02-20",
-    avatar: "https://i.pravatar.cc/32?img=1",
-  },
-  {
-    id: 23,
-    title: "Compliance Gap in GDPR",
-    description: "Missing data processing agreements",
-    severity: "High",
-    status: "In Progress",
-    category: "Compliance",
-    owner: "Sarah Johnson",
-    created: "2026-02-18",
-    avatar: "https://i.pravatar.cc/32?img=5",
-  },
-  {
-    id: 24,
-    title: "Third-party Vendor Risk",
-    description: "New vendor lacks adequate security controls",
-    severity: "Medium",
-    status: "Open",
-    category: "Vendor",
-    owner: "Mike Davis",
-    created: "2026-02-15",
-    avatar: "https://i.pravatar.cc/32?img=9",
-  },
-  {
-    id: 25,
-    title: "Data Breach Vulnerability",
-    description: "Potential security gaps in customer database",
-    severity: "Critical",
-    status: "Open",
-    category: "Security",
-    owner: "John Smith",
-    created: "2026-02-20",
-    avatar: "https://i.pravatar.cc/32?img=1",
-  },
-  {
-    id: 26,
-    title: "Compliance Gap in GDPR",
-    description: "Missing data processing agreements",
-    severity: "High",
-    status: "In Progress",
-    category: "Compliance",
-    owner: "Sarah Johnson",
-    created: "2026-02-18",
-    avatar: "https://i.pravatar.cc/32?img=5",
-  },
-  {
-    id: 27,
-    title: "Third-party Vendor Risk",
-    description: "New vendor lacks adequate security controls",
-    severity: "Medium",
-    status: "Open",
-    category: "Vendor",
-    owner: "Mike Davis",
-    created: "2026-02-15",
-    avatar: "https://i.pravatar.cc/32?img=9",
-  },
-  {
-    id: 28,
-    title: "Data Breach Vulnerability",
-    description: "Potential security gaps in customer database",
-    severity: "Critical",
-    status: "Open",
-    category: "Security",
-    owner: "John Smith",
-    created: "2026-02-20",
-    avatar: "https://i.pravatar.cc/32?img=1",
-  },
-  {
-    id: 29,
-    title: "Compliance Gap in GDPR",
-    description: "Missing data processing agreements",
-    severity: "High",
-    status: "In Progress",
-    category: "Compliance",
-    owner: "Sarah Johnson",
-    created: "2026-02-18",
-    avatar: "https://i.pravatar.cc/32?img=5",
-  },
-  {
-    id: 30,
-    title: "Third-party Vendor Risk",
-    description: "New vendor lacks adequate security controls",
-    severity: "Medium",
-    status: "Open",
-    category: "Vendor",
-    owner: "Mike Davis",
-    created: "2026-02-15",
-    avatar: "https://i.pravatar.cc/32?img=9",
-  },
-];
+// const allRisks = [
+//   {
+//     id: 1,
+//     title: "Data Breach Vulnerability",
+//     description: "Potential security gaps in customer database",
+//     severity: "Critical",
+//     status: "Open",
+//     category: "Security",
+//     owner: "John Smith",
+//     created: "2026-02-20",
+//     avatar: "https://i.pravatar.cc/32?img=1",
+//   },
+//   {
+//     id: 2,
+//     title: "Compliance Gap in GDPR",
+//     description: "Missing data processing agreements",
+//     severity: "High",
+//     status: "In Progress",
+//     category: "Compliance",
+//     owner: "Sarah Johnson",
+//     created: "2026-02-18",
+//     avatar: "https://i.pravatar.cc/32?img=5",
+//   },
+//   {
+//     id: 3,
+//     title: "Third-party Vendor Risk",
+//     description: "New vendor lacks adequate security controls",
+//     severity: "Medium",
+//     status: "Open",
+//     category: "Vendor",
+//     owner: "Mike Davis",
+//     created: "2026-02-15",
+//     avatar: "https://i.pravatar.cc/32?img=9",
+//   },
+//   {
+//     id: 4,
+//     title: "Data Breach Vulnerability",
+//     description: "Potential security gaps in customer database",
+//     severity: "Critical",
+//     status: "Open",
+//     category: "Security",
+//     owner: "John Smith",
+//     created: "2026-02-20",
+//     avatar: "https://i.pravatar.cc/32?img=1",
+//   },
+//   {
+//     id: 5,
+//     title: "Compliance Gap in GDPR",
+//     description: "Missing data processing agreements",
+//     severity: "High",
+//     status: "In Progress",
+//     category: "Compliance",
+//     owner: "Sarah Johnson",
+//     created: "2026-02-18",
+//     avatar: "https://i.pravatar.cc/32?img=5",
+//   },
+//   {
+//     id: 6,
+//     title: "Third-party Vendor Risk",
+//     description: "New vendor lacks adequate security controls",
+//     severity: "Medium",
+//     status: "Open",
+//     category: "Vendor",
+//     owner: "Mike Davis",
+//     created: "2026-02-15",
+//     avatar: "https://i.pravatar.cc/32?img=9",
+//   },
+//   {
+//     id: 7,
+//     title: "Data Breach Vulnerability",
+//     description: "Potential security gaps in customer database",
+//     severity: "Critical",
+//     status: "Open",
+//     category: "Security",
+//     owner: "John Smith",
+//     created: "2026-02-20",
+//     avatar: "https://i.pravatar.cc/32?img=1",
+//   },
+//   {
+//     id: 8,
+//     title: "Compliance Gap in GDPR",
+//     description: "Missing data processing agreements",
+//     severity: "High",
+//     status: "In Progress",
+//     category: "Compliance",
+//     owner: "Sarah Johnson",
+//     created: "2026-02-18",
+//     avatar: "https://i.pravatar.cc/32?img=5",
+//   },
+//   {
+//     id: 9,
+//     title: "Third-party Vendor Risk",
+//     description: "New vendor lacks adequate security controls",
+//     severity: "Medium",
+//     status: "Open",
+//     category: "Vendor",
+//     owner: "Mike Davis",
+//     created: "2026-02-15",
+//     avatar: "https://i.pravatar.cc/32?img=9",
+//   },
+//   {
+//     id: 10,
+//     title: "Data Breach Vulnerability",
+//     description: "Potential security gaps in customer database",
+//     severity: "Critical",
+//     status: "Open",
+//     category: "Security",
+//     owner: "John Smith",
+//     created: "2026-02-20",
+//     avatar: "https://i.pravatar.cc/32?img=1",
+//   },
+//   {
+//     id: 11,
+//     title: "Compliance Gap in GDPR",
+//     description: "Missing data processing agreements",
+//     severity: "High",
+//     status: "In Progress",
+//     category: "Compliance",
+//     owner: "Sarah Johnson",
+//     created: "2026-02-18",
+//     avatar: "https://i.pravatar.cc/32?img=5",
+//   },
+//   {
+//     id: 12,
+//     title: "Third-party Vendor Risk",
+//     description: "New vendor lacks adequate security controls",
+//     severity: "Medium",
+//     status: "Open",
+//     category: "Vendor",
+//     owner: "Mike Davis",
+//     created: "2026-02-15",
+//     avatar: "https://i.pravatar.cc/32?img=9",
+//   },
+//   {
+//     id: 13,
+//     title: "Data Breach Vulnerability",
+//     description: "Potential security gaps in customer database",
+//     severity: "Critical",
+//     status: "Open",
+//     category: "Security",
+//     owner: "John Smith",
+//     created: "2026-02-20",
+//     avatar: "https://i.pravatar.cc/32?img=1",
+//   },
+//   {
+//     id: 14,
+//     title: "Compliance Gap in GDPR",
+//     description: "Missing data processing agreements",
+//     severity: "High",
+//     status: "In Progress",
+//     category: "Compliance",
+//     owner: "Sarah Johnson",
+//     created: "2026-02-18",
+//     avatar: "https://i.pravatar.cc/32?img=5",
+//   },
+//   {
+//     id: 15,
+//     title: "Third-party Vendor Risk",
+//     description: "New vendor lacks adequate security controls",
+//     severity: "Medium",
+//     status: "Open",
+//     category: "Vendor",
+//     owner: "Mike Davis",
+//     created: "2026-02-15",
+//     avatar: "https://i.pravatar.cc/32?img=9",
+//   },
+//   {
+//     id: 16,
+//     title: "Data Breach Vulnerability",
+//     description: "Potential security gaps in customer database",
+//     severity: "Critical",
+//     status: "Open",
+//     category: "Security",
+//     owner: "John Smith",
+//     created: "2026-02-20",
+//     avatar: "https://i.pravatar.cc/32?img=1",
+//   },
+//   {
+//     id: 17,
+//     title: "Compliance Gap in GDPR",
+//     description: "Missing data processing agreements",
+//     severity: "High",
+//     status: "In Progress",
+//     category: "Compliance",
+//     owner: "Sarah Johnson",
+//     created: "2026-02-18",
+//     avatar: "https://i.pravatar.cc/32?img=5",
+//   },
+//   {
+//     id: 18,
+//     title: "Third-party Vendor Risk",
+//     description: "New vendor lacks adequate security controls",
+//     severity: "Medium",
+//     status: "Open",
+//     category: "Vendor",
+//     owner: "Mike Davis",
+//     created: "2026-02-15",
+//     avatar: "https://i.pravatar.cc/32?img=9",
+//   },
+//   {
+//     id: 19,
+//     title: "Data Breach Vulnerability",
+//     description: "Potential security gaps in customer database",
+//     severity: "Critical",
+//     status: "Open",
+//     category: "Security",
+//     owner: "John Smith",
+//     created: "2026-02-20",
+//     avatar: "https://i.pravatar.cc/32?img=1",
+//   },
+//   {
+//     id: 20,
+//     title: "Compliance Gap in GDPR",
+//     description: "Missing data processing agreements",
+//     severity: "High",
+//     status: "In Progress",
+//     category: "Compliance",
+//     owner: "Sarah Johnson",
+//     created: "2026-02-18",
+//     avatar: "https://i.pravatar.cc/32?img=5",
+//   },
+//   {
+//     id: 21,
+//     title: "Third-party Vendor Risk",
+//     description: "New vendor lacks adequate security controls",
+//     severity: "Medium",
+//     status: "Open",
+//     category: "Vendor",
+//     owner: "Mike Davis",
+//     created: "2026-02-15",
+//     avatar: "https://i.pravatar.cc/32?img=9",
+//   },
+//   {
+//     id: 22,
+//     title: "Data Breach Vulnerability",
+//     description: "Potential security gaps in customer database",
+//     severity: "Critical",
+//     status: "Open",
+//     category: "Security",
+//     owner: "John Smith",
+//     created: "2026-02-20",
+//     avatar: "https://i.pravatar.cc/32?img=1",
+//   },
+//   {
+//     id: 23,
+//     title: "Compliance Gap in GDPR",
+//     description: "Missing data processing agreements",
+//     severity: "High",
+//     status: "In Progress",
+//     category: "Compliance",
+//     owner: "Sarah Johnson",
+//     created: "2026-02-18",
+//     avatar: "https://i.pravatar.cc/32?img=5",
+//   },
+//   {
+//     id: 24,
+//     title: "Third-party Vendor Risk",
+//     description: "New vendor lacks adequate security controls",
+//     severity: "Medium",
+//     status: "Open",
+//     category: "Vendor",
+//     owner: "Mike Davis",
+//     created: "2026-02-15",
+//     avatar: "https://i.pravatar.cc/32?img=9",
+//   },
+//   {
+//     id: 25,
+//     title: "Data Breach Vulnerability",
+//     description: "Potential security gaps in customer database",
+//     severity: "Critical",
+//     status: "Open",
+//     category: "Security",
+//     owner: "John Smith",
+//     created: "2026-02-20",
+//     avatar: "https://i.pravatar.cc/32?img=1",
+//   },
+//   {
+//     id: 26,
+//     title: "Compliance Gap in GDPR",
+//     description: "Missing data processing agreements",
+//     severity: "High",
+//     status: "In Progress",
+//     category: "Compliance",
+//     owner: "Sarah Johnson",
+//     created: "2026-02-18",
+//     avatar: "https://i.pravatar.cc/32?img=5",
+//   },
+//   {
+//     id: 27,
+//     title: "Third-party Vendor Risk",
+//     description: "New vendor lacks adequate security controls",
+//     severity: "Medium",
+//     status: "Open",
+//     category: "Vendor",
+//     owner: "Mike Davis",
+//     created: "2026-02-15",
+//     avatar: "https://i.pravatar.cc/32?img=9",
+//   },
+//   {
+//     id: 28,
+//     title: "Data Breach Vulnerability",
+//     description: "Potential security gaps in customer database",
+//     severity: "Critical",
+//     status: "Open",
+//     category: "Security",
+//     owner: "John Smith",
+//     created: "2026-02-20",
+//     avatar: "https://i.pravatar.cc/32?img=1",
+//   },
+//   {
+//     id: 29,
+//     title: "Compliance Gap in GDPR",
+//     description: "Missing data processing agreements",
+//     severity: "High",
+//     status: "In Progress",
+//     category: "Compliance",
+//     owner: "Sarah Johnson",
+//     created: "2026-02-18",
+//     avatar: "https://i.pravatar.cc/32?img=5",
+//   },
+//   {
+//     id: 30,
+//     title: "Third-party Vendor Risk",
+//     description: "New vendor lacks adequate security controls",
+//     severity: "Medium",
+//     status: "Open",
+//     category: "Vendor",
+//     owner: "Mike Davis",
+//     created: "2026-02-15",
+//     avatar: "https://i.pravatar.cc/32?img=9",
+//   },
+// ];
 
 const PAGE_SIZE = 3;
 
@@ -408,7 +410,32 @@ export default function RiskManagment() {
   const [showOptionMenu, setShowOptionMenu] = useState(false);
   const [sortBy, setSortBy] = useState("created");
   const [currentPage, setCurrentPage] = useState(1);
+  const [showModal, setShowModal] = useState(false);
+  const { risks, loading } = useRisk();
+  const allRisks = risks.map((r) => ({
+    id: r.id,
+    title: r.title,
+    description: r.description,
 
+    // ✅ convert severity for UI badges
+    severity: r.severity.charAt(0) + r.severity.slice(1).toLowerCase(),
+
+    // ✅ keep backend status but display nicely
+    status: r.status
+      .replace("_", " ")
+      .toLowerCase()
+      .replace(/\b\w/g, (c) => c.toUpperCase()),
+
+    // ✅ direct mapping
+    category: r.department_name,
+    owner: r.assigned_to_name,
+
+    // ✅ date formatting
+    created: r.created_at?.slice(0, 10),
+
+    // ✅ avatar
+    avatar: `https://i.pravatar.cc/32?u=${r.id}`,
+  }));
   const filtered = allRisks.filter((r) => {
     const matchSearch = r.title.toLowerCase().includes(search.toLowerCase());
     const matchSeverity =
@@ -686,7 +713,44 @@ export default function RiskManagment() {
 
             {/* Controls */}
             <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 w-full sm:w-auto">
-              
+              {/* Sort */}
+              <div className="relative flex-1 sm:flex-none">
+                <button
+                  onClick={() => {
+                    setShowSortMenu(!showSortMenu);
+                    setShowOptionMenu(false);
+                  }}
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-3 text-sm rounded-2xl"
+                  style={{
+                    backgroundColor: "#F7F7F9",
+                    color: "#666666",
+                    border: "1px solid #EEEEEE",
+                  }}
+                >
+                  sort
+                </button>
+
+                {showSortMenu && (
+                  <div className="absolute right-0 mt-1 w-full sm:w-44 bg-white border border-gray-100 rounded-xl shadow-lg z-20 py-1">
+                    {[
+                      ["created", "Date Created"],
+                      ["title", "Risk Title"],
+                      ["severity", "Severity"],
+                    ].map(([val, label]) => (
+                      <button
+                        key={val}
+                        onClick={() => {
+                          setSortBy(val);
+                          setShowSortMenu(false);
+                        }}
+                        className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
 
               {/* Option */}
               <div className="relative flex-1 sm:flex-none">
@@ -716,7 +780,7 @@ export default function RiskManagment() {
               <div className="w-full sm:w-auto">
                 <Button
                   text="+ Add Risk"
-                  onClick={() => console.log("Add Risk clicked")}
+                  onClick={() => setShowModal(true)}
                   className="w-full sm:w-auto"
                 />
               </div>
@@ -873,6 +937,7 @@ export default function RiskManagment() {
           </div>
         </div>
       </div>
+      <CreateRiskModal open={showModal} onClose={() => setShowModal(false)} />
     </div>
   );
 }

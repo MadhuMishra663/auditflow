@@ -1,6 +1,8 @@
 "use client";
 
+import { USE_MOCK } from "@/config/env";
 import { Role } from "@/types/admin";
+import axios from "axios";
 import {
   createContext,
   useContext,
@@ -29,8 +31,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK_API === "true";
-
+  // const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK_API;
   // Load user on mount
   useEffect(() => {
     if (USE_MOCK) {
@@ -74,53 +75,146 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   // Login
+  // const login = async (email: string, password: string): Promise<User> => {
+  //   try {
+  //     console.log("Calling login...");
+
+  //     // ───────── MOCK LOGIN ─────────
+  //     if (USE_MOCK) {
+  //       console.log("Using MOCK login");
+
+  //       const mockUser: User = {
+  //         id: "1",
+  //         name: "Demo User",
+  //         email,
+  //         role:
+  //           email === "admin@test.com"
+  //             ? "ADMIN"
+  //             : email === "auditor@test.com"
+  //               ? "AUDITOR"
+  //               : "DEPARTMENT",
+  //       };
+
+  //       // persist session
+  //       localStorage.setItem("mockUser", JSON.stringify(mockUser));
+  //       document.cookie = "mockSession=1; path=/";
+
+  //       setUser(mockUser);
+  //       return mockUser;
+  //     }
+
+  //     // ───────── REAL API LOGIN ─────────
+  //     console.log("Using REAL API login");
+
+  //     const res = await axios.post(
+  //       `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`,
+  //       { email, password },
+  //       {
+  //         withCredentials: true,
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       },
+  //     );
+
+  //     console.log("Login response:", res.data);
+
+  //     // Force the token cookie so the Next.js middleware gets it immediately
+  //     const token = res.data?.data?.token || res.data?.token;
+  //     if (token) {
+  //       localStorage.setItem("token", token);
+
+  //       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  //     }
+
+  //     const user: User = res.data.data.user;
+
+  //     setUser(user);
+  //     localStorage.setItem("user", JSON.stringify(user));
+
+  //     return user;
+  //   } catch (err: unknown) {
+  //     const message = axios.isAxiosError(err)
+  //       ? err.response?.data?.message || err.message
+  //       : err instanceof Error
+  //         ? err.message
+  //         : "Login failed";
+
+  //     console.error("LOGIN ERROR:", message);
+  //     throw new Error(message);
+  //   }
+  // };
+
   const login = async (email: string, password: string): Promise<User> => {
-    if (USE_MOCK) {
-      const mockUser: User = {
-        id: "1",
-        name: "Demo Admin",
-        email,
-        role:
-          email === "admin@test.com"
-            ? "ADMIN"
-            : email === "auditor@test.com"
-              ? "AUDITOR"
-              : "DEPARTMENT",
-      };
+    try {
+      console.log("Calling login...");
+      console.log("USE_MOCK:", USE_MOCK);
+      // ───────── MOCK LOGIN ─────────
+      if (USE_MOCK) {
+        console.log("Using MOCK login");
 
-      // Persist session in both localStorage and a cookie
-      localStorage.setItem("mockUser", JSON.stringify(mockUser));
-      document.cookie = "mockSession=1; path=/";
+        const mockUser: User = {
+          id: "1",
+          name: "Demo User",
+          email,
+          role:
+            email === "admin@test.com"
+              ? "ADMIN"
+              : email === "auditor@test.com"
+                ? "AUDITOR"
+                : "DEPARTMENT",
+        };
 
-      setUser(mockUser);
-      return mockUser;
+        // persist session (mock)
+        document.cookie = "mockSession=1; path=/";
+        setUser(mockUser);
+        return mockUser;
+      }
+
+      // ───────── REAL API LOGIN ─────────
+      console.log("Using REAL API login");
+
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`,
+        { email, password },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      console.log("Login response:", res.data);
+
+      const token = res.data?.data?.token || res.data?.token;
+      const user: User = res.data.data.user;
+      console.log("User after login:", user);
+      if (token) {
+        // ✅ Set token cookie instead of localStorage
+        document.cookie = `token=${token}; path=/; max-age=86400; SameSite=Lax`;
+        // Optional: set default Authorization header for axios
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      }
+
+      // ✅ Set user cookie so you can restore after page reload
+      const userCookie = encodeURIComponent(JSON.stringify(user));
+      document.cookie = `user=${userCookie}; path=/; max-age=86400; SameSite=Lax`;
+
+      // Set user state for immediate access
+      setUser(user);
+
+      return user;
+    } catch (err: unknown) {
+      const message = axios.isAxiosError(err)
+        ? err.response?.data?.message || err.message
+        : err instanceof Error
+          ? err.message
+          : "Login failed";
+
+      console.error("LOGIN ERROR:", message);
+      throw new Error(message);
     }
-
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-        credentials: "include",
-      },
-    );
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      throw new Error(data.message || "Login failed");
-    }
-
-    const user: User = {
-      id: data.data.user.id,
-      name: data.data.user.name,
-      email: data.data.user.email,
-      role: data.data.user.role,
-    };
-
-    setUser(user);
-    return user;
   };
 
   // Logout

@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { useLogin } from "../hooks/useLogin";
 import SuccessModal from "@/components/common/successModal";
@@ -14,7 +15,7 @@ interface LoginFormProps {
 
 const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
   const { login } = useAuth();
-  const { loginUser } = useLogin();
+  // const { loginUser } = useLogin();
   const [showSuccess, setShowSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -41,17 +42,19 @@ const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
     try {
       const user = await login(formData.email, formData.password);
 
-      onClose();
-
-      if (user.role === "ADMIN") {
-        router.replace("/admin");
-      } else if (user.role === "AUDITOR") {
+      const role = user.role?.toUpperCase() || "";
+      console.log(user.role);
+      if (role.includes("ADMIN")) {
+        router.push("/admin");
+      } else if (role.includes("AUDITOR")) {
         router.replace("/auditor");
       } else if (user.role === "DEPARTMENT") {
-        router.replace("/department");
+        // router.replace("/department");
       } else {
         router.replace("/");
       }
+
+      onClose();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed");
     } finally {
