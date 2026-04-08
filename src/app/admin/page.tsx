@@ -12,8 +12,9 @@ export default function AdminDashboardPage() {
   console.log(user?.role);
   useEffect(() => {
     if (!user) return;
-    if (user.role !== "ADMIN") {
-      router.replace("/");
+    const role = user.role?.toUpperCase() || "";
+    if (!role.includes("ADMIN")) {
+      router.push("/");
     }
   }, [user, router]);
 
@@ -21,7 +22,6 @@ export default function AdminDashboardPage() {
   return (
     <div className="space-y-10">
       <DashboardOverview />
-
     </div>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRegister } from "@/components/hooks/useRegister";
-import { useDepartments } from "@/components/hooks/useDepartment";
+import useDepartments from "@/components/hooks/useDepartment";
 import SuccessModal from "@/components/common/successModal";
 
 interface SignupFormProps {
@@ -126,7 +126,7 @@ const SignupForm = ({ onSwitch }: SignupFormProps) => {
             >
               <option value="">Select Department</option>
               {departments.map((dept) => (
-                <option key={dept._id} value={dept._id}>
+                <option key={dept.id} value={dept.id}>
                   {dept.name}
                 </option>
               ))}
