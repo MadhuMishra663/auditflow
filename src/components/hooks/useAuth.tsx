@@ -187,8 +187,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       console.log("Login response:", res.data);
 
+      // const token = res.data?.data?.token || res.data?.token;
+      // const user: User = res.data.data.user;
       const token = res.data?.data?.token || res.data?.token;
-      const user: User = res.data.data.user;
+
+      const user: User = res.data?.data?.user || res.data?.user;
+
+      if (!user) {
+        throw new Error("User not found in response");
+      }
       console.log("User after login:", user);
       if (token) {
         // ✅ Set token cookie instead of localStorage
