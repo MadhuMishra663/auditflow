@@ -189,7 +189,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       // const token = res.data?.data?.token || res.data?.token;
       // const user: User = res.data.data.user;
-      const token = res.data?.data?.token || res.data?.token;
+      const token = res.data?.token;
 
       const user: User = res.data?.data?.user || res.data?.user;
 
