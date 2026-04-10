@@ -152,7 +152,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // );
       console.log("Login response:", res.data);
 
-      const user = res.data?.data?.user;
+      const user = res.data?.data?.user || res.data?.user || null;
+
+      if (!user) {
+        throw new Error("Invalid login response");
+      }
       console.log(user);
       // Set user state for immediate access
       setUser(user);
