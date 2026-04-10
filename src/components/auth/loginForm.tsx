@@ -19,7 +19,6 @@ const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [initialized, setInitialized] = useState(false);
 
   const router = useRouter();
 
@@ -35,6 +34,38 @@ const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
     });
   };
 
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   setError(null);
+
+  //   try {
+  //     const user = await login(formData.email, formData.password);
+
+  //     setShowSuccess(true);
+
+  //     // Delay redirection to allow the success modal to be seen
+  //     setTimeout(async () => {
+  //       const role = user.role?.toUpperCase() || "";
+  //       console.log(user.role);
+  //       if (role.includes("ADMIN")) {
+  //         await router.push("/admin");
+  //       } else if (role.includes("AUDITOR")) {
+  //         router.replace("/auditor");
+  //       } else if (user.role === "DEPARTMENT") {
+  //         // router.replace("/department");
+  //       } else {
+  //         router.replace("/");
+  //       }
+  //       onClose();
+  //     }, 1500);
+  //   } catch (err) {
+  //     setError(err instanceof Error ? err.message : "Login failed");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -45,28 +76,28 @@ const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
 
       setShowSuccess(true);
 
-      // Delay redirection to allow the success modal to be seen
-      setTimeout(async () => {
-        const role = user.role?.toUpperCase() || "";
-        console.log(user.role);
-        if (role.includes("ADMIN")) {
-          await router.push("/admin");
-        } else if (role.includes("AUDITOR")) {
-          router.replace("/auditor");
-        } else if (user.role === "DEPARTMENT") {
-          // router.replace("/department");
-        } else {
-          router.replace("/");
-        }
-        onClose();
-      }, 1500);
+      // wait just for UI modal (NOT for auth timing)
+      await new Promise((res) => setTimeout(res, 800));
+
+      const role = user.role?.toUpperCase() || "";
+
+      if (role === "ADMIN") {
+        router.replace("/admin");
+      } else if (role === "AUDITOR") {
+        router.replace("/auditor");
+      } else if (role === "DEPARTMENT") {
+        router.replace("/department");
+      } else {
+        router.replace("/");
+      }
+
+      onClose?.();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed");
     } finally {
       setLoading(false);
     }
   };
-
   const handleSuccessClose = () => {
     setShowSuccess(false);
     onClose();
