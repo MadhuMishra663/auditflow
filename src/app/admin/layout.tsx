@@ -37,10 +37,21 @@ export default function AdminLayout({
   //     </div>
   //   );
   // }
-  if (!initialized) return <div>Loading...</div>;
+  if (!initialized) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        Loading...
+      </div>
+    );
+  }
 
-  // prevent flash of admin UI
-  if (!user) return null;
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        Redirecting...
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen bg-[#f7f8fc]">
