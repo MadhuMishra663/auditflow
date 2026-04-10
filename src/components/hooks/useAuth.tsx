@@ -36,46 +36,75 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK_API;
   // Load user on mount
-  useEffect(() => {
-    if (USE_MOCK) {
-      // Restore session from localStorage on reload instead of wiping it
-      const stored = localStorage.getItem("mockUser");
-      if (stored) {
-        try {
-          setUser(JSON.parse(stored));
-        } catch {
-          setUser(null);
-          localStorage.removeItem("mockUser");
-        }
-      } else {
-        setUser(null);
-      }
-      setLoading(false);
-      return;
-    }
+  // useEffect(() => {
+  //   if (USE_MOCK) {
+  //     // Restore session from localStorage on reload instead of wiping it
+  //     const stored = localStorage.getItem("mockUser");
+  //     if (stored) {
+  //       try {
+  //         setUser(JSON.parse(stored));
+  //       } catch {
+  //         setUser(null);
+  //         localStorage.removeItem("mockUser");
+  //       }
+  //     } else {
+  //       setUser(null);
+  //     }
+  //     setLoading(false);
+  //     return;
+  //   }
 
-    const loadUser = async () => {
+  //   const loadUser = async () => {
+  //     try {
+  //       const res = await fetch(
+  //         `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/me`,
+  //         {
+  //           credentials: "include",
+  //         },
+  //       );
+
+  //       if (!res.ok) throw new Error("Not logged in");
+
+  //       const data = await res.json();
+  //       setUser(data.user);
+  //     } catch {
+  //       setUser(null);
+  //     } finally {
+  //       setLoading(false);
+  //       setInitialized(true);
+  //     }
+  //   };
+
+  //   loadUser();
+  // }, []);
+
+  useEffect(() => {
+    const init = async () => {
+      if (USE_MOCK) {
+        const stored = localStorage.getItem("mockUser");
+        if (stored) setUser(JSON.parse(stored));
+
+        setLoading(false);
+        setInitialized(true); // ✅ IMPORTANT
+        return;
+      }
+
       try {
-        const res = await fetch(
+        const res = await axios.get(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/me`,
-          {
-            credentials: "include",
-          },
+          { withCredentials: true },
         );
 
-        if (!res.ok) throw new Error("Not logged in");
-
-        const data = await res.json();
-        setUser(data.user);
+        setUser(res.data.user);
       } catch {
         setUser(null);
       } finally {
         setLoading(false);
-        setInitialized(true);
+        setInitialized(true); // ✅ IMPORTANT
       }
     };
 
-    loadUser();
+    init();
   }, []);
 
   const login = async (email: string, password: string): Promise<User> => {
@@ -164,7 +193,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, setUser, loading, initialized, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
