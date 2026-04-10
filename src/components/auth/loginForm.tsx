@@ -41,20 +41,25 @@ const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
 
     try {
       const user = await login(formData.email, formData.password);
-
-      const role = user.role?.toUpperCase() || "";
-      console.log(user.role);
-      if (role.includes("ADMIN")) {
-        router.push("/admin");
-      } else if (role.includes("AUDITOR")) {
-        router.replace("/auditor");
-      } else if (user.role === "DEPARTMENT") {
-        // router.replace("/department");
-      } else {
-        router.replace("/");
-      }
-
-      onClose();
+      
+      setShowSuccess(true);
+      
+      // Delay redirection to allow the success modal to be seen
+      setTimeout(async () => {
+        const role = user.role?.toUpperCase() || "";
+        console.log(user.role);
+        if (role.includes("ADMIN")) {
+          await router.push("/admin");
+        } else if (role.includes("AUDITOR")) {
+          router.replace("/auditor");
+        } else if (user.role === "DEPARTMENT") {
+          // router.replace("/department");
+        } else {
+          router.replace("/");
+        }
+        onClose();
+      }, 1500);
+      
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed");
     } finally {

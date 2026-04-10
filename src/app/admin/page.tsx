@@ -7,16 +7,20 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function AdminDashboardPage() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const router = useRouter();
   console.log(user?.role);
   useEffect(() => {
-    if (!user) return;
+    if (loading) return;
+    if (!user) {
+      router.push("/login"); // optional
+      return;
+    }
     const role = user.role?.toUpperCase() || "";
     if (!role.includes("ADMIN")) {
       router.push("/");
     }
-  }, [user, router]);
+  }, [user, loading, router]);
 
   if (!user) return null;
   return (
