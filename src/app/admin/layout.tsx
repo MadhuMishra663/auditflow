@@ -21,11 +21,11 @@ export default function AdminLayout({
   // ======================
   // AUTH GUARD
   // ======================
-  useEffect(() => {
-    if (!loading && !user) {
-      router.replace("/"); // redirect to login
-    }
-  }, [user, loading, router]);
+  // useEffect(() => {
+  //   if (!loading && !user) {
+  //     router.replace("/"); // redirect to login
+  //   }
+  // }, [user, loading, router]);
 
   // ======================
   // LOADING STATE
