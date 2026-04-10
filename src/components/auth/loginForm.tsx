@@ -19,6 +19,7 @@ const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [initialized, setInitialized] = useState(false);
 
   const router = useRouter();
 
@@ -41,9 +42,9 @@ const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
 
     try {
       const user = await login(formData.email, formData.password);
-      
+
       setShowSuccess(true);
-      
+
       // Delay redirection to allow the success modal to be seen
       setTimeout(async () => {
         const role = user.role?.toUpperCase() || "";
@@ -59,7 +60,6 @@ const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
         }
         onClose();
       }, 1500);
-      
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed");
     } finally {

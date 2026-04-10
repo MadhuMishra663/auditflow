@@ -15,7 +15,7 @@ export default function AdminLayout({
 }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const { user, loading } = useAuth();
+  const { user, loading, initialized } = useAuth();
   const router = useRouter();
 
   // ======================
@@ -30,13 +30,14 @@ export default function AdminLayout({
   // ======================
   // LOADING STATE
   // ======================
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        Loading...
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="flex items-center justify-center min-h-screen">
+  //       Loading...
+  //     </div>
+  //   );
+  // }
+  if (!initialized) return <div>Loading...</div>;
 
   // prevent flash of admin UI
   if (!user) return null;
