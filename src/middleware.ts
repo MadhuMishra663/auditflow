@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { USE_MOCK } from "./config/env";
 
 export function middleware(request: NextRequest) {
-  const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK_API;
+  
   const isAdminRoute = request.nextUrl.pathname.startsWith("/admin");
 
   if (USE_MOCK) {

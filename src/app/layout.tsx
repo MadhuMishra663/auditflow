@@ -6,6 +6,7 @@ import { theme } from "@/styles/theme";
 import Navbar from "@/components/navbar/navbar";
 import NavbarWrapper from "@/components/navbar/NavbarWrapper";
 import { NavigationProvider } from "@/components/common/navigationContext";
+// import AuthRedirectHandler from "@/components/auth/authRedirect";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,6 +35,7 @@ export default function RootLayout({
         style={{ backgroundColor: theme.colors.secondary }}
       >
         <AuthProvider>
+          {/* <AuthRedirectHandler /> */}
           <NavigationProvider>
             <NavbarWrapper /> {/* global navbar */}
             <main>{children}</main>

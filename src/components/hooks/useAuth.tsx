@@ -74,77 +74,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     loadUser();
   }, []);
 
-  // Login
-  // const login = async (email: string, password: string): Promise<User> => {
-  //   try {
-  //     console.log("Calling login...");
-
-  //     // ───────── MOCK LOGIN ─────────
-  //     if (USE_MOCK) {
-  //       console.log("Using MOCK login");
-
-  //       const mockUser: User = {
-  //         id: "1",
-  //         name: "Demo User",
-  //         email,
-  //         role:
-  //           email === "admin@test.com"
-  //             ? "ADMIN"
-  //             : email === "auditor@test.com"
-  //               ? "AUDITOR"
-  //               : "DEPARTMENT",
-  //       };
-
-  //       // persist session
-  //       localStorage.setItem("mockUser", JSON.stringify(mockUser));
-  //       document.cookie = "mockSession=1; path=/";
-
-  //       setUser(mockUser);
-  //       return mockUser;
-  //     }
-
-  //     // ───────── REAL API LOGIN ─────────
-  //     console.log("Using REAL API login");
-
-  //     const res = await axios.post(
-  //       `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`,
-  //       { email, password },
-  //       {
-  //         withCredentials: true,
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       },
-  //     );
-
-  //     console.log("Login response:", res.data);
-
-  //     // Force the token cookie so the Next.js middleware gets it immediately
-  //     const token = res.data?.data?.token || res.data?.token;
-  //     if (token) {
-  //       localStorage.setItem("token", token);
-
-  //       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-  //     }
-
-  //     const user: User = res.data.data.user;
-
-  //     setUser(user);
-  //     localStorage.setItem("user", JSON.stringify(user));
-
-  //     return user;
-  //   } catch (err: unknown) {
-  //     const message = axios.isAxiosError(err)
-  //       ? err.response?.data?.message || err.message
-  //       : err instanceof Error
-  //         ? err.message
-  //         : "Login failed";
-
-  //     console.error("LOGIN ERROR:", message);
-  //     throw new Error(message);
-  //   }
-  // };
-
   const login = async (email: string, password: string): Promise<User> => {
     try {
       console.log("Calling login...");
@@ -184,29 +113,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           },
         },
       );
-
+      const meRes = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/me`,
+        { withCredentials: true },
+      );
       console.log("Login response:", res.data);
 
-      // const token = res.data?.data?.token || res.data?.token;
-      // const user: User = res.data.data.user;
-      const token = res.data?.token;
-
-      const user: User = res.data?.data?.user || res.data?.user;
-
-      if (!user) {
-        throw new Error("User not found in response");
-      }
-      console.log("User after login:", user);
-      if (token) {
-        // ✅ Set token cookie instead of localStorage
-        document.cookie = `token=${token}; path=/; max-age=86400; SameSite=Lax`;
-        // Optional: set default Authorization header for axios
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      }
-
-      // ✅ Set user cookie so you can restore after page reload
-      const userCookie = encodeURIComponent(JSON.stringify(user));
-      document.cookie = `user=${userCookie}; path=/; max-age=86400; SameSite=Lax`;
+      const user: User = meRes.data.user;
 
       // Set user state for immediate access
       setUser(user);
