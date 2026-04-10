@@ -152,8 +152,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // );
       console.log("Login response:", res.data);
 
-      const user: User = res.data.data.user;
-
+      const user = res.data?.data?.user;
+      console.log(user);
       // Set user state for immediate access
       setUser(user);
 
