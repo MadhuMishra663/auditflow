@@ -97,10 +97,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         setUser(res.data.user);
       } catch {
-        setUser(null);
+        // setUser(null);
+        console.log("No session found");
       } finally {
         setLoading(false);
-        setInitialized(true); // ✅ IMPORTANT
+        setInitialized(true);
       }
     };
 
@@ -150,13 +151,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       //   `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/me`,
       //   { withCredentials: true },
       // );
-      console.log("Login response:", res.data);
+      console.log("FULL RESPONSE:", res);
+      console.log("DATA:", res.data);
 
-      const user = res.data?.data?.user || res.data?.user || null;
-
-      if (!user) {
-        throw new Error("Invalid login response");
-      }
+      const user = res.data?.data?.user;
       console.log(user);
       // Set user state for immediate access
       setUser(user);
