@@ -146,13 +146,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           },
         },
       );
-      const meRes = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/me`,
-        { withCredentials: true },
-      );
+      // const meRes = await axios.get(
+      //   `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/me`,
+      //   { withCredentials: true },
+      // );
       console.log("Login response:", res.data);
 
-      const user: User = meRes.data.user;
+      const user: User = res.data.data.user;
 
       // Set user state for immediate access
       setUser(user);
