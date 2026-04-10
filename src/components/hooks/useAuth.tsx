@@ -96,8 +96,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         );
         const user = res.data?.data?.user;
 
-        if (!user) {
-          throw new Error("User not found in response");
+        // if (!user) {
+        //   throw new Error("User not found in response");
+        // }
+        if (user) {
+          setUser(user);
         }
         // setUser(res.data.user);
       } catch {
