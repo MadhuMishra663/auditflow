@@ -94,8 +94,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/me`,
           { withCredentials: true },
         );
+        const user = res.data?.data?.user;
 
-        setUser(res.data.user);
+        if (!user) {
+          throw new Error("User not found in response");
+        }
+        // setUser(res.data.user);
       } catch {
         // setUser(null);
         console.log("No session found");
