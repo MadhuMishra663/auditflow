@@ -1,5 +1,3 @@
-//
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -13,30 +11,18 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
+  console.log("ADMIN LAYOUT LOADED");
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const { user, loading, initialized } = useAuth();
+  const { user, initialized } = useAuth();
   const router = useRouter();
 
-  // ======================
-  // AUTH GUARD
-  // ======================
-  // useEffect(() => {
-  //   if (!loading && !user) {
-  //     router.replace("/"); // redirect to login
-  //   }
-  // }, [user, loading, router]);
+  useEffect(() => {
+    if (initialized && !user) {
+      router.replace("/");
+    }
+  }, [initialized, user, router]);
 
-  // ======================
-  // LOADING STATE
-  // ======================
-  // if (loading) {
-  //   return (
-  //     <div className="flex items-center justify-center min-h-screen">
-  //       Loading...
-  //     </div>
-  //   );
-  // }
   if (!initialized) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -48,23 +34,20 @@ export default function AdminLayout({
   if (!user) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        Redirecting...
+        Preparing dashboard...
       </div>
     );
   }
 
   return (
     <div className="flex min-h-screen bg-[#f7f8fc]">
-      {/* Sidebar */}
       <Sidebar
         mobileOpen={mobileOpen}
         onMobileClose={() => setMobileOpen(false)}
       />
 
-      {/* Main content */}
       <div className="md:ml-[358px] flex-1 flex flex-col min-h-screen">
         <AdminTopbar onMenuOpen={() => setMobileOpen(true)} />
-
         <main className="flex-1 overflow-y-auto">{children}</main>
       </div>
     </div>

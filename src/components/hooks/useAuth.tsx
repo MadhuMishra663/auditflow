@@ -1,7 +1,6 @@
 "use client";
 
 import { USE_MOCK } from "@/config/env";
-import { Role } from "@/types/admin";
 import axios from "axios";
 import {
   createContext,
@@ -10,6 +9,8 @@ import {
   ReactNode,
   useEffect,
 } from "react";
+
+type Role = "ADMIN" | "AUDITOR" | "DEPARTMENT" | string;
 
 interface User {
   id: string;
@@ -34,58 +35,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const [initialized, setInitialized] = useState(false);
 
-  // const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK_API;
-  // Load user on mount
-  // useEffect(() => {
-  //   if (USE_MOCK) {
-  //     // Restore session from localStorage on reload instead of wiping it
-  //     const stored = localStorage.getItem("mockUser");
-  //     if (stored) {
-  //       try {
-  //         setUser(JSON.parse(stored));
-  //       } catch {
-  //         setUser(null);
-  //         localStorage.removeItem("mockUser");
-  //       }
-  //     } else {
-  //       setUser(null);
-  //     }
-  //     setLoading(false);
-  //     return;
-  //   }
-
-  //   const loadUser = async () => {
-  //     try {
-  //       const res = await fetch(
-  //         `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/me`,
-  //         {
-  //           credentials: "include",
-  //         },
-  //       );
-
-  //       if (!res.ok) throw new Error("Not logged in");
-
-  //       const data = await res.json();
-  //       setUser(data.user);
-  //     } catch {
-  //       setUser(null);
-  //     } finally {
-  //       setLoading(false);
-  //       setInitialized(true);
-  //     }
-  //   };
-
-  //   loadUser();
-  // }, []);
-
   useEffect(() => {
+    if (user) {
+      setLoading(false);
+      setInitialized(true);
+      return;
+    }
     const init = async () => {
       if (USE_MOCK) {
         const stored = localStorage.getItem("mockUser");
         if (stored) setUser(JSON.parse(stored));
 
         setLoading(false);
-        setInitialized(true); // ✅ IMPORTANT
+        setInitialized(true);
         return;
       }
 
@@ -94,18 +56,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/me`,
           { withCredentials: true },
         );
+        console.log("res", res);
         const user = res.data?.data?.user;
 
-        // if (!user) {
-        //   throw new Error("User not found in response");
-        // }
         if (user) {
           setUser(user);
         }
-        // setUser(res.data.user);
-      } catch {
-        // setUser(null);
-        console.log("No session found");
+      } catch (err) {
+        console.error("AUTH ME ERROR:", err);
       } finally {
         setLoading(false);
         setInitialized(true);
@@ -135,7 +93,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 : "DEPARTMENT",
         };
 
-        // persist session (mock)
+        // persist session in localStorage (mock)
+        localStorage.setItem("mockUser", JSON.stringify(mockUser));
         document.cookie = "mockSession=1; path=/";
         setUser(mockUser);
         return mockUser;
@@ -154,20 +113,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           },
         },
       );
-      // const meRes = await axios.get(
-      //   `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/me`,
-      //   { withCredentials: true },
-      // );
-      console.log("FULL RESPONSE:", res);
-      console.log("DATA:", res.data);
 
       const user = res.data?.data?.user;
       if (user) {
-        setUser(user); // 🔥 MOST IMPORTANT FIX
+        setUser(user);
       }
-      console.log(user);
-      // Set user state for immediate access
-      // setUser(user);
 
       return user;
     } catch (err: unknown) {
@@ -185,7 +135,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Logout
   const logout = async () => {
     if (USE_MOCK) {
-      // Clear both localStorage and the cookie
       localStorage.removeItem("mockUser");
       document.cookie = "mockSession=; path=/; max-age=0";
       setUser(null);
