@@ -42,7 +42,7 @@ export const useLogin = () => {
       setSuccess(true);
 
       // Optional: store token
-      localStorage.setItem("token", response.data.token);
+      // localStorage.setItem("token", response.data.token);
 
       return response.data;
     } catch (err: unknown) {
