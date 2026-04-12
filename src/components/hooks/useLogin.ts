@@ -34,6 +34,9 @@ export const useLogin = () => {
       const response = await axios.post<LoginResponse>(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`,
         payload,
+        {
+          withCredentials: true,
+        },
       );
 
       setSuccess(true);

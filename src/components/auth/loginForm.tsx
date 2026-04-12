@@ -25,7 +25,7 @@ const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
     email: "",
     password: "",
   });
-
+  console.log(process.env.NEXT_PUBLIC_API_BASE_URL);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
