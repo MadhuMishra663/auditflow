@@ -44,7 +44,7 @@ const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
       setShowSuccess(true);
 
       const role = user.role?.toUpperCase() || "";
-
+      console.log("Redirecting");
       router.push("/admin");
 
       onClose?.();
