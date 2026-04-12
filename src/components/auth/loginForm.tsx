@@ -37,10 +37,10 @@ const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
+    console.log("1");
     try {
       const user = await login(formData.email, formData.password);
-
+      console.log("user", user);
       setShowSuccess(true);
 
       const role = user.role?.toUpperCase() || "";

@@ -17,7 +17,7 @@ export default function AuthModal({
   setActiveSection,
 }: AuthModalProps) {
   const [mode, setMode] = useState<"login" | "signup">("login");
-
+  console.log("Btao kya haal");
   if (!isOpen) return null;
 
   return (
