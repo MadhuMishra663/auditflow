@@ -50,7 +50,8 @@ export default function AdminDashboardPage() {
       router.push("/login");
       return;
     }
-
+    console.log("USER:", user);
+    console.log("LOADING:", loading);
     const role = user.role?.toUpperCase() || "";
 
     if (!role.includes("ADMIN")) {
