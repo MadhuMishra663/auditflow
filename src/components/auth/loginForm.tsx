@@ -41,11 +41,14 @@ const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
     try {
       const user = await login(formData.email, formData.password);
       console.log("user", user);
-      setShowSuccess(true);
-
-      const role = user.role?.toUpperCase() || "";
+      // setShowSuccess(true);
+      if (user) {
+        setShowSuccess(true);
+        router.push("/admin");
+      }
+      // const role = user.role?.toUpperCase() || "";
       console.log("Redirecting");
-      router.push("/admin");
+      // router.push("/admin");
 
       onClose?.();
     } catch (err) {
