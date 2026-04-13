@@ -16,15 +16,15 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const router = useRouter();
-
+  console.log("USER:", user);
   // ── Hide public navbar entirely for logged-in admin/auditor/department users
   // Their layout (src/app/admin/layout.tsx) renders AdminTopbar instead.
   const isAdminUser =
-    user &&
-    (user.role === "ADMIN" ||
-      user.role === "AUDITOR" ||
-      user.role === "DEPARTMENT");
-  if (isAdminUser) return null;
+    user?.role === "ADMIN" ||
+    user?.role === "AUDITOR" ||
+    user?.role === "DEPARTMENT";
+
+  if (isAdminUser && user) return null;
 
   return (
     <>
