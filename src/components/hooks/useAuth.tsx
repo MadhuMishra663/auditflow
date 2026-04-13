@@ -51,6 +51,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return;
       }
 
+      // Restore token from localStorage and set Authorization header
+      const token = localStorage.getItem("authToken");
+      if (token) {
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      }
+
       try {
         const res = await axios.get(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/me`,
@@ -64,6 +70,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
       } catch (err) {
         console.error("AUTH ME ERROR:", err);
+        // If token is invalid, clear it
+        if (token) {
+          localStorage.removeItem("authToken");
+          delete axios.defaults.headers.common["Authorization"];
+        }
       } finally {
         setLoading(false);
         setInitialized(true);
@@ -115,8 +126,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       );
 
       const user = res.data?.data?.user;
+      const token = res.data?.data?.token;
+
       if (user) {
         setUser(user);
+        // Store JWT token for subsequent requests
+        if (token) {
+          localStorage.setItem("authToken", token);
+          // Set default Authorization header for all future requests
+          axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        }
       }
 
       return user;
@@ -149,6 +168,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } catch (err) {
       console.error("Logout failed", err);
     } finally {
+      // Clear JWT token and Authorization header
+      localStorage.removeItem("authToken");
+      delete axios.defaults.headers.common["Authorization"];
       setUser(null);
     }
   };
