@@ -10,12 +10,22 @@ export default function AdminDashboardPage() {
   const { user, loading, initialized } = useAuth();
   const router = useRouter();
 
+  // Debugging alerts
+  alert(
+    `ADMIN PAGE: User: ${user ? "YES" : "NO"}, Loading: ${loading ? "YES" : "NO"}, Initialized: ${initialized ? "YES" : "NO"}`,
+  );
+
   useEffect(() => {
+    alert(
+      `ADMIN USEEFFECT: User: ${user ? "YES" : "NO"}, Loading: ${loading ? "YES" : "NO"}, Initialized: ${initialized ? "YES" : "NO"}`,
+    );
+
     // 1. If we are still fetching the user (/auth/me), DO NOTHING.
     if (!initialized || loading) return;
 
     // 2. If initialization is DONE and there is still no user, then redirect.
     if (!user) {
+      alert("ADMIN PAGE: Redirecting to /login - No user found");
       router.push("/login");
     }
   }, [user, loading, initialized, router]);
@@ -33,6 +43,7 @@ export default function AdminDashboardPage() {
   // the useEffect above will handle the redirect.
   if (!user) return null;
 
+  alert("ADMIN PAGE: Rendering dashboard");
   return (
     <div className="space-y-10">
       <DashboardOverview />

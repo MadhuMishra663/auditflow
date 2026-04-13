@@ -37,21 +37,26 @@ const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    console.log("1");
+
+    // Visible debugging
+    alert("LOGIN FORM: Starting login process");
+
     try {
+      alert("LOGIN FORM: Calling login function");
       const user = await login(formData.email, formData.password);
-      console.log("user", user);
-      // setShowSuccess(true);
+      alert(`LOGIN FORM: Login result: ${user ? "SUCCESS" : "FAILED"}`);
+
       if (user) {
         setShowSuccess(true);
+        alert("LOGIN FORM: Redirecting to /admin");
         router.push("/admin");
       }
-      // const role = user.role?.toUpperCase() || "";
-      console.log("Redirecting");
-      // router.push("/admin");
 
       onClose?.();
     } catch (err) {
+      alert(
+        `LOGIN FORM ERROR: ${err instanceof Error ? err.message : "Login failed"}`,
+      );
       setError(err instanceof Error ? err.message : "Login failed");
     } finally {
       setLoading(false);
