@@ -1,73 +1,37 @@
-// "use client";
-
-// import DashboardOverview from "@/components/admin/Dashboard/dashboardOverview";
-// //import AuditorManagement from "@/components/admin/auditorManagement";
-// import { useAuth } from "@/components/hooks/useAuth";
-// import { useRouter } from "next/navigation";
-// import { useEffect } from "react";
-
-// export default function AdminDashboardPage() {
-//   const { user, loading } = useAuth();
-//   const router = useRouter();
-//   console.log(user?.role);
-//   useEffect(() => {
-//     if (loading) return;
-//     if (!user) {
-//       router.push("/login"); // optional
-//       return;
-//     }
-//     const role = user.role?.toUpperCase() || "";
-//     if (!role.includes("ADMIN")) {
-//       router.push("/");
-//     }
-//   }, [user, loading, router]);
-
-//   if (!user) return null;
-//   return (
-//     <div className="space-y-10">
-//       <DashboardOverview />
-//     </div>
-//   );
-// }
-
+// // app/admin/page.tsx
 "use client";
 
-import DashboardOverview from "@/components/admin/Dashboard/dashboardOverview";
 import { useAuth } from "@/components/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import DashboardOverview from "@/components/admin/Dashboard/dashboardOverview";
 
 export default function AdminDashboardPage() {
-  const { user, loading } = useAuth();
+  const { user, loading, initialized } = useAuth();
   const router = useRouter();
 
-  console.log("ADMIN PAGE RENDER");
-
   useEffect(() => {
-    if (loading) return;
+    // 1. If we are still fetching the user (/auth/me), DO NOTHING.
+    if (!initialized || loading) return;
 
+    // 2. If initialization is DONE and there is still no user, then redirect.
     if (!user) {
       router.push("/login");
-      return;
     }
-    console.log("USER:", user);
-    console.log("LOADING:", loading);
-    const role = user.role?.toUpperCase() || "";
+  }, [user, loading, initialized, router]);
 
-    if (!role.includes("ADMIN")) {
-      router.push("/");
-    }
-  }, [user, loading, router]);
-
-  // ✅ WAIT for auth
-  if (loading) {
-    return <div>Loading dashboard...</div>;
+  // 3. DO NOT render the dashboard OR redirect until initialized is true
+  if (!initialized || loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p>Loading session...</p>
+      </div>
+    );
   }
 
-  // ✅ only block AFTER loading
+  // 4. If we reach here, initialized is true. If user is still null,
+  // the useEffect above will handle the redirect.
   if (!user) return null;
-
-  console.log("USER ROLE:", user.role);
 
   return (
     <div className="space-y-10">
