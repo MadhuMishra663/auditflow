@@ -53,8 +53,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       // Restore token from localStorage and set Authorization header
       const token = localStorage.getItem("authToken");
+      console.log("INIT - Token from localStorage:", token);
+      console.log("INIT - API_BASE_URL:", process.env.NEXT_PUBLIC_API_BASE_URL);
+
       if (token) {
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        console.log("INIT - Authorization header set:", `Bearer ${token}`);
       }
 
       try {
@@ -62,18 +66,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/me`,
           { withCredentials: true },
         );
-        console.log("res", res);
+        console.log("AUTH ME SUCCESS:", res.data);
         const user = res.data?.data?.user;
 
         if (user) {
           setUser(user);
+          console.log("INIT - User set from /auth/me:", user);
+        } else {
+          console.warn("INIT - No user found in /auth/me response");
         }
-      } catch (err) {
+      } catch (err: unknown) {
         console.error("AUTH ME ERROR:", err);
+        if (axios.isAxiosError(err)) {
+          console.error("AUTH ME ERROR STATUS:", err.response?.status);
+          console.error("AUTH ME ERROR DATA:", err.response?.data);
+        }
         // If token is invalid, clear it
         if (token) {
           localStorage.removeItem("authToken");
           delete axios.defaults.headers.common["Authorization"];
+          console.log("INIT - Token cleared due to auth error");
         }
       } finally {
         setLoading(false);
@@ -128,6 +140,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const user = res.data?.data?.user;
       const token = res.data?.data?.token;
 
+      console.log("LOGIN RESPONSE:", { user, token, fullResponse: res.data });
+
       if (user) {
         setUser(user);
         // Store JWT token for subsequent requests
@@ -135,7 +149,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           localStorage.setItem("authToken", token);
           // Set default Authorization header for all future requests
           axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+          console.log("Token stored and Authorization header set:", token);
+        } else {
+          console.warn("No token found in login response");
         }
+      } else {
+        console.error("No user found in login response");
       }
 
       return user;
