@@ -36,11 +36,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
-    // if (user) {
-    //   setLoading(false);
-    //   setInitialized(true);
-    //   return;
-    // }
     const init = async () => {
       if (USE_MOCK) {
         const stored = localStorage.getItem("mockUser");
@@ -51,31 +46,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return;
       }
 
-      // Restore token from localStorage and set Authorization header
-      // const token = localStorage.getItem("authToken");
-      // alert(`INIT - Token found: ${token ? "YES" : "NO"}`);
-      alert(`INIT - API URL: ${process.env.NEXT_PUBLIC_API_BASE_URL}`);
-
       try {
         const res = await axios.get(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/me`,
           { withCredentials: true },
         );
-        alert("AUTH ME SUCCESS");
         const user = res.data?.data?.user;
 
         if (user) {
           setUser(user);
-          alert(`USER SET: ${user.name}`);
-        } else {
-          alert("ERROR: No user in /auth/me response");
         }
       } catch (err: unknown) {
-        alert("AUTH ME ERROR");
-        if (axios.isAxiosError(err)) {
-          alert(`ERROR STATUS: ${err.response?.status}`);
-          alert(`ERROR DATA: ${JSON.stringify(err.response?.data)}`);
-        }
+        console.error("Auth Error", err);
         // If token is invalid, clear it
       } finally {
         setLoading(false);
@@ -88,12 +70,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (email: string, password: string): Promise<User> => {
     try {
-      console.log("Calling login...");
       console.log("USE_MOCK:", USE_MOCK);
       // ───────── MOCK LOGIN ─────────
       if (USE_MOCK) {
-        console.log("Using MOCK login");
-
         const mockUser: User = {
           id: "1",
           name: "Demo User",
@@ -106,7 +85,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 : "DEPARTMENT",
         };
 
-        // persist session in localStorage (mock)
         localStorage.setItem("mockUser", JSON.stringify(mockUser));
         document.cookie = "mockSession=1; path=/";
         setUser(mockUser);
@@ -114,7 +92,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
 
       // ───────── REAL API LOGIN ─────────
-      console.log("Using REAL API login");
 
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`,
@@ -130,21 +107,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const user = res.data?.data?.user;
       const token = res.data?.data?.token;
 
-      // Visible debugging for production
-      alert(
-        `LOGIN RESPONSE: User: ${user ? "YES" : "NO"}, Token: ${token ? "YES" : "NO"}`,
-      );
-
       if (user) {
         setUser(user);
-        // Store JWT token for subsequent requests
-        if (token) {
-          alert(`Token stored: ${token.substring(0, 20)}...`);
-        } else {
-          alert("ERROR: No token found in login response");
-        }
       } else {
-        alert("ERROR: No user found in login response");
+        console.error("LOGIN ERROR: No user found in login response");
       }
 
       return user;
