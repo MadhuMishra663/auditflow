@@ -52,14 +52,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
 
       // Restore token from localStorage and set Authorization header
-      const token = localStorage.getItem("authToken");
-      alert(`INIT - Token found: ${token ? "YES" : "NO"}`);
+      // const token = localStorage.getItem("authToken");
+      // alert(`INIT - Token found: ${token ? "YES" : "NO"}`);
       alert(`INIT - API URL: ${process.env.NEXT_PUBLIC_API_BASE_URL}`);
-
-      if (token) {
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-        alert(`INIT - Authorization set: ${token.substring(0, 20)}...`);
-      }
 
       try {
         const res = await axios.get(
@@ -82,11 +77,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           alert(`ERROR DATA: ${JSON.stringify(err.response?.data)}`);
         }
         // If token is invalid, clear it
-        if (token) {
-          localStorage.removeItem("authToken");
-          delete axios.defaults.headers.common["Authorization"];
-          alert("TOKEN CLEARED due to error");
-        }
       } finally {
         setLoading(false);
         setInitialized(true);
@@ -149,9 +139,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(user);
         // Store JWT token for subsequent requests
         if (token) {
-          localStorage.setItem("authToken", token);
-          // Set default Authorization header for all future requests
-          axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
           alert(`Token stored: ${token.substring(0, 20)}...`);
         } else {
           alert("ERROR: No token found in login response");
@@ -191,8 +178,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       console.error("Logout failed", err);
     } finally {
       // Clear JWT token and Authorization header
-      localStorage.removeItem("authToken");
-      delete axios.defaults.headers.common["Authorization"];
       setUser(null);
     }
   };
