@@ -54,7 +54,7 @@
 // // app/admin/page.tsx
 "use client";
 
-import { useAuth } from "@/components/provider/auth-provider";
+import { useAuth } from "@/components/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import DashboardOverview from "@/components/admin/Dashboard/dashboardOverview";
