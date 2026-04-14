@@ -14,16 +14,16 @@ export default function AdminLayout({
   console.log("ADMIN LAYOUT LOADED");
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const { user, initialized } = useAuth();
+  const { user, loading, initialized } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (initialized && !user) {
+    if (initialized && !loading && !user) {
       router.replace("/");
     }
-  }, [initialized, user, router]);
+  }, [initialized, loading, user]);
 
-  if (!initialized) {
+  if (loading || !initialized) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         Loading...

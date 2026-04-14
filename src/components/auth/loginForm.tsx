@@ -48,8 +48,11 @@ const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
 
       if (user) {
         setShowSuccess(true);
-        alert("LOGIN FORM: Redirecting to /admin");
-        router.push("/admin");
+
+        // wait for state to propagate
+        setTimeout(() => {
+          router.push("/admin");
+        }, 300);
       }
 
       onClose?.();

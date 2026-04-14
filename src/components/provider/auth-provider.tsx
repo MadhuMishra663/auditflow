@@ -36,11 +36,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
-    // if (user) {
-    //   setLoading(false);
-    //   setInitialized(true);
-    //   return;
-    // }
+    if (user) {
+      setLoading(false);
+      setInitialized(true);
+      return;
+    }
     const init = async () => {
       if (USE_MOCK) {
         const stored = localStorage.getItem("mockUser");
@@ -53,12 +53,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       // Restore token from localStorage and set Authorization header
       const token = localStorage.getItem("authToken");
-      alert(`INIT - Token found: ${token ? "YES" : "NO"}`);
-      alert(`INIT - API URL: ${process.env.NEXT_PUBLIC_API_BASE_URL}`);
+      console.log("[v0] INIT - Token found:", token ? "YES" : "NO");
+      console.log("[v0] INIT - API URL:", process.env.NEXT_PUBLIC_API_BASE_URL);
 
       if (token) {
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-        alert(`INIT - Authorization set: ${token.substring(0, 20)}...`);
+        console.log("[v0] INIT - Authorization set");
       }
 
       try {
@@ -66,26 +66,33 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/me`,
           { withCredentials: true },
         );
-        alert("AUTH ME SUCCESS");
-        const user = res.data?.data?.user;
+        console.log("[v0] AUTH ME SUCCESS - Status:", res.status);
+        console.log("[v0] AUTH ME Response:", res.data);
 
-        if (user) {
+        // Handle different response structures
+        const user = res.data?.data?.user || res.data?.user;
+
+        if (user && typeof user === "object" && "id" in user) {
           setUser(user);
-          alert(`USER SET: ${user.name}`);
+          console.log("[v0] USER SET:", user.name || user.email);
         } else {
-          alert("ERROR: No user in /auth/me response");
+          console.log(
+            "[v0] ERROR: Invalid user structure in response",
+            res.data,
+          );
         }
       } catch (err: unknown) {
-        alert("AUTH ME ERROR");
+        console.log("[v0] AUTH ME ERROR - No session found");
         if (axios.isAxiosError(err)) {
-          alert(`ERROR STATUS: ${err.response?.status}`);
-          alert(`ERROR DATA: ${JSON.stringify(err.response?.data)}`);
+          console.log("[v0] ERROR STATUS:", err.response?.status);
+          console.log("[v0] ERROR MESSAGE:", err.message);
+          console.log("[v0] ERROR DATA:", err.response?.data);
         }
         // If token is invalid, clear it
         if (token) {
           localStorage.removeItem("authToken");
           delete axios.defaults.headers.common["Authorization"];
-          alert("TOKEN CLEARED due to error");
+          console.log("[v0] TOKEN CLEARED due to error");
         }
       } finally {
         setLoading(false);
@@ -137,27 +144,35 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         },
       );
 
-      const user = res.data?.data?.user;
-      const token = res.data?.data?.token;
+      // Handle different response structures from backend
+      const user = res.data?.data?.user || res.data?.user;
+      const token = res.data?.data?.token || res.data?.token;
 
-      // Visible debugging for production
-      alert(
-        `LOGIN RESPONSE: User: ${user ? "YES" : "NO"}, Token: ${token ? "YES" : "NO"}`,
+      console.log("[v0] LOGIN RESPONSE Status:", res.status);
+      console.log("[v0] LOGIN RESPONSE Data:", res.data);
+      console.log(
+        "[v0] LOGIN RESPONSE: User:",
+        user ? "YES" : "NO",
+        "Token:",
+        token ? "YES" : "NO",
       );
 
-      if (user) {
+      if (user && typeof user === "object" && "id" in user) {
         setUser(user);
         // Store JWT token for subsequent requests
         if (token) {
           localStorage.setItem("authToken", token);
           // Set default Authorization header for all future requests
           axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-          alert(`Token stored: ${token.substring(0, 20)}...`);
+          console.log("[v0] Token stored successfully");
         } else {
-          alert("ERROR: No token found in login response");
+          console.log(
+            "[v0] WARNING: No token found in login response, but user exists",
+          );
         }
       } else {
-        alert("ERROR: No user found in login response");
+        console.log("[v0] ERROR: Invalid user structure in response", res.data);
+        throw new Error("Invalid response format from server");
       }
 
       return user;
