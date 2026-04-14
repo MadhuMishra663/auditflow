@@ -38,13 +38,8 @@ const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
     setLoading(true);
     setError(null);
 
-    // Visible debugging
-    alert("LOGIN FORM: Starting login process");
-
     try {
-      alert("LOGIN FORM: Calling login function");
       const user = await login(formData.email, formData.password);
-      alert(`LOGIN FORM: Login result: ${user ? "SUCCESS" : "FAILED"}`);
 
       if (user) {
         setShowSuccess(true);
@@ -57,9 +52,6 @@ const LoginForm = ({ onSwitch, onClose, setActiveSection }: LoginFormProps) => {
 
       onClose?.();
     } catch (err) {
-      alert(
-        `LOGIN FORM ERROR: ${err instanceof Error ? err.message : "Login failed"}`,
-      );
       setError(err instanceof Error ? err.message : "Login failed");
     } finally {
       setLoading(false);

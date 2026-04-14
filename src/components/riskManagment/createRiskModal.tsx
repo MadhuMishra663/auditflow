@@ -4,6 +4,7 @@ import useRisk from "@/components/hooks/useRiskManagement";
 import { theme } from "@/styles/theme";
 import useDepartment from "@/components/hooks/useDepartment";
 import useCompanyUsers from "@/components/hooks/useUsers";
+import { Severity, Status } from "../enums";
 
 type CreateRiskModalProps = {
   open: boolean;
@@ -20,8 +21,8 @@ export default function CreateRiskModal({
   const [form, setForm] = useState({
     title: "",
     description: "",
-    severity: "Medium",
-    status: "OPEN",
+    severity: Severity.MEDIUM,
+    status: Status.OPEN,
     id: "",
     assigned_to: "",
     due_date: "",
@@ -43,8 +44,8 @@ export default function CreateRiskModal({
     setForm({
       title: "",
       description: "",
-      severity: "Medium",
-      status: "OPEN",
+      severity: Severity.MEDIUM,
+      status: Status.OPEN,
       id: "",
       assigned_to: "",
       due_date: "",
@@ -119,10 +120,10 @@ export default function CreateRiskModal({
                 color: theme.colors.textDark,
               }}
             >
-              <option value="CRITICAL">Critical</option>
-              <option value="HIGH">High</option>
-              <option value="MEDIUM">Medium</option>
-              <option value="LOW">Low</option>
+              <option value={Severity.LOW}>Low</option>
+              <option value={Severity.MEDIUM}>Medium</option>
+              <option value={Severity.HIGH}>High</option>
+              <option value={Severity.CRITICAL}>Critical</option>
             </select>
 
             {/* Status */}
