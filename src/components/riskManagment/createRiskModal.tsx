@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import useRisk from "../hooks/useRiskManagement";
+import useRisk from "@/components/hooks/useRiskManagement";
 import { theme } from "@/styles/theme";
 import useDepartment from "@/components/hooks/useDepartment";
 import useCompanyUsers from "@/components/hooks/useUsers";

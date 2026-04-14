@@ -4,7 +4,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import AuthModal from "@/components/auth/authModal";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "@/components/hooks/useAuth";
 import { useNavigation } from "../common/navigationContext";
 import { useRouter } from "next/navigation";
 import { theme } from "@/styles/theme";
