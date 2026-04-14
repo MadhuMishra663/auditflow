@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useLogin } from "../hooks/useLogin";
 import SuccessModal from "@/components/common/successModal";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "@/components/hooks/useAuth";
 import { Section } from "../common/navigationContext";
 import { useRouter } from "next/navigation";
 import Button from "../common/button";
