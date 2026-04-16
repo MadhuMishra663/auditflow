@@ -6,6 +6,7 @@ import useDepartment from "@/components/hooks/useDepartment";
 import useCompanyUsers from "@/components/hooks/useUsers";
 import { Severity, Status } from "../enums";
 import { CreateRiskPayload } from "@/types/types";
+import { createRiskSchema } from "../validations/riskFormValidation";
 
 type CreateRiskModalProps = {
   open: boolean;
@@ -47,7 +48,7 @@ export default function CreateRiskModal({
     if (!result.success) {
       const fieldErrors: Record<string, string> = {};
 
-      result.error.errors.forEach((err) => {
+      result.error.issues.forEach((err) => {
         const field = err.path[0];
         if (field) {
           fieldErrors[field as string] = err.message;
