@@ -6,339 +6,7 @@ import { theme } from "@/styles/theme";
 import Button from "../common/button";
 import CreateRiskModal from "./createRiskModal";
 import useRisk from "../hooks/useRiskManagement";
-
-// const allRisks = [
-//   {
-//     id: 1,
-//     title: "Data Breach Vulnerability",
-//     description: "Potential security gaps in customer database",
-//     severity: "Critical",
-//     status: "Open",
-//     category: "Security",
-//     owner: "John Smith",
-//     created: "2026-02-20",
-//     avatar: "https://i.pravatar.cc/32?img=1",
-//   },
-//   {
-//     id: 2,
-//     title: "Compliance Gap in GDPR",
-//     description: "Missing data processing agreements",
-//     severity: "High",
-//     status: "In Progress",
-//     category: "Compliance",
-//     owner: "Sarah Johnson",
-//     created: "2026-02-18",
-//     avatar: "https://i.pravatar.cc/32?img=5",
-//   },
-//   {
-//     id: 3,
-//     title: "Third-party Vendor Risk",
-//     description: "New vendor lacks adequate security controls",
-//     severity: "Medium",
-//     status: "Open",
-//     category: "Vendor",
-//     owner: "Mike Davis",
-//     created: "2026-02-15",
-//     avatar: "https://i.pravatar.cc/32?img=9",
-//   },
-//   {
-//     id: 4,
-//     title: "Data Breach Vulnerability",
-//     description: "Potential security gaps in customer database",
-//     severity: "Critical",
-//     status: "Open",
-//     category: "Security",
-//     owner: "John Smith",
-//     created: "2026-02-20",
-//     avatar: "https://i.pravatar.cc/32?img=1",
-//   },
-//   {
-//     id: 5,
-//     title: "Compliance Gap in GDPR",
-//     description: "Missing data processing agreements",
-//     severity: "High",
-//     status: "In Progress",
-//     category: "Compliance",
-//     owner: "Sarah Johnson",
-//     created: "2026-02-18",
-//     avatar: "https://i.pravatar.cc/32?img=5",
-//   },
-//   {
-//     id: 6,
-//     title: "Third-party Vendor Risk",
-//     description: "New vendor lacks adequate security controls",
-//     severity: "Medium",
-//     status: "Open",
-//     category: "Vendor",
-//     owner: "Mike Davis",
-//     created: "2026-02-15",
-//     avatar: "https://i.pravatar.cc/32?img=9",
-//   },
-//   {
-//     id: 7,
-//     title: "Data Breach Vulnerability",
-//     description: "Potential security gaps in customer database",
-//     severity: "Critical",
-//     status: "Open",
-//     category: "Security",
-//     owner: "John Smith",
-//     created: "2026-02-20",
-//     avatar: "https://i.pravatar.cc/32?img=1",
-//   },
-//   {
-//     id: 8,
-//     title: "Compliance Gap in GDPR",
-//     description: "Missing data processing agreements",
-//     severity: "High",
-//     status: "In Progress",
-//     category: "Compliance",
-//     owner: "Sarah Johnson",
-//     created: "2026-02-18",
-//     avatar: "https://i.pravatar.cc/32?img=5",
-//   },
-//   {
-//     id: 9,
-//     title: "Third-party Vendor Risk",
-//     description: "New vendor lacks adequate security controls",
-//     severity: "Medium",
-//     status: "Open",
-//     category: "Vendor",
-//     owner: "Mike Davis",
-//     created: "2026-02-15",
-//     avatar: "https://i.pravatar.cc/32?img=9",
-//   },
-//   {
-//     id: 10,
-//     title: "Data Breach Vulnerability",
-//     description: "Potential security gaps in customer database",
-//     severity: "Critical",
-//     status: "Open",
-//     category: "Security",
-//     owner: "John Smith",
-//     created: "2026-02-20",
-//     avatar: "https://i.pravatar.cc/32?img=1",
-//   },
-//   {
-//     id: 11,
-//     title: "Compliance Gap in GDPR",
-//     description: "Missing data processing agreements",
-//     severity: "High",
-//     status: "In Progress",
-//     category: "Compliance",
-//     owner: "Sarah Johnson",
-//     created: "2026-02-18",
-//     avatar: "https://i.pravatar.cc/32?img=5",
-//   },
-//   {
-//     id: 12,
-//     title: "Third-party Vendor Risk",
-//     description: "New vendor lacks adequate security controls",
-//     severity: "Medium",
-//     status: "Open",
-//     category: "Vendor",
-//     owner: "Mike Davis",
-//     created: "2026-02-15",
-//     avatar: "https://i.pravatar.cc/32?img=9",
-//   },
-//   {
-//     id: 13,
-//     title: "Data Breach Vulnerability",
-//     description: "Potential security gaps in customer database",
-//     severity: "Critical",
-//     status: "Open",
-//     category: "Security",
-//     owner: "John Smith",
-//     created: "2026-02-20",
-//     avatar: "https://i.pravatar.cc/32?img=1",
-//   },
-//   {
-//     id: 14,
-//     title: "Compliance Gap in GDPR",
-//     description: "Missing data processing agreements",
-//     severity: "High",
-//     status: "In Progress",
-//     category: "Compliance",
-//     owner: "Sarah Johnson",
-//     created: "2026-02-18",
-//     avatar: "https://i.pravatar.cc/32?img=5",
-//   },
-//   {
-//     id: 15,
-//     title: "Third-party Vendor Risk",
-//     description: "New vendor lacks adequate security controls",
-//     severity: "Medium",
-//     status: "Open",
-//     category: "Vendor",
-//     owner: "Mike Davis",
-//     created: "2026-02-15",
-//     avatar: "https://i.pravatar.cc/32?img=9",
-//   },
-//   {
-//     id: 16,
-//     title: "Data Breach Vulnerability",
-//     description: "Potential security gaps in customer database",
-//     severity: "Critical",
-//     status: "Open",
-//     category: "Security",
-//     owner: "John Smith",
-//     created: "2026-02-20",
-//     avatar: "https://i.pravatar.cc/32?img=1",
-//   },
-//   {
-//     id: 17,
-//     title: "Compliance Gap in GDPR",
-//     description: "Missing data processing agreements",
-//     severity: "High",
-//     status: "In Progress",
-//     category: "Compliance",
-//     owner: "Sarah Johnson",
-//     created: "2026-02-18",
-//     avatar: "https://i.pravatar.cc/32?img=5",
-//   },
-//   {
-//     id: 18,
-//     title: "Third-party Vendor Risk",
-//     description: "New vendor lacks adequate security controls",
-//     severity: "Medium",
-//     status: "Open",
-//     category: "Vendor",
-//     owner: "Mike Davis",
-//     created: "2026-02-15",
-//     avatar: "https://i.pravatar.cc/32?img=9",
-//   },
-//   {
-//     id: 19,
-//     title: "Data Breach Vulnerability",
-//     description: "Potential security gaps in customer database",
-//     severity: "Critical",
-//     status: "Open",
-//     category: "Security",
-//     owner: "John Smith",
-//     created: "2026-02-20",
-//     avatar: "https://i.pravatar.cc/32?img=1",
-//   },
-//   {
-//     id: 20,
-//     title: "Compliance Gap in GDPR",
-//     description: "Missing data processing agreements",
-//     severity: "High",
-//     status: "In Progress",
-//     category: "Compliance",
-//     owner: "Sarah Johnson",
-//     created: "2026-02-18",
-//     avatar: "https://i.pravatar.cc/32?img=5",
-//   },
-//   {
-//     id: 21,
-//     title: "Third-party Vendor Risk",
-//     description: "New vendor lacks adequate security controls",
-//     severity: "Medium",
-//     status: "Open",
-//     category: "Vendor",
-//     owner: "Mike Davis",
-//     created: "2026-02-15",
-//     avatar: "https://i.pravatar.cc/32?img=9",
-//   },
-//   {
-//     id: 22,
-//     title: "Data Breach Vulnerability",
-//     description: "Potential security gaps in customer database",
-//     severity: "Critical",
-//     status: "Open",
-//     category: "Security",
-//     owner: "John Smith",
-//     created: "2026-02-20",
-//     avatar: "https://i.pravatar.cc/32?img=1",
-//   },
-//   {
-//     id: 23,
-//     title: "Compliance Gap in GDPR",
-//     description: "Missing data processing agreements",
-//     severity: "High",
-//     status: "In Progress",
-//     category: "Compliance",
-//     owner: "Sarah Johnson",
-//     created: "2026-02-18",
-//     avatar: "https://i.pravatar.cc/32?img=5",
-//   },
-//   {
-//     id: 24,
-//     title: "Third-party Vendor Risk",
-//     description: "New vendor lacks adequate security controls",
-//     severity: "Medium",
-//     status: "Open",
-//     category: "Vendor",
-//     owner: "Mike Davis",
-//     created: "2026-02-15",
-//     avatar: "https://i.pravatar.cc/32?img=9",
-//   },
-//   {
-//     id: 25,
-//     title: "Data Breach Vulnerability",
-//     description: "Potential security gaps in customer database",
-//     severity: "Critical",
-//     status: "Open",
-//     category: "Security",
-//     owner: "John Smith",
-//     created: "2026-02-20",
-//     avatar: "https://i.pravatar.cc/32?img=1",
-//   },
-//   {
-//     id: 26,
-//     title: "Compliance Gap in GDPR",
-//     description: "Missing data processing agreements",
-//     severity: "High",
-//     status: "In Progress",
-//     category: "Compliance",
-//     owner: "Sarah Johnson",
-//     created: "2026-02-18",
-//     avatar: "https://i.pravatar.cc/32?img=5",
-//   },
-//   {
-//     id: 27,
-//     title: "Third-party Vendor Risk",
-//     description: "New vendor lacks adequate security controls",
-//     severity: "Medium",
-//     status: "Open",
-//     category: "Vendor",
-//     owner: "Mike Davis",
-//     created: "2026-02-15",
-//     avatar: "https://i.pravatar.cc/32?img=9",
-//   },
-//   {
-//     id: 28,
-//     title: "Data Breach Vulnerability",
-//     description: "Potential security gaps in customer database",
-//     severity: "Critical",
-//     status: "Open",
-//     category: "Security",
-//     owner: "John Smith",
-//     created: "2026-02-20",
-//     avatar: "https://i.pravatar.cc/32?img=1",
-//   },
-//   {
-//     id: 29,
-//     title: "Compliance Gap in GDPR",
-//     description: "Missing data processing agreements",
-//     severity: "High",
-//     status: "In Progress",
-//     category: "Compliance",
-//     owner: "Sarah Johnson",
-//     created: "2026-02-18",
-//     avatar: "https://i.pravatar.cc/32?img=5",
-//   },
-//   {
-//     id: 30,
-//     title: "Third-party Vendor Risk",
-//     description: "New vendor lacks adequate security controls",
-//     severity: "Medium",
-//     status: "Open",
-//     category: "Vendor",
-//     owner: "Mike Davis",
-//     created: "2026-02-15",
-//     avatar: "https://i.pravatar.cc/32?img=9",
-//   },
-// ];
+import SuccessModal from "../common/successModal";
 
 const PAGE_SIZE = 3;
 
@@ -408,10 +76,15 @@ export default function RiskManagment() {
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [showSortMenu, setShowSortMenu] = useState(false);
   const [showOptionMenu, setShowOptionMenu] = useState(false);
-  const [sortBy, setSortBy] = useState("created");
+  const [sortBy, setSortBy] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
-  const { risks, loading } = useRisk();
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [showFilterMenu, setShowFilterMenu] = useState(false);
+  // const { risks, loading } = useRisk();
+  const { risks, loading, createRisk, getRisks } = useRisk();
   const allRisks = risks.map((r) => ({
     id: r.id,
     title: r.title,
@@ -436,21 +109,39 @@ export default function RiskManagment() {
     // ✅ avatar
     avatar: `https://i.pravatar.cc/32?u=${r.id}`,
   }));
+
   const filtered = allRisks.filter((r) => {
     const matchSearch = r.title.toLowerCase().includes(search.toLowerCase());
     const matchSeverity =
       severityFilter === "All" || r.severity === severityFilter;
     const matchCategory =
       categoryFilter === "All" || r.category === categoryFilter;
-    return matchSearch && matchSeverity && matchCategory;
+
+    const matchStatus = statusFilter === "All" || r.status === statusFilter;
+
+    return matchSearch && matchSeverity && matchCategory && matchStatus;
   });
 
   const sorted = [...filtered].sort((a, b) => {
-    if (sortBy === "title") return a.title.localeCompare(b.title);
-    if (sortBy === "severity") return a.severity.localeCompare(b.severity);
-    return b.created.localeCompare(a.created);
-  });
+    let result = 0;
 
+    if (sortBy === "title") {
+      result = a.title.localeCompare(b.title);
+    } else if (sortBy === "severity") {
+      const order = ["Critical", "High", "Medium", "Low"];
+      result = order.indexOf(a.severity) - order.indexOf(b.severity);
+    } else if (sortBy === "status") {
+      const order = ["Open", "In Progress", "Closed"];
+      result = order.indexOf(a.status) - order.indexOf(b.status);
+    } else if (sortBy === "created") {
+      // created
+      result = new Date(a.created).getTime() - new Date(b.created).getTime();
+    } else {
+      return 0; // 🚀 NO SORT APPLIED
+    }
+
+    return sortDirection === "asc" ? result : -result;
+  });
   const totalPages = Math.ceil(sorted.length / PAGE_SIZE);
   const paginated = sorted.slice(
     (currentPage - 1) * PAGE_SIZE,
@@ -641,75 +332,6 @@ export default function RiskManagment() {
                 }}
               />
             </div>
-            {/* Sort */}
-            <div className="relative">
-              <button
-                onClick={() => {
-                  setShowSortMenu(!showSortMenu);
-                  setShowOptionMenu(false);
-                }}
-                className="flex items-center gap-2 px-4 py-3 text-sm rounded-2xl whitespace-nowrap"
-                style={{
-                  backgroundColor: "#F7F7F9",
-                  color: "#666666",
-                  border: "1px solid #EEEEEE",
-                }}
-              >
-                <svg
-                  width="13"
-                  height="13"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#BBBBBB"
-                  strokeWidth="2"
-                >
-                  <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-                </svg>
-                sort
-                <svg
-                  width="11"
-                  height="11"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#BBBBBB"
-                  strokeWidth="2"
-                >
-                  <polyline points="6 9 12 15 18 9" />
-                </svg>
-              </button>
-              {showSortMenu && (
-                <div className="absolute right-0 mt-1 bg-white border border-gray-100 rounded-xl shadow-lg z-20 w-44 py-1">
-                  {[
-                    ["created", "Date Created"],
-                    ["title", "Risk Title"],
-                    ["severity", "Severity"],
-                  ].map(([val, label]) => (
-                    <button
-                      key={val}
-                      onClick={() => {
-                        setSortBy(val);
-                        setShowSortMenu(false);
-                      }}
-                      className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center justify-between ${sortBy === val ? "text-violet-500 font-medium" : "text-gray-600"}`}
-                    >
-                      {label}
-                      {sortBy === val && (
-                        <svg
-                          width="12"
-                          height="12"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2.5"
-                        >
-                          <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                      )}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
 
             {/* Controls */}
             <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 w-full sm:w-auto">
@@ -723,8 +345,9 @@ export default function RiskManagment() {
                   className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-3 text-sm rounded-2xl"
                   style={{
                     backgroundColor: "#F7F7F9",
-                    color: "#666666",
+                    color: theme.colors.textDark,
                     border: "1px solid #EEEEEE",
+                    borderRadius: "8px",
                   }}
                 >
                   sort
@@ -732,6 +355,23 @@ export default function RiskManagment() {
 
                 {showSortMenu && (
                   <div className="absolute right-0 mt-1 w-full sm:w-44 bg-white border border-gray-100 rounded-xl shadow-lg z-20 py-1">
+                    <button
+                      onClick={() => {
+                        setSortBy("");
+                        setSortDirection("desc");
+                        setShowSortMenu(false);
+                        setShowOptionMenu(false);
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
+                      style={{
+                        color: theme.colors.textDark,
+
+                        borderRadius: "8px",
+                      }}
+                    >
+                      Reset
+                    </button>
+
                     {[
                       ["created", "Date Created"],
                       ["title", "Risk Title"],
@@ -742,8 +382,17 @@ export default function RiskManagment() {
                         onClick={() => {
                           setSortBy(val);
                           setShowSortMenu(false);
+                          setShowOptionMenu(true);
                         }}
                         className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
+                        style={{
+                          color: theme.colors.textDark,
+                          backgroundColor:
+                            sortBy === val
+                              ? theme.colors.primary
+                              : "transparent",
+                          borderRadius: "8px",
+                        }}
                       >
                         {label}
                       </button>
@@ -756,14 +405,16 @@ export default function RiskManagment() {
               <div className="relative flex-1 sm:flex-none">
                 <button
                   onClick={() => {
+                    if (!sortBy) return;
                     setShowOptionMenu(!showOptionMenu);
                     setShowSortMenu(false);
                   }}
                   className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-3 text-sm rounded-2xl"
                   style={{
                     backgroundColor: "#F7F7F9",
-                    color: "#666666",
+                    color: theme.colors.textDark,
                     border: "1px solid #EEEEEE",
+                    borderRadius: "8px",
                   }}
                 >
                   Option
@@ -771,7 +422,170 @@ export default function RiskManagment() {
 
                 {showOptionMenu && (
                   <div className="absolute right-0 mt-1 w-full sm:w-48 bg-white border border-gray-100 rounded-xl shadow-lg z-20 py-2">
-                    {/* keep your existing menu content unchanged */}
+                    {/* DATE */}
+                    {sortBy === "created" && (
+                      <>
+                        <button
+                          onClick={() => {
+                            setSortDirection("desc");
+                            setShowOptionMenu(false);
+                          }}
+                          className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
+                          style={{
+                            color: theme.colors.textDark,
+                            backgroundColor:
+                              sortDirection === "desc"
+                                ? theme.colors.primary
+                                : "transparent",
+                            borderRadius: "8px",
+                          }}
+                        >
+                          Newest First
+                        </button>
+                        <button
+                          onClick={() => {
+                            setSortDirection("asc");
+                            setShowOptionMenu(false);
+                          }}
+                          className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
+                          style={{
+                            color: theme.colors.textDark,
+                            backgroundColor:
+                              sortDirection === "asc"
+                                ? theme.colors.primary
+                                : "transparent",
+                            borderRadius: "8px",
+                          }}
+                        >
+                          Oldest First
+                        </button>
+                      </>
+                    )}
+
+                    {/* TITLE */}
+                    {sortBy === "title" && (
+                      <>
+                        <button
+                          onClick={() => {
+                            setSortDirection("asc");
+                            setShowOptionMenu(false);
+                          }}
+                          className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
+                          style={{
+                            color: theme.colors.textDark,
+                            backgroundColor:
+                              sortDirection === "asc"
+                                ? theme.colors.primary
+                                : "transparent",
+                            borderRadius: "8px",
+                          }}
+                        >
+                          A → Z
+                        </button>
+                        <button
+                          onClick={() => {
+                            setSortDirection("desc");
+                            setShowOptionMenu(false);
+                          }}
+                          className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
+                          style={{
+                            color: theme.colors.textDark,
+                            backgroundColor:
+                              sortDirection === "desc"
+                                ? theme.colors.primary
+                                : "transparent",
+                            borderRadius: "8px",
+                          }}
+                        >
+                          Z → A
+                        </button>
+                      </>
+                    )}
+
+                    {/* SEVERITY */}
+                    {sortBy === "severity" && (
+                      <>
+                        <button
+                          onClick={() => {
+                            setSortDirection("asc");
+                            setShowOptionMenu(false);
+                          }}
+                          className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
+                          style={{
+                            color: theme.colors.textDark,
+                            backgroundColor:
+                              sortDirection === "asc"
+                                ? theme.colors.primary
+                                : "transparent",
+                            borderRadius: "8px",
+                          }}
+                        >
+                          Low → Critical
+                        </button>
+                        <button
+                          onClick={() => {
+                            setSortDirection("desc");
+                            setShowOptionMenu(false);
+                          }}
+                          className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
+                          style={{
+                            color: theme.colors.textDark,
+                            backgroundColor:
+                              sortDirection === "desc"
+                                ? theme.colors.primary
+                                : "transparent",
+                            borderRadius: "8px",
+                          }}
+                        >
+                          Critical → Low
+                        </button>
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
+              {/* Filter */}
+              <div className="relative flex-1 sm:flex-none">
+                <button
+                  onClick={() => {
+                    setShowFilterMenu(!showFilterMenu);
+                    setShowSortMenu(false);
+                    setShowOptionMenu(false);
+                  }}
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-3 text-sm rounded-2xl"
+                  style={{
+                    backgroundColor: "#F7F7F9",
+                    color: theme.colors.textDark,
+                    border: "1px solid #EEEEEE",
+                    borderRadius: "8px",
+                  }}
+                >
+                  Filter
+                </button>
+
+                {showFilterMenu && (
+                  <div className="absolute right-0 mt-1 w-full sm:w-48 bg-white border border-gray-100 rounded-xl shadow-lg z-20 py-2">
+                    {["All", "Closed", "Open", "In Progress"].map((status) => (
+                      <button
+                        key={status}
+                        onClick={() => {
+                          setStatusFilter(status);
+                          setShowFilterMenu(false);
+                          setCurrentPage(1);
+                        }}
+                        className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
+                        style={{
+                          color: theme.colors.textDark,
+                          backgroundColor:
+                            statusFilter === status
+                              ? theme.colors.primary
+                              : "transparent",
+                          borderRadius: "8px",
+                        }}
+                      >
+                        {status}
+                      </button>
+                    ))}
                   </div>
                 )}
               </div>
@@ -937,7 +751,22 @@ export default function RiskManagment() {
           </div>
         </div>
       </div>
-      <CreateRiskModal open={showModal} onClose={() => setShowModal(false)} />
+      <CreateRiskModal
+        open={showModal}
+        onClose={() => setShowModal(false)}
+        onSuccess={async () => {
+          await getRisks();
+          setShowSuccess(true);
+          setCurrentPage(1);
+        }}
+        createRisk={createRisk}
+        loading={loading}
+      />
+      <SuccessModal
+        isOpen={showSuccess}
+        message="Risk created successfully!"
+        onClose={() => setShowSuccess(false)}
+      />
     </div>
   );
 }

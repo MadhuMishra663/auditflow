@@ -57,7 +57,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           setUser(user);
         }
       } catch (err: unknown) {
-        console.error("Auth Error", err);
         // If token is invalid, clear it
       } finally {
         setLoading(false);
@@ -70,7 +69,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (email: string, password: string): Promise<User> => {
     try {
-      console.log("USE_MOCK:", USE_MOCK);
       // ───────── MOCK LOGIN ─────────
       if (USE_MOCK) {
         const mockUser: User = {
@@ -121,7 +119,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           ? err.message
           : "Login failed";
 
-      console.error("LOGIN ERROR:", message);
       throw new Error(message);
     }
   };

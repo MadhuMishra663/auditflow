@@ -27,7 +27,6 @@ export default function useRisk() {
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/risks`,
         { withCredentials: true },
       );
-
       setRisks(res.data.risks || []);
     } catch (err: unknown) {
       setError("Failed to fetch risks");
@@ -55,7 +54,6 @@ export default function useRisk() {
 
       // ✅ auto refresh after create
       await getRisks();
-
       return res.data;
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
