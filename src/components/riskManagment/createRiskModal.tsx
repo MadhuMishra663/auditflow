@@ -5,15 +5,20 @@ import { theme } from "@/styles/theme";
 import useDepartment from "@/components/hooks/useDepartment";
 import useCompanyUsers from "@/components/hooks/useUsers";
 import { Severity, Status } from "../enums";
+import { CreateRiskPayload } from "@/types/types";
 
 type CreateRiskModalProps = {
   open: boolean;
   onClose: () => void;
+  onSuccess: () => void;
+  createRisk: (data: CreateRiskPayload) => Promise<unknown>;
+  loading: boolean;
 };
 
 export default function CreateRiskModal({
   open,
   onClose,
+  onSuccess,
 }: CreateRiskModalProps) {
   const { createRisk, loading } = useRisk();
   const { departments } = useDepartment();
@@ -40,7 +45,7 @@ export default function CreateRiskModal({
     if (!res) return;
 
     onClose();
-
+    onSuccess();
     setForm({
       title: "",
       description: "",

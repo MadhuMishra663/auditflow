@@ -11,7 +11,6 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  console.log("ADMIN LAYOUT LOADED");
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const { user, loading, initialized } = useAuth();

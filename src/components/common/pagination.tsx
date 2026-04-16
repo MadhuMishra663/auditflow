@@ -33,13 +33,16 @@ const Pagination: React.FC<PaginationProps> = ({
       `w-9 h-9 flex items-center justify-center rounded-full border text-sm font-medium transition-colors
       ${
         active
-          ? "text-white border-transparent"           // LINE 37: Teal active color
+          ? "text-white border-transparent" // LINE 37: Teal active color
           : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50" // LINE 38: Subtle inactive style
       }`;
 
     const ellipsis = (key: string) => (
       // LINE 42–44: New ellipsis span matching photo's "..." separators
-      <span key={key} className="w-9 h-9 flex items-center justify-center text-gray-400 text-sm">
+      <span
+        key={key}
+        className="w-9 h-9 flex items-center justify-center text-gray-400 text-sm"
+      >
         ...
       </span>
     );
@@ -49,7 +52,15 @@ const Pagination: React.FC<PaginationProps> = ({
         key={i}
         onClick={() => onPageChange(i)}
         className={btnClass(currentPage === i)}
-        style={currentPage === i ? { backgroundColor: "#EDE8F9", borderColor: "#EDE8F9", color: "#8B6FD4" } : {}}
+        style={
+          currentPage === i
+            ? {
+                backgroundColor: "#EDE8F9",
+                borderColor: "#EDE8F9",
+                color: "#8B6FD4",
+              }
+            : {}
+        }
       >
         {i}
       </button>
@@ -79,22 +90,16 @@ const Pagination: React.FC<PaginationProps> = ({
     return pages;
   };
 
-  // LINE 81–82: Compute "Showing X to Y of Z" values
-  const startItem = (currentPage - 1) * itemsPerPage + 1;
-  const endItem = Math.min(currentPage * itemsPerPage, totalItems);
-
   return (
     // LINE 85: Changed to justify-between so text is left, pagination is right
     <div className="flex items-center justify-between w-full px-2 py-3">
-
       {/* LINE 88: New result count label matching photo's left-side text */}
       <span className="text-sm text-gray-500">
-        Showing {startItem} to {endItem} of {totalItems} results
+        Showing {currentPage} of {totalPages} pages
       </span>
 
       {/* LINE 93: Pagination controls grouped on the right */}
       <div className="flex items-center gap-1">
-
         {/* LINE 96–102: Prev button now circular with "<" icon */}
         <button
           onClick={handlePrev}
