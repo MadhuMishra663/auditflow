@@ -23,6 +23,7 @@ export default function CreateRiskModal({
   const { createRisk, loading } = useRisk();
   const { departments } = useDepartment();
   const { departmentUsers } = useCompanyUsers();
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -41,6 +42,24 @@ export default function CreateRiskModal({
   };
 
   const handleSubmit = async () => {
+    const result = createRiskSchema.safeParse(form);
+
+    if (!result.success) {
+      const fieldErrors: Record<string, string> = {};
+
+      result.error.errors.forEach((err) => {
+        const field = err.path[0];
+        if (field) {
+          fieldErrors[field as string] = err.message;
+        }
+      });
+
+      setErrors(fieldErrors);
+      return;
+    }
+
+    // ✅ clear errors
+    setErrors({});
     const res = await createRisk(form);
     if (!res) return;
 
@@ -98,6 +117,9 @@ export default function CreateRiskModal({
               color: theme.colors.textDark,
             }}
           />
+          {errors.title && (
+            <p className="text-xs text-red-500 mt-1">{errors.title}</p>
+          )}
 
           {/* Description */}
           <textarea
@@ -111,6 +133,9 @@ export default function CreateRiskModal({
               color: theme.colors.textDark,
             }}
           />
+          {errors.description && (
+            <p className="text-xs text-red-500 mt-1">{errors.description}</p>
+          )}
 
           {/* Row */}
           <div className="grid grid-cols-2 gap-3">
@@ -130,6 +155,9 @@ export default function CreateRiskModal({
               <option value={Severity.HIGH}>High</option>
               <option value={Severity.CRITICAL}>Critical</option>
             </select>
+            {errors.severity && (
+              <p className="text-xs text-red-500 mt-1">{errors.severity}</p>
+            )}
 
             {/* Status */}
             <select
@@ -146,6 +174,9 @@ export default function CreateRiskModal({
               <option value="IN_PROGRESS">In Progress</option>
               <option value="CLOSED">Closed</option>
             </select>
+            {errors.status && (
+              <p className="text-xs text-red-500 mt-1">{errors.status}</p>
+            )}
           </div>
 
           {/* Department */}
@@ -167,6 +198,9 @@ export default function CreateRiskModal({
               </option>
             ))}
           </select>
+          {errors.id && (
+            <p className="text-xs text-red-500 mt-1">{errors.id}</p>
+          )}
 
           {/* Assigned */}
           <select
@@ -189,6 +223,9 @@ export default function CreateRiskModal({
                 </option>
               ))}
           </select>
+          {errors.assigned_to && (
+            <p className="text-xs text-red-500 mt-1">{errors.assigned_to}</p>
+          )}
 
           {/* Date */}
           <input
@@ -202,6 +239,9 @@ export default function CreateRiskModal({
               color: theme.colors.textDark,
             }}
           />
+          {errors.due_date && (
+            <p className="text-xs text-red-500 mt-1">{errors.due_date}</p>
+          )}
         </div>
 
         {/* Actions */}
