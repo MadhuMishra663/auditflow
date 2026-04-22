@@ -29,7 +29,7 @@ const PAGE_TITLES: Record<string, string> = {
   "/admin/compliance":       "Compliance",
   "/admin/policies":         "Policies",
   "/admin/audit-management": "Audit Management",
-  "/admin/setting-mamagement":"Settings",
+  "/admin/setting-management":"Settings",
   "/admin/auditor":          "Auditors",
   "/admin/department":       "Departments",
   "/admin/users":            "Users",
