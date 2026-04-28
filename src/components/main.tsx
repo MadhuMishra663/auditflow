@@ -12,7 +12,10 @@ const ContactSection = lazy(() => import("./contact/contact"));
 const AdminDashboard = lazy(() => import("@/components/admin/Dashboard/dashboard"));
 
 export default function HomePage() {
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
+  console.log("API URL =", API_BASE);
   const { user } = useAuth();
+
   const { activeSection, setActiveSection, hydrated } = useNavigation();
   const router = useRouter();
 
@@ -35,12 +38,14 @@ export default function HomePage() {
           onLearnMore={() => setActiveSection("about")} // ✅ Navigate to About
         />
       )} */}
+
       {activeSection === "about" && <AboutSection />}
       {activeSection === "contact" && <ContactSection />}
       {activeSection === "dashboard" && user?.role !== "ADMIN" && (
         <HeroSection
           onLearnMore={() => router.push("/about")} // ✅ Navigate to About
         />
+
       )}
     </Suspense>
   );
