@@ -9,7 +9,7 @@ type Department = {
 export default function useDepartment() {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(false);
-
+  console.log(`${process.env.NEXT_PUBLIC_API_BASE_URL}/departments`);
   const fetchDepartments = async () => {
     setLoading(true);
     try {
@@ -19,6 +19,7 @@ export default function useDepartment() {
           withCredentials: true,
         },
       );
+      console.log(res);
 
       setDepartments(res.data?.departments ?? []);
     } catch (err: unknown) {
