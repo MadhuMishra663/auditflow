@@ -7,6 +7,8 @@ import Button from "../common/button";
 import CreateRiskModal from "./createRiskModal";
 import useRisk from "../hooks/useRiskManagement";
 import SuccessModal from "../common/successModal";
+import { Risk, RiskUI } from "@/types/types";
+import RiskDetailModal from "./riskDetailModal";
 
 const PAGE_SIZE = 3;
 
@@ -83,21 +85,25 @@ export default function RiskManagment() {
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
   const [statusFilter, setStatusFilter] = useState("All");
   const [showFilterMenu, setShowFilterMenu] = useState(false);
-  // const { risks, loading } = useRisk();
-  const { risks, loading, createRisk, getRisks } = useRisk();
+  const [selectedRisk, setSelectedRisk] = useState<RiskUI | null>(null);
+  const [showRiskModal, setShowRiskModal] = useState(false);
+  const {
+    risks,
+    loading,
+    createRisk,
+    getRisks,
+    uploadAttachment,
+    updateRiskStatus,
+  } = useRisk();
   const allRisks = risks.map((r) => ({
     id: r.id,
     title: r.title,
     description: r.description,
 
     // ✅ convert severity for UI badges
-    severity: r.severity.charAt(0) + r.severity.slice(1).toLowerCase(),
-
-    // ✅ keep backend status but display nicely
-    status: r.status
-      .replace("_", " ")
-      .toLowerCase()
-      .replace(/\b\w/g, (c) => c.toUpperCase()),
+    severity: (r.severity.charAt(0) +
+      r.severity.slice(1).toLowerCase()) as Risk["severity"],
+    status: r.status,
 
     // ✅ direct mapping
     category: r.department_name,
@@ -649,7 +655,11 @@ export default function RiskManagment() {
                 {paginated.map((r) => (
                   <div
                     key={r.id}
-                    className="grid gap-4 px-4 py-4 items-center"
+                    className="grid gap-4 px-4 py-4 items-center cursor-pointer"
+                    onClick={() => {
+                      setSelectedRisk(r);
+                      setShowRiskModal(true);
+                    }}
                     style={{
                       gridTemplateColumns: "2.5fr 1fr 1.2fr 1fr 1.3fr 1fr",
                       border: "1px solid #F0F0F0",
@@ -700,7 +710,11 @@ export default function RiskManagment() {
                 {paginated.map((r) => (
                   <div
                     key={r.id}
-                    className="rounded-2xl p-4 space-y-2"
+                    className="rounded-2xl p-4 space-y-2 cursor-pointer"
+                    onClick={() => {
+                      setSelectedRisk(r);
+                      setShowRiskModal(true);
+                    }}
                     style={{ border: "1px solid #F0F0F0" }}
                   >
                     <div className="flex items-start justify-between gap-2">
@@ -761,6 +775,19 @@ export default function RiskManagment() {
         }}
         createRisk={createRisk}
         loading={loading}
+      />
+      <RiskDetailModal
+        risk={selectedRisk}
+        open={showRiskModal}
+        onClose={() => {
+          setShowRiskModal(false);
+          setSelectedRisk(null);
+        }}
+        uploadAttachment={uploadAttachment}
+        updateRiskStatus={updateRiskStatus}
+        onSuccess={async () => {
+          await getRisks();
+        }}
       />
       <SuccessModal
         isOpen={showSuccess}
