@@ -12,6 +12,8 @@ type Props = {
   open: boolean;
   onClose: () => void;
   onSuccess?: () => void;
+  uploadAttachment: (riskId: string, file: File) => Promise<void>;
+  updateRiskStatus: (riskId: string, status: string) => Promise<void>;
 };
 
 export default function RiskDetailModal({
