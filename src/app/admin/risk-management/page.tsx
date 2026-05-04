@@ -1,5 +1,12 @@
-import RiskManagment from "@/components/riskManagment/riskManagment";
+
+
+
+
+"use client";
+import DashboardOverview from "@/components/admin/Dashboard/dashboardOverview";
+// import { useRoleAccess } from "@/components/hooks/useRoleAccess";
 
 export default function DashboardPage() {
-  return <RiskManagment />;
+ // useRoleAccess(["dashboard"]);
+  return <DashboardOverview />;
 }
