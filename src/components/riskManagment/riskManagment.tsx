@@ -104,7 +104,6 @@ export default function RiskManagment() {
     severity: (r.severity.charAt(0) +
       r.severity.slice(1).toLowerCase()) as Risk["severity"],
     status: r.status,
-
     // ✅ direct mapping
     category: r.department_name,
     owner: r.assigned_to_name,
@@ -115,6 +114,7 @@ export default function RiskManagment() {
     // ✅ avatar
     avatar: `https://i.pravatar.cc/32?u=${r.id}`,
   }));
+  console.log(process.env.NEXT_PUBLIC_API_BASE_URL);
 
   const filtered = allRisks.filter((r) => {
     const matchSearch = r.title.toLowerCase().includes(search.toLowerCase());
