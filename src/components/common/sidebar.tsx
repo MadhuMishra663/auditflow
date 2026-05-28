@@ -77,11 +77,19 @@ const CloseIcon = () => (
     <line x1="6" y1="6" x2="18" y2="18" />
   </svg>
 );
+const DepartmentsIcon = ({ active }: { active: boolean }) => (
+  <svg viewBox="0 0 24 24" fill="none" width="18" height="18"
+    stroke={active ? "#6B4EFF" : "#9CA3AF"} strokeWidth={1.8}>
+    <rect x="3" y="3" width="18" height="18" rx="2" />
+    <path d="M3 9h18M9 21V9" />
+  </svg>
+);
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
 type NavItemId =
   | "dashboard"
+   | "departments"
   | "risk-management"
   | "compliance"
   | "policies"
@@ -107,6 +115,7 @@ type SidebarProps = {
 
 const NAV_ITEMS: NavItem[] = [
   { id: "dashboard",        label: "Dashboard",        icon: (a) => <GridIcon active={a} /> },
+  { id: "departments", label: "Departments", icon: (a) => <DepartmentsIcon active={a} /> },
   { id: "risk-management",  label: "Risk Management",  icon: (a) => <AlertTriangleIcon active={a} /> },
   { id: "compliance",       label: "Compliance",       icon: (a) => <ClipboardIcon active={a} /> },
   { id: "policies",         label: "Policies",         icon: (a) => <FileTextIcon active={a} /> },
@@ -116,6 +125,7 @@ const NAV_ITEMS: NavItem[] = [
 
 const ROUTES: Record<NavItemId, string> = {
   "dashboard":        "/admin/dashboard",
+  "departments": "/admin/departments",
   "risk-management":  "/admin/risk-management",
   "compliance":       "/admin/compliance",
   "policies":         "/admin/policies",
@@ -224,6 +234,7 @@ export function Sidebar({
 
   const getActiveItem = (): NavItemId => {
     if (pathname.includes("risk-management"))  return "risk-management";
+    if (pathname.includes("departments")) return "departments";
     if (pathname.includes("compliance"))       return "compliance";
     if (pathname.includes("policies"))         return "policies";
     if (pathname.includes("audit-management")) return "audit-management";
